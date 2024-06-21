@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Datatype" Id="{51a69d2e-c0c1-0516-1d53-b6243b074c1e}">
+    <Declaration><![CDATA[INTERFACE I_Datatype extends I_Serializable, I_Deserializable, I_Disposable]]></Declaration>
+    <Method Name="Accept" Id="{8aab0540-3d70-0faa-342b-c9c8c7ecf3f8}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_DatatypeVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Address" Id="{8809e202-d80e-0319-2e1b-d146d1dadc27}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Address : PVOID]]></Declaration>
+      <Get Name="Get" Id="{fc4214f6-2c1e-0dca-25a0-e0b18c91907f}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="ClearReference" Id="{96eb5a41-0604-0b7a-2f4b-4cc353477151}">
+      <Declaration><![CDATA[METHOD PUBLIC ClearReference
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Clone" Id="{6325439c-b1ab-000e-3f25-4c490af1b6f0}">
+      <Declaration><![CDATA[METHOD Clone : I_Datatype
+]]></Declaration>
+    </Method>
+    <Property Name="IsUserDefined" Id="{0446cf84-05ec-4e56-be5c-a67118db8177}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsUserDefined : BOOL]]></Declaration>
+      <Get Name="Get" Id="{30f423b3-7fa4-4d61-994e-65acaf766845}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="SerializeTypeWith" Id="{e1478293-3276-079d-0abb-6dbf50e15077}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Size" Id="{2ad172e6-46ce-0b59-298b-c75a14cb69e8}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Size : UDINT]]></Declaration>
+      <Get Name="Get" Id="{0e80b350-5013-0de5-3799-dc72c7b754fd}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryCopyFrom" Id="{d118b90b-402a-49d5-8138-4b2026e6a7a7}">
+      <Declaration><![CDATA[METHOD PUBLIC TryCopyFrom : BOOL
+VAR_INPUT
+	Source : I_Datatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{9f77e658-78c8-04ed-1f73-fb60fcdde097}">
+      <Declaration><![CDATA[METHOD PUBLIC ABSTRACT TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryMakeReferenceTo" Id="{d965edc7-ad7d-0727-1a86-d224233b48fc}">
+      <Declaration><![CDATA[METHOD TryMakeReferenceTo : BOOL
+VAR_INPUT
+	Target : I_Datatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAsAliasDatatype" Id="{c185e5df-9218-03ac-0f52-284bc7b16735}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsAliasDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_AliasDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAsBitDatatype" Id="{9f36dfa4-8831-46bb-bdc9-fdf9ebc483d0}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsBitDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_BitDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAsEnumDatatype" Id="{4f3a1c38-8ebe-03a9-1aab-375b2bf261f9}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsEnumDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_EnumDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAsInterfaceDatatype" Id="{97ca1c82-d5b0-440f-8796-29491277fae6}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsInterfaceDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_InterfaceDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAsStructuredDatatype" Id="{b7f6a976-614e-0340-2e42-2bb5bf32c4c6}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsStructuredDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_StructuredDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="TypeName" Id="{42c9be80-d7dc-0e9a-0066-afba1b83ca24}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TypeName : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{25cf6114-32fc-0b25-2ff7-9e1b19211c00}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

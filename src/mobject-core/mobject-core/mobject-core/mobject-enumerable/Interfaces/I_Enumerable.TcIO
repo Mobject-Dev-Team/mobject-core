@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Enumerable" Id="{c0c0fe49-067f-49e3-9690-c4b2f37b4182}">
+    <Declaration><![CDATA[INTERFACE I_Enumerable EXTENDS __SYSTEM.IQueryInterface]]></Declaration>
+    <Method Name="GetEnumerator" Id="{1791c613-0d85-447e-83e3-7ac662e8a8c6}">
+      <Declaration><![CDATA[METHOD PUBLIC GetEnumerator : I_ForwardEnumerator]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

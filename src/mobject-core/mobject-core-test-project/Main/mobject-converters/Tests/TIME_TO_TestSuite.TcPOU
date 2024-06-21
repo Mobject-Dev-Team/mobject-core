@@ -1,0 +1,1090 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TIME_TO_TestSuite" Id="{380d3158-7e18-4cfc-8058-2273c495ab5a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC TIME_TO_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Check_TIME_TO_BOOL_Max();
+Check_TIME_TO_BOOL_Min();
+Check_TIME_TO_BYTE_Max();
+Check_TIME_TO_BYTE_Min();
+Check_TIME_TO_BYTE_TooHigh();
+Check_TIME_TO_WORD_Max();
+Check_TIME_TO_WORD_Min();
+Check_TIME_TO_WORD_TooHigh();
+Check_TIME_TO_DWORD_Max();
+Check_TIME_TO_DWORD_Min();
+Check_TIME_TO_LWORD_Max();
+Check_TIME_TO_LWORD_Min();
+Check_TIME_TO_SINT_Max();
+Check_TIME_TO_SINT_Min();
+Check_TIME_TO_SINT_TooHigh();
+Check_TIME_TO_INT_Max();
+Check_TIME_TO_INT_Min();
+Check_TIME_TO_INT_TooHigh();
+Check_TIME_TO_DINT_Max();
+Check_TIME_TO_DINT_Min();
+Check_TIME_TO_DINT_TooHigh();
+Check_TIME_TO_LINT_Max();
+Check_TIME_TO_LINT_Min();
+Check_TIME_TO_USINT_Max();
+Check_TIME_TO_USINT_Min();
+Check_TIME_TO_USINT_TooHigh();
+Check_TIME_TO_UINT_Max();
+Check_TIME_TO_UINT_Min();
+Check_TIME_TO_UINT_TooHigh();
+Check_TIME_TO_UDINT_Max();
+Check_TIME_TO_UDINT_Min();
+Check_TIME_TO_ULINT_Max();
+Check_TIME_TO_ULINT_Min();
+Check_TIME_TO_REAL_Max();
+Check_TIME_TO_REAL_Min();
+Check_TIME_TO_LREAL_Max();
+Check_TIME_TO_LREAL_Min();
+Check_TIME_TO_TIME_Max();
+Check_TIME_TO_TIME_Min();
+Check_TIME_TO_TOD_Max();
+Check_TIME_TO_TOD_Min();
+Check_TIME_TO_TOD_TooHigh();
+Check_TIME_TO_DATE_Max();
+Check_TIME_TO_DATE_Min();
+Check_TIME_TO_DT_Max();
+Check_TIME_TO_DT_Min();
+Check_TIME_TO_STRING_Max();
+Check_TIME_TO_STRING_Min();]]></ST>
+    </Implementation>
+    <Method Name="Check_TIME_TO_BOOL_Max" Id="{01aa0023-f588-4240-a9e6-7db240cbf464}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_BOOL_Max
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_BOOL_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_BOOL_Min" Id="{3e2be2d2-1fc3-4b11-a734-6471981603e4}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_BOOL_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_BOOL_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_BYTE_Max" Id="{5e8f4440-ad97-4594-b91c-b2bfa85036e3}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_BYTE_Max
+VAR
+	value : TIME := DatatypeLimits.MAX_VALUE_OF_TIME_WHICH_CAN_BE_HELD_IN_A_BYTE;
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_BYTE_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_BYTE_Min" Id="{ba394948-d237-4239-a63b-1691bf583dd4}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_BYTE_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_BYTE_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_BYTE_TooHigh" Id="{e8ebb409-9a72-4ee1-8e38-9dd5079aefce}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_BYTE_TooHigh
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : BYTE;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_BYTE_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TIME to BYTE conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_DATE_Max" Id="{bf662dfa-38d0-4297-b410-54038fe0db0a}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_DATE_Max
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_DATE_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_DATE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_DATE_Min" Id="{0f947764-67d2-4e4d-9bc5-f3c513079bca}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_DATE_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_DATE_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_DATE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_DINT_Max" Id="{67911d4c-29dc-47ad-8d1c-83e1aebc6077}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_DINT_Max
+VAR
+	value : TIME := DatatypeLimits.MAX_VALUE_OF_TIME_WHICH_CAN_BE_HELD_IN_A_DINT;
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_DINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_DINT_Min" Id="{7cb4c26f-512b-4482-814d-39cca57dc68b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_DINT_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_DINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_DINT_TooHigh" Id="{806ac05f-6a7a-4421-9602-ba03ba311283}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_DINT_TooHigh
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : DINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_DINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TIME to DINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_DT_Max" Id="{9981fe58-ae42-446d-a760-019622ebd834}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_DT_Max
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_DT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_DT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_DT_Min" Id="{fee634bc-f8c6-4495-8a3d-a39e217f13de}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_DT_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_DT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_DT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_DWORD_Max" Id="{b8baf936-01cf-40b7-ade4-4160a270b3d8}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_DWORD_Max
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_DWORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_DWORD_Min" Id="{8355b866-678a-47ab-b35d-ef7e158eb19e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_DWORD_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_DWORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_INT_Max" Id="{d8014ad5-f606-4b54-adb4-dcf115567795}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_INT_Max
+VAR
+	value : TIME := DatatypeLimits.MAX_VALUE_OF_TIME_WHICH_CAN_BE_HELD_IN_A_INT;
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_INT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_INT_Min" Id="{d7df0e5f-1a1e-4b49-8185-c322320ddc1f}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_INT_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_INT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_INT_TooHigh" Id="{6611a7ba-a841-45bc-9616-028103cd560f}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_INT_TooHigh
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : INT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_INT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TIME to INT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_LINT_Max" Id="{89a42617-0fd9-428d-9e0a-1146cf8fa9e7}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_LINT_Max
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_LINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_LINT_Min" Id="{2f5df819-c32b-46ee-963d-5dbc037b8f5a}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_LINT_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_LINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_LREAL_Max" Id="{d01bb02f-6492-4e5a-93f9-71ebd2bbf0da}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_LREAL_Max
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_LREAL_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_LREAL_Min" Id="{05e76963-b5e7-4840-b7da-19609cfbc747}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_LREAL_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_LREAL_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_LWORD_Max" Id="{cb221cca-8f4a-487c-bee1-0109397ec7fa}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_LWORD_Max
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_LWORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_LWORD_Min" Id="{856f5b8c-164c-40bd-b070-9018c2b1d29a}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_LWORD_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_LWORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_REAL_Max" Id="{9e15b4b9-c988-431a-91f5-dead00ccb86a}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_REAL_Max
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_REAL_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_REAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_REAL_Min" Id="{89bb2b9e-40d0-4e76-b292-65cb5dfefda1}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_REAL_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_REAL_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_REAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_SINT_Max" Id="{75a6086f-3381-41d6-b494-873ef4163df2}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_SINT_Max
+VAR
+	value : TIME := DatatypeLimits.MAX_VALUE_OF_TIME_WHICH_CAN_BE_HELD_IN_A_SINT;
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_SINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_SINT_Min" Id="{c9773174-e127-41a7-944d-f1cbf4d5e80c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_SINT_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_SINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_SINT_TooHigh" Id="{98e5ac0e-6d03-4cb4-81f3-3b56ae000edb}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_SINT_TooHigh
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : SINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_SINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TIME to SINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_STRING_Max" Id="{5d74d7ad-bfbe-4c9a-a0ee-588e757d74ad}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_STRING_Max
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_STRING_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_STRING(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_STRING_Min" Id="{bf7a69f1-058c-4b04-8ff6-1087fb502987}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_STRING_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_STRING_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_STRING(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_TIME_Max" Id="{dbc7f8b9-b8f2-4033-9204-82ac4439b9b0}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_TIME_Max
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_TIME_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_TIME_Min" Id="{df5b685b-65bd-40e5-a1bc-96bc93cf2a07}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_TIME_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_TIME_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_TOD_Max" Id="{30aa9a31-bbd5-45cb-af54-abc49fa66f5d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_TOD_Max
+VAR
+	value : TIME := DatatypeLimits.MAX_VALUE_OF_TIME_WHICH_CAN_BE_HELD_IN_A_TOD;
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_TOD_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_TOD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_TOD_Min" Id="{bf568982-2a81-43b4-925c-23e5462156dd}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_TOD_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_TOD_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_TOD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_TOD_TooHigh" Id="{b3815e18-fcb8-445d-ab2b-196dd07fb230}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_TOD_TooHigh
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : TOD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_TOD_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TIME to TOD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_UDINT_Max" Id="{f774662c-0c19-48d2-94ee-348de1b73c85}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_UDINT_Max
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_UDINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_UDINT_Min" Id="{92fa8d28-8f16-4f71-8e2d-673d86b07c8e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_UDINT_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_UDINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_UINT_Max" Id="{1820933f-32b0-4b9f-8a66-b30761855019}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_UINT_Max
+VAR
+	value : TIME := DatatypeLimits.MAX_VALUE_OF_TIME_WHICH_CAN_BE_HELD_IN_A_UINT;
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_UINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_UINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_UINT_Min" Id="{9bfd1676-e9e3-48cc-8008-a5355c266edd}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_UINT_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_UINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_UINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_UINT_TooHigh" Id="{3eb7836f-724a-421f-a2d7-63de3c89a25f}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_UINT_TooHigh
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : UINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_UINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TIME to UINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_ULINT_Max" Id="{7ee3c708-11f2-48a3-8b9f-167d4948983e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_ULINT_Max
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_ULINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_ULINT_Min" Id="{84b6be94-8253-4796-90e3-44b236a384a4}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_ULINT_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_ULINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_USINT_Max" Id="{1f86fd40-f917-4639-a949-ccbfeac57b63}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_USINT_Max
+VAR
+	value : TIME := DatatypeLimits.MAX_VALUE_OF_TIME_WHICH_CAN_BE_HELD_IN_A_USINT;
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_USINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_USINT_Min" Id="{3cdbf7f4-8c92-4e39-b966-8141313ad443}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_USINT_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_USINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_USINT_TooHigh" Id="{1606d1dc-2ad3-4280-8d38-506496b0a2cd}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_USINT_TooHigh
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : USINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_USINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TIME to USINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_WORD_Max" Id="{3ada09cf-7e45-4bd0-8b47-57e9961b3ca4}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_WORD_Max
+VAR
+	value : TIME := DatatypeLimits.MAX_VALUE_OF_TIME_WHICH_CAN_BE_HELD_IN_A_WORD;
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_WORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_WORD_Min" Id="{701afbe6-26a6-47fc-b2b8-c8227e2a77a6}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_WORD_Min
+VAR
+	value : TIME := DatatypeLimits.TIME_MIN_VALUE;
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_WORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+equal := actual = TIME_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TIME to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TIME to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TIME_TO_WORD_TooHigh" Id="{430868fd-1f71-4718-b951-033dc312a86b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TIME_TO_WORD_TooHigh
+VAR
+	value : TIME := DatatypeLimits.TIME_MAX_VALUE;
+	actual : WORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TIME_TO_WORD_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TIME_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TIME to WORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,830 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="STRING_TO_TestSuite" Id="{2562e52f-68ee-4bb5-8e0e-a4d5479d0cb5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC STRING_TO_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Check_STRING_TO_BOOL_Valid();
+Check_STRING_TO_BYTE_Valid();
+Check_STRING_TO_BYTE_Invalid();
+Check_STRING_TO_WORD_Valid();
+Check_STRING_TO_WORD_Invalid();
+Check_STRING_TO_DWORD_Valid();
+Check_STRING_TO_DWORD_Invalid();
+Check_STRING_TO_LWORD_Valid();
+Check_STRING_TO_LWORD_Invalid();
+Check_STRING_TO_SINT_Valid();
+Check_STRING_TO_SINT_Invalid();
+Check_STRING_TO_INT_Valid();
+Check_STRING_TO_INT_Invalid();
+Check_STRING_TO_DINT_Valid();
+Check_STRING_TO_DINT_Invalid();
+Check_STRING_TO_LINT_Valid();
+Check_STRING_TO_LINT_Invalid();
+Check_STRING_TO_USINT_Valid();
+Check_STRING_TO_USINT_Invalid();
+Check_STRING_TO_UINT_Valid();
+Check_STRING_TO_UINT_Invalid();
+Check_STRING_TO_UDINT_Valid();
+Check_STRING_TO_UDINT_Invalid();
+Check_STRING_TO_ULINT_Valid();
+Check_STRING_TO_ULINT_Invalid();
+Check_STRING_TO_REAL_Valid();
+Check_STRING_TO_REAL_Invalid();
+Check_STRING_TO_LREAL_Valid();
+Check_STRING_TO_LREAL_Invalid();
+Check_STRING_TO_TIME_Valid();
+Check_STRING_TO_TIME_Invalid();
+Check_STRING_TO_TOD_Valid();
+Check_STRING_TO_TOD_Invalid();
+Check_STRING_TO_DATE_Valid();
+Check_STRING_TO_DATE_Invalid();
+Check_STRING_TO_DT_Valid();
+Check_STRING_TO_DT_Invalid();
+Check_STRING_TO_STRING_Valid();]]></ST>
+    </Implementation>
+    <Method Name="Check_STRING_TO_BOOL_Valid" Id="{af6f772c-3388-4f00-9496-d05afdf3bf49}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_BOOL_Valid
+VAR
+	value : STRING := BOOL_TO_STRING(DatatypeLimits.BOOL_MAX_VALUE);
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_BOOL_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_BYTE_Invalid" Id="{c8819340-52e7-43bd-a938-4ffb05d65c6d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_BYTE_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : BYTE;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_BYTE_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to BYTE conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_BYTE_Valid" Id="{b2c8bdc4-2563-44bc-aae7-b52f0bbde14c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_BYTE_Valid
+VAR
+	value : STRING := BYTE_TO_STRING(DatatypeLimits.BYTE_MAX_VALUE);
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_BYTE_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_DATE_Invalid" Id="{0051cf1a-b04a-4d0e-b67b-d1f1a0618ab8}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_DATE_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : DATE;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_DATE_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to DATE conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_DATE_Valid" Id="{bb6a17e3-a576-4477-bdb9-d92933fe2d63}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_DATE_Valid
+VAR
+	value : STRING := DATE_TO_STRING(DatatypeLimits.DATE_MAX_VALUE);
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_DATE_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_DATE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_DINT_Invalid" Id="{c4241b26-9b3e-4630-9b11-a23bc0c1b4b7}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_DINT_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : DINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_DINT_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to DINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_DINT_Valid" Id="{15377368-fd0e-459e-8ee7-8c07b823a8eb}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_DINT_Valid
+VAR
+	value : STRING := DINT_TO_STRING(DatatypeLimits.DINT_MAX_VALUE);
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_DINT_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_DT_Invalid" Id="{af62438a-df4f-4bb0-abb6-c168ed176f74}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_DT_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : DT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_DT_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to DT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_DT_Valid" Id="{5b3cd065-da35-45e8-8362-d589123580cc}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_DT_Valid
+VAR
+	value : STRING := DT_TO_STRING(DatatypeLimits.DT_MAX_VALUE);
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_DT_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_DT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_DWORD_Invalid" Id="{6699d658-ae2b-4205-84f9-8d3cdd90334b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_DWORD_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : DWORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_DWORD_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to DWORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_DWORD_Valid" Id="{b790670e-2053-4118-b7ff-bf023e723061}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_DWORD_Valid
+VAR
+	value : STRING := DWORD_TO_STRING(DatatypeLimits.DWORD_MAX_VALUE);
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_DWORD_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_INT_Invalid" Id="{9d1eef70-0336-4d8e-9c2a-b3246835c50c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_INT_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : INT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_INT_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to INT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_INT_Valid" Id="{56a6d96b-2341-4ed6-9170-0e95d8cf21a6}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_INT_Valid
+VAR
+	value : STRING := INT_TO_STRING(DatatypeLimits.INT_MAX_VALUE);
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_INT_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_LINT_Invalid" Id="{9d57c263-8778-4ac5-b38e-fc006df82b4a}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_LINT_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : LINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_LINT_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to LINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_LINT_Valid" Id="{1906b63a-1dd5-4bf5-a474-33ba52b84e85}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_LINT_Valid
+VAR
+	value : STRING := LINT_TO_STRING(DatatypeLimits.LINT_MAX_VALUE);
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_LINT_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_LREAL_Invalid" Id="{58dd0580-e8d3-43e1-93b1-d564ab5aba72}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_LREAL_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : LREAL;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_LREAL_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to LREAL conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_LREAL_Valid" Id="{6967847e-4e55-4142-b4d5-0a224103e462}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_LREAL_Valid
+VAR
+	value : STRING := LREAL_TO_STRING(DatatypeLimits.MAX_VALUE_OF_LREAL_WHICH_CAN_BE_HELD_IN_A_STRING);
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_LREAL_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_LWORD_Invalid" Id="{f30bf617-f5d6-458e-855d-3254b2139a0d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_LWORD_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : LWORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_LWORD_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to LWORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_LWORD_Valid" Id="{471f78e6-83f2-46dd-8876-02c782d4e739}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_LWORD_Valid
+VAR
+	value : STRING := LWORD_TO_STRING(DatatypeLimits.LWORD_MAX_VALUE);
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_LWORD_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_REAL_Invalid" Id="{42d94fd4-421a-428c-801a-f76fa55542b1}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_REAL_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : REAL;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_REAL_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to REAL conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_REAL_Valid" Id="{36817efc-dca5-4e25-a709-1b2cad675436}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_REAL_Valid
+VAR
+	value : STRING := REAL_TO_STRING(DatatypeLimits.REAL_MAX_VALUE);
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_REAL_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_REAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_SINT_Invalid" Id="{892c42d5-cc06-4bcf-8542-c0cf5589f26c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_SINT_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : SINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_SINT_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to SINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_SINT_Valid" Id="{566c8948-4e15-4ae6-819f-9259b3b07eae}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_SINT_Valid
+VAR
+	value : STRING := SINT_TO_STRING(DatatypeLimits.SINT_MAX_VALUE);
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_SINT_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_STRING_Valid" Id="{cc1b2d3b-f666-4676-81f5-839b81ae0971}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_STRING_Valid
+VAR
+	value : STRING := 'hello';
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_STRING_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_TIME_Invalid" Id="{8292a414-12ad-4300-8a2c-29bdaafbca14}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_TIME_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : TIME;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_TIME_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to TIME conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_TIME_Valid" Id="{32adc5db-15b4-4699-a1be-1ebd02c34302}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_TIME_Valid
+VAR
+	value : STRING := TIME_TO_STRING(DatatypeLimits.TIME_MAX_VALUE);
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_TIME_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_TIME(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_TOD_Invalid" Id="{13957d89-de68-4cf8-82a6-3919d3c1c2ce}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_TOD_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : TOD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_TOD_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to TOD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_TOD_Valid" Id="{0bbceee4-8cb6-4406-8832-43ab23fda309}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_TOD_Valid
+VAR
+	value : STRING := TOD_TO_STRING(DatatypeLimits.TOD_MAX_VALUE);
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_TOD_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_TOD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_UDINT_Invalid" Id="{9a2cb6de-5387-49d6-80db-fcede8ffd5ba}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_UDINT_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : UDINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_UDINT_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to UDINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_UDINT_Valid" Id="{9a90b1ca-5a54-4e55-b684-b5defe266c01}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_UDINT_Valid
+VAR
+	value : STRING := UDINT_TO_STRING(DatatypeLimits.UDINT_MAX_VALUE);
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_UDINT_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_UINT_Invalid" Id="{1597bd8c-cdf8-4a1f-82aa-1939c5dced49}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_UINT_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : UINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_UINT_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to UINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_UINT_Valid" Id="{c06f77d7-cc91-45c2-a8fe-06480824f776}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_UINT_Valid
+VAR
+	value : STRING := UINT_TO_STRING(DatatypeLimits.UINT_MAX_VALUE);
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_UINT_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_UINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_ULINT_Invalid" Id="{e1e7a2ef-d461-4ab2-b969-1481872928fa}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_ULINT_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : ULINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_ULINT_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to ULINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_ULINT_Valid" Id="{8c0c42ba-28ca-44e5-87e0-757702541a03}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_ULINT_Valid
+VAR
+	value : STRING := ULINT_TO_STRING(DatatypeLimits.ULINT_MAX_VALUE);
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_ULINT_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_USINT_Invalid" Id="{f0164615-f38b-418c-8acf-5a66c810f1f4}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_USINT_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : USINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_USINT_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to USINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_USINT_Valid" Id="{973da760-9981-4e60-8ca9-a2728ea86375}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_USINT_Valid
+VAR
+	value : STRING := USINT_TO_STRING(DatatypeLimits.USINT_MAX_VALUE);
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_USINT_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_WORD_Invalid" Id="{ed427836-f250-4e2c-acd1-a9735c4a1bcd}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_WORD_Invalid
+VAR
+	value : STRING := 'hello';
+	actual : WORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_WORD_Invalid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report STRING to WORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_STRING_TO_WORD_Valid" Id="{f6b86e54-c9b2-45eb-8110-99c1dede8f05}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_STRING_TO_WORD_Valid
+VAR
+	value : STRING := WORD_TO_STRING(DatatypeLimits.WORD_MAX_VALUE);
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_STRING_TO_WORD_Valid');
+
+// @TEST-RUN
+converted := TryConvert_STRING_TO_Destination(value, actual);
+equal := actual = STRING_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert STRING to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report STRING to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

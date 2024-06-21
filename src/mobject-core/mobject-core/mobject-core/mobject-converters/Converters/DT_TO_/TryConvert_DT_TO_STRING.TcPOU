@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_DT_TO_STRING" Id="{8a6df26a-245b-44c3-8c72-0861336b15a3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_DT_TO_STRING : BOOL
+VAR_INPUT
+	in : DT;
+	out : REFERENCE TO STRING;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := DT_TO_STRING(in);
+TryConvert_DT_TO_STRING := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

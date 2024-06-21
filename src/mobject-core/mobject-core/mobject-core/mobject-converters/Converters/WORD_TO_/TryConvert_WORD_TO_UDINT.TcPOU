@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_WORD_TO_UDINT" Id="{899d463d-0ca1-4ab6-8c8a-c668e38c3c24}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_WORD_TO_UDINT : BOOL
+VAR_INPUT
+	in : WORD;
+	out : REFERENCE TO UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := WORD_TO_UDINT(in);
+TryConvert_WORD_TO_UDINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

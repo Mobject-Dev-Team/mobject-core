@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="EventHandlerItemOnceOnly" Id="{6902de80-7fd4-0d25-24dc-bbfb6798b8f1}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK EventHandlerItemOnceOnly EXTENDS EventHandlerItem
+VAR
+	parent : I_EventEmitter;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{13607e1a-a708-0b98-163e-ed1e11524abe}" />
+    <Method Name="Emit" Id="{80b2f11a-1e22-0339-067f-1d2076045c82}">
+      <Declaration><![CDATA[METHOD PUBLIC Emit
+VAR_INPUT
+	EventName : T_MaxString;
+	Event : I_Event;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.Emit(EventName,Event);
+parent.OffEvent(name,handler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{169f1c25-5dbd-092b-13d4-9cb2fb23deec}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : T_MAXSTRING;
+	Handler : I_EventHandler;
+	Parent : I_EventEmitter;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.parent := Parent;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

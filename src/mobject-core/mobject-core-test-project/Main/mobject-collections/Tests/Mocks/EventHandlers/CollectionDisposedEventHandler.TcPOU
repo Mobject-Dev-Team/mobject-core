@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="CollectionDisposedEventHandler" Id="{09cbe91e-c205-023a-23fe-74d36bd5bf22}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK CollectionDisposedEventHandler EXTENDS CollectionEventHandler]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="HandleEvent" Id="{24998de9-ec1b-02b8-2176-477628cb27c5}">
+      <Declaration><![CDATA[METHOD PUBLIC HandleEvent
+VAR_INPUT
+	Event : I_Event;
+END_VAR
+VAR
+	disposedEvent : I_CollectionDisposedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF __QUERYINTERFACE(Event, disposedEvent) THEN
+	_eventReceived := TRUE;
+	fromExpected := disposedEvent.Target = expectedOriginator;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

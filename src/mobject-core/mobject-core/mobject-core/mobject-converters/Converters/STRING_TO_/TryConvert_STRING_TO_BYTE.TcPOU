@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_STRING_TO_BYTE" Id="{a75f4faa-7687-41f2-8cb5-5634bac775a8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_STRING_TO_BYTE : BOOL
+VAR_INPUT
+	in : STRING;
+	out : REFERENCE TO BYTE;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in <> BYTE_TO_STRING(STRING_TO_BYTE(in)) THEN
+	RETURN;
+END_IF
+
+out := STRING_TO_BYTE(in);
+TryConvert_STRING_TO_BYTE := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

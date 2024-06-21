@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="EventEmitter" Id="{386a564b-a0dc-4be1-a8e7-21a7a9f8f701}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK EventEmitter EXTENDS Disposable IMPLEMENTS I_EventEmitter, I_EventTarget
+VAR
+	firstEventHandlerItem : I_EventHandlerItem;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Destructor" Id="{93b59328-141f-0b13-3573-e740790aadb8}" />
+    <Folder Name="Private" Id="{33d3080d-6eaa-068a-2bc3-7c95bf231221}" />
+    <Method Name="Clear" Id="{b35cd50e-b016-4140-8958-8e574ba8c18b}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DisposeAllEventHandlerItems();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeAllEventHandlerItems" Id="{9b8211b4-e4c5-0dea-24ef-2e88bb2a44ec}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeAllEventHandlerItems
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE firstEventHandlerItem <> 0 DO
+	DisposeEventHandlerItem(firstEventHandlerItem);
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeEventHandlerItem" Id="{848d5ab6-1266-07e1-2cc6-308c0813d0e6}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeEventHandlerItem
+VAR_INPUT
+	EventHandlerItem : I_EventHandlerItem;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RemoveEventHandlerItemFromCollection(EventHandlerItem);
+EventHandlerItem.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Emit" Id="{3d9d54f7-e434-4278-b02b-0489a02065a6}">
+      <Declaration><![CDATA[METHOD PUBLIC Emit
+VAR_INPUT
+	EventName : T_MaxString;
+	Event : I_Event;
+END_VAR
+VAR
+	currentEventHandlerItem : I_EventHandlerItem;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[currentEventHandlerItem := firstEventHandlerItem;
+
+WHILE currentEventHandlerItem <> 0 DO
+	currentEventHandlerItem.Emit(EventName, Event);
+	currentEventHandlerItem := currentEventHandlerItem.Next;
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{4ae6a920-3b29-0806-2784-82c26cb8ad60}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeAllEventHandlerItems();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FindEventHandlerItem" Id="{b296670b-ff32-0b68-04f0-12d3b67d149b}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE FindEventHandlerItem : I_EventHandlerItem
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR
+VAR
+	currentEventHandlerItem : I_EventHandlerItem;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[currentEventHandlerItem := firstEventHandlerItem;
+
+WHILE currentEventHandlerItem <> 0 DO
+	
+	IF currentEventHandlerItem.EqualTo(EventName, EventHandler) THEN
+		FindEventHandlerItem := currentEventHandlerItem; 
+		RETURN;
+	END_IF
+	
+	currentEventHandlerItem := currentEventHandlerItem.Next;
+
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InsertEventHandlerItem" Id="{b7614457-f579-0272-047d-ed438d52d9e7}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE InsertEventHandlerItem
+VAR_INPUT
+	EventHandlerItem : I_EventHandlerItem;
+END_VAR
+VAR
+	currentEventHandlerItem : I_EventHandlerItem;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF firstEventHandlerItem = 0 THEN
+	firstEventHandlerItem := EventHandlerItem;
+	RETURN;
+END_IF
+
+currentEventHandlerItem := firstEventHandlerItem;
+
+WHILE currentEventHandlerItem.next <> 0 DO
+	currentEventHandlerItem := currentEventHandlerItem.next;
+END_WHILE
+
+currentEventHandlerItem.next := EventHandlerItem;
+EventHandlerItem.previous := currentEventHandlerItem;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OffEvent" Id="{778712cf-c700-4d8a-a47d-fc638129eebc}">
+      <Declaration><![CDATA[METHOD PUBLIC OffEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR
+VAR
+	foundHandlerItem : I_EventHandlerItem;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[foundHandlerItem := FindEventHandlerItem(EventName, EventHandler);
+
+IF foundHandlerItem = 0 THEN
+	RETURN;
+END_IF
+
+DisposeEventHandlerItem(foundHandlerItem);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnceEvent" Id="{240ad7e5-c68d-02af-2c0c-fbe09db2b785}">
+      <Declaration><![CDATA[METHOD PUBLIC OnceEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR
+VAR
+	pEventHandlerItem : POINTER TO EventHandlerItemOnceOnly;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pEventHandlerItem := __NEW(EventHandlerItemOnceOnly(Name := EventName, Handler := EventHandler, Parent := THIS^));
+InsertEventHandlerItem(pEventHandlerItem^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnEvent" Id="{9cfdfbad-e770-4bea-90eb-4a4c8772dde4}">
+      <Declaration><![CDATA[METHOD PUBLIC OnEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR
+VAR
+	pEventHandlerItem : POINTER TO EventHandlerItem;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pEventHandlerItem := __NEW(EventHandlerItem(Name :=EventName, Handler := EventHandler));
+InsertEventHandlerItem(pEventHandlerItem^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RemoveEventHandlerItemFromCollection" Id="{0b975cdb-3511-07e9-0949-690f9ea9b508}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE RemoveEventHandlerItemFromCollection
+VAR_INPUT
+	EventHandlerItem : I_EventHandlerItem;
+END_VAR
+VAR
+	previous : I_EventHandlerItem;
+	next : I_EventHandlerItem;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF EventHandlerItem = 0 THEN
+	// nothing to remove
+	RETURN;
+END_IF
+
+IF EventHandlerItem = firstEventHandlerItem AND EventHandlerItem.Next = 0 THEN 
+	
+	// the item was the only one in the list, as such you just set the first to zero
+	firstEventHandlerItem := 0; 
+	
+ELSIF EventHandlerItem = firstEventHandlerItem THEN 
+	
+	// the item was the first in the list of many, so make the next item the first and remove 
+	// it's "previous" as the first in the item does not have a previous
+	firstEventHandlerItem := EventHandlerItem.next; 
+	firstEventHandlerItem.Previous := 0;
+
+ELSIF EventHandlerItem.Next <> 0 THEN
+	
+	// the item is mid list so link it's previous and next together 
+	previous := EventHandlerItem.Previous;
+	next := EventHandlerItem.Next;
+	
+	previous.Next := next;
+	next.Previous := previous;
+	
+ELSE 
+	
+	// the item is at the end so only remove itself from the previous
+	previous := EventHandlerItem.Previous;
+	previous.Next := 0;
+
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

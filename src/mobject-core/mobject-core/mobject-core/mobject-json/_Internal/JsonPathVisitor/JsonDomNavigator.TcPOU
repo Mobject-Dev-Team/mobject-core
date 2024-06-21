@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="JsonDomNavigator" Id="{17a0dbe1-b117-4cf7-a87e-789019e1809b}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK JsonDomNavigator IMPLEMENTS I_JsonPathVisitor
+VAR
+	jsonDomParser : REFERENCE TO JsonDomParser;
+	currentJsonPosition : SJsonValue;
+	_currentNode : SJsonValue;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{9e9629ff-a170-4d6e-9893-343ba96c6ab5}" />
+    <Method Name="ArrayIndexFound" Id="{02b14946-dad5-475b-9a74-4887cebcfcf0}">
+      <Declaration><![CDATA[METHOD ArrayIndexFound
+VAR_INPUT
+	Index : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[currentJsonPosition := jsonDomParser.GetArrayValueByIdx(currentJsonPosition, Index);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="CurrentNode" Id="{02f0a770-75f1-4caf-be18-1a778c9ef0a0}">
+      <Declaration><![CDATA[PROPERTY PUBLIC CurrentNode : SJsonValue]]></Declaration>
+      <Get Name="Get" Id="{8afa67d9-7ddb-4a7e-9ee2-aea4c8e52d50}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CurrentNode := _currentNode;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="EndOfParse" Id="{835925b2-376e-48d1-9ffc-3e685f01d04f}">
+      <Declaration><![CDATA[METHOD EndOfParse
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_currentNode := currentJsonPosition;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{53b46c59-779c-41e8-b0f2-d9c79903517f}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	JsonDomParser : REFERENCE TO JsonDomParser;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.jsonDomParser REF= JsonDomParser;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InvalidSyntaxFound" Id="{9ac2fe37-8d3e-4f3f-b75c-762a5d41031f}">
+      <Declaration><![CDATA[METHOD InvalidSyntaxFound
+VAR_INPUT
+	Character : BYTE;
+	Position : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[currentJsonPosition := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PropertyFound" Id="{9919dff6-0bc9-4fe7-9d9c-e6f157a227e6}">
+      <Declaration><![CDATA[METHOD PropertyFound
+VAR_INPUT
+	Name : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[currentJsonPosition := jsonDomParser.FindMember(currentJsonPosition,Name);	]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="StartOfParse" Id="{b0226ba8-b6c8-4fd7-ada7-3f05f8bd9ad5}">
+      <Declaration><![CDATA[METHOD StartOfParse
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[currentJsonPosition := jsonDomParser.GetDocumentRoot();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

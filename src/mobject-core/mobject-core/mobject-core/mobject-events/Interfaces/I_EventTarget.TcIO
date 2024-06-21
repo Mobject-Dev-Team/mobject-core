@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_EventTarget" Id="{b3629c9b-eb96-0f5e-0417-2e528432e8fb}">
+    <Declaration><![CDATA[INTERFACE I_EventTarget EXTENDS __SYSTEM.IQueryInterface 
+]]></Declaration>
+    <Method Name="Emit" Id="{bdc3224e-360d-0884-05e6-2a405967c31d}">
+      <Declaration><![CDATA[METHOD PUBLIC Emit
+VAR_INPUT
+	EventName : T_MaxString;
+	Event : I_Event;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

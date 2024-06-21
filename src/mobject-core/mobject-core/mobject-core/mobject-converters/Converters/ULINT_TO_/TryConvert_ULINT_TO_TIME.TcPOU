@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_ULINT_TO_TIME" Id="{9ed46abe-8289-4795-907c-a336edfc72fa}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_ULINT_TO_TIME : BOOL
+VAR_INPUT
+	in : ULINT;
+	out : REFERENCE TO TIME;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_ULINT_WHICH_CAN_BE_HELD_IN_A_TIME THEN
+	RETURN;
+END_IF
+
+out := ULINT_TO_TIME(in);
+TryConvert_ULINT_TO_TIME := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

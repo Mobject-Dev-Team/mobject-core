@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_LREAL_TO_USINT" Id="{4971f69a-4fca-4001-a2d7-168ca464f270}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_LREAL_TO_USINT : BOOL
+VAR_INPUT
+	in : LREAL;
+	out : REFERENCE TO USINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_LREAL_WHICH_CAN_BE_HELD_IN_A_USINT THEN
+	RETURN;
+END_IF
+
+IF in < DatatypeLimits.MIN_VALUE_OF_LREAL_WHICH_CAN_BE_HELD_IN_A_USINT THEN
+	RETURN;
+END_IF
+
+out := LREAL_TO_USINT(in);
+TryConvert_LREAL_TO_USINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

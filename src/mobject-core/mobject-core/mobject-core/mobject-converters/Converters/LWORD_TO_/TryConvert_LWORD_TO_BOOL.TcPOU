@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_LWORD_TO_BOOL" Id="{9b73019f-e00b-4ea5-93d5-9383b437a8d2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_LWORD_TO_BOOL : BOOL
+VAR_INPUT
+	in : LWORD;
+	out : REFERENCE TO BOOL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := LWORD_TO_BOOL(in);
+TryConvert_LWORD_TO_BOOL := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

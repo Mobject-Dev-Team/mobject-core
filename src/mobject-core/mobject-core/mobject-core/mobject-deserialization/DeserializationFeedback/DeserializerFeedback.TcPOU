@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="DeserializerFeedback" Id="{2e84fb02-f66f-0b43-33f3-677b9988a2f3}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK DeserializerFeedback IMPLEMENTS I_DeserializerFeedback
+VAR
+	errors : Stack;
+	_hasError : BOOL;
+	nullError : NullError;
+	deserializationErrorFactory : DeserializationErrorFactory;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Destructor" Id="{631212ed-5b08-0b81-28d3-92e6bb89dae9}" />
+    <Folder Name="Private" Id="{1761482a-b125-0fc9-21b4-db379558e6e7}" />
+    <Method Name="DisposeErrors" Id="{f81bebde-8a4c-0dc9-3a39-8dbaab413ef8}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeErrors : BOOL
+VAR
+	error : I_Error;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE errors.TryPop(error) DO
+	error.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{a0bbc00c-cd51-0632-0543-f81d8cfb233d}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeErrors();]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="FirstError" Id="{8d46df0c-34b9-00c7-1155-fbd261ea7bff}">
+      <Declaration><![CDATA[PROPERTY PUBLIC FirstError : I_Error]]></Declaration>
+      <Get Name="Get" Id="{b088faae-cb74-060e-2f5e-fbf140917e61}">
+        <Declaration><![CDATA[VAR
+	error : I_Error;
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF NOT HasError THEN
+	FirstError := nullError;
+	RETURN;
+END_IF
+
+IF NOT errors.TryPeek(error) THEN
+	FirstError := nullError;
+	RETURN;
+END_IF
+
+FirstError := error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="HasError" Id="{3b980e53-cf16-077b-045e-71957268af51}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasError : BOOL]]></Declaration>
+      <Get Name="Get" Id="{ce48668b-14c3-07d4-1099-6d21fcbbad05}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasError := _hasError;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="LogDeserializationFailedError" Id="{3f8e1f7f-6b65-08f5-07be-ed602e11dd87}">
+      <Declaration><![CDATA[METHOD PUBLIC LogDeserializationFailedError
+VAR_INPUT
+	Message : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[LogError(deserializationErrorFactory.CreateCustomDeserializationFailedError(Message));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LogError" Id="{685bb2d6-a411-0376-24bc-8570a5fbb450}">
+      <Declaration><![CDATA[METHOD PUBLIC LogError
+VAR_INPUT
+	Error : I_Error;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[errors.Push(Error);
+_hasError := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LogIncorrectKeyTypeError" Id="{0ce0ffe0-a39e-00f0-3b8f-7d0646f9ea7a}">
+      <Declaration><![CDATA[METHOD PUBLIC LogIncorrectKeyTypeError
+VAR_INPUT
+	ExpectedType : T_MAXSTRING;
+	ActualKey : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[LogError(deserializationErrorFactory.CreateIncorrectKeyTypeError(ExpectedType, ActualKey));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LogIncorrectTypeError" Id="{b25b6436-a170-0ed9-1e62-1ed362faca94}">
+      <Declaration><![CDATA[METHOD PUBLIC LogIncorrectTypeError
+VAR_INPUT
+	ExpectedType : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[LogError(deserializationErrorFactory.CreateIncorrectTypeError(ExpectedType));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LogInvalidKeyError" Id="{5223344c-cd31-0a81-2859-55eafcc5793c}">
+      <Declaration><![CDATA[METHOD PUBLIC LogInvalidKeyError
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[LogError(deserializationErrorFactory.CreateInvalidKeyError());]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LogMissingKeyError" Id="{17cbac75-9ba8-0b82-3152-f14ee9cb44d5}">
+      <Declaration><![CDATA[METHOD PUBLIC LogMissingKeyError
+VAR_INPUT
+	ExpectedKey : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[LogError(deserializationErrorFactory.CreateMissingKeyError(ExpectedKey));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reset" Id="{2727b4db-df00-0175-20c8-58ab1d6e8aa0}">
+      <Declaration><![CDATA[METHOD PUBLIC Reset : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DisposeErrors();
+_hasError := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{a951426c-7f17-047b-1793-ec00cf447dec}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT HasError THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('errors');
+Serializer.StartArray();
+
+enumerator := errors.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(error) THEN
+		error.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

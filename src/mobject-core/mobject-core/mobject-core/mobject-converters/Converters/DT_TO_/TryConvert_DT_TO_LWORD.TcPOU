@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_DT_TO_LWORD" Id="{a950b503-a5db-4f3e-9504-f71978ddcf4d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_DT_TO_LWORD : BOOL
+VAR_INPUT
+	in : DT;
+	out : REFERENCE TO LWORD;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := DT_TO_LWORD(in);
+TryConvert_DT_TO_LWORD := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

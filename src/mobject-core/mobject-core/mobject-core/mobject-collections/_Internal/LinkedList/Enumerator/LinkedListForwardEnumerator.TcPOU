@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="LinkedListForwardEnumerator" Id="{267f5316-2666-0eed-36bb-bdcd3f2bbb47}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK LinkedListForwardEnumerator EXTENDS Disposable IMPLEMENTS I_ForwardEnumerator, I_EventHandler
+VAR
+	parent : I_LinkedList;
+	currentNode : I_LinkedListNode;
+	moveNextCalled : BOOL := FALSE;
+	invalid : BOOL := FALSE; 
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{2d4a9bf8-0de5-0b3c-3315-c4d5ab407851}" />
+    <Folder Name="Destructor" Id="{5fa9f4c0-6515-07f3-33f4-73b4214cffe8}" />
+    <Method Name="FB_exit" Id="{7773486e-2148-0f3d-3c20-a0ce17ee1314}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+IF parent = 0 THEN
+	RETURN;
+END_IF
+
+parent.OffEvent('OnChanged',THIS^);
+parent.OffEvent('OnDisposed',THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{00cf93c2-7b7a-07bd-2c6f-6694bc0f1478}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_LinkedList;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Parent.OnEvent('OnChanged',THIS^);
+Parent.OnEvent('OnDisposed',THIS^);
+this^.parent := Parent;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="HandleEvent" Id="{0cc8f594-ade9-0659-1319-35287527620b}">
+      <Declaration><![CDATA[METHOD PUBLIC HandleEvent
+VAR_INPUT
+	Event : I_Event;
+END_VAR
+VAR
+	changedEvent : I_CollectionChangedEvent;
+	disposedEvent : I_CollectionDisposedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF __QUERYINTERFACE(Event, changedEvent) THEN
+	invalid := TRUE;
+	currentNode := 0;
+ELSIF __QUERYINTERFACE(Event, disposedEvent) THEN
+	parent := 0;
+	Dispose();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="IsValid" Id="{38b2d895-97ce-0507-120a-5871debb61c4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsValid : BOOL]]></Declaration>
+      <Get Name="Get" Id="{40b0f62a-4ada-0125-3686-54f54037dc7e}">
+        <Declaration><![CDATA[PUBLIC]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsValid := (not invalid and parent <> 0);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="MoveNext" Id="{fcaee6e0-b936-0e20-37b9-955ea93fb8c4}">
+      <Declaration><![CDATA[METHOD PUBLIC MoveNext : BOOL]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF invalid THEN
+	RETURN;
+END_IF
+
+IF NOT moveNextCalled THEN
+	moveNextCalled := TRUE;	
+	currentNode := parent.First;
+	MoveNext := currentNode <> 0;
+	RETURN;
+END_IF
+
+IF currentNode = 0 THEN
+	RETURN;
+END_IF
+
+if currentNode.Next <> 0 then
+	currentNode := currentNode.Next;
+	MoveNext := TRUE;	
+	RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reset" Id="{65045b96-ab6f-0374-3ca4-ab51953ad11b}">
+      <Declaration><![CDATA[METHOD Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[moveNextCalled := FALSE;
+currentNode := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGet" Id="{9758b987-0db8-0f9d-03d6-cb8d8d90e889}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGet : BOOL;
+VAR_INPUT
+	Destination : ANY;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF currentNode <> 0 THEN
+	TryGet := currentNode.TryGet(Destination);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetTo" Id="{83589871-9358-04c7-0d35-5551e5b22099}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetTo : BOOL;
+VAR_INPUT
+	DestinationAddress : PVOID;
+	DestinationSize : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF currentNode <> 0 THEN
+	TryGetTo := currentNode.TryGetTo(DestinationAddress,DestinationSize);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

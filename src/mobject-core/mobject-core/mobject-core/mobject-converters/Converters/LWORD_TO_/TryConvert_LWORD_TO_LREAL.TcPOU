@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_LWORD_TO_LREAL" Id="{606e0e36-bacd-4be0-bf0a-b2ef85847637}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_LWORD_TO_LREAL : BOOL
+VAR_INPUT
+	in : LWORD;
+	out : REFERENCE TO LREAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := LWORD_TO_LREAL(in);
+TryConvert_LWORD_TO_LREAL := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

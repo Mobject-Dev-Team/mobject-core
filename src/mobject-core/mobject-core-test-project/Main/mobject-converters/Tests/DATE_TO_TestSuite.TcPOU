@@ -1,0 +1,1110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="DATE_TO_TestSuite" Id="{629ee2cc-ce26-4c94-94ac-ac3339434901}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC DATE_TO_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Check_DATE_TO_BOOL_Max();
+Check_DATE_TO_BOOL_Min();
+Check_DATE_TO_BYTE_Max();
+Check_DATE_TO_BYTE_Min();
+Check_DATE_TO_BYTE_TooHigh();
+Check_DATE_TO_WORD_Max();
+Check_DATE_TO_WORD_Min();
+Check_DATE_TO_WORD_TooHigh();
+Check_DATE_TO_DWORD_Max();
+Check_DATE_TO_DWORD_Min();
+Check_DATE_TO_LWORD_Max();
+Check_DATE_TO_LWORD_Min();
+Check_DATE_TO_SINT_Max();
+Check_DATE_TO_SINT_Min();
+Check_DATE_TO_SINT_TooHigh();
+Check_DATE_TO_INT_Max();
+Check_DATE_TO_INT_Min();
+Check_DATE_TO_INT_TooHigh();
+Check_DATE_TO_DINT_Max();
+Check_DATE_TO_DINT_Min();
+Check_DATE_TO_DINT_TooHigh();
+Check_DATE_TO_LINT_Max();
+Check_DATE_TO_LINT_Min();
+Check_DATE_TO_USINT_Max();
+Check_DATE_TO_USINT_Min();
+Check_DATE_TO_USINT_TooHigh();
+Check_DATE_TO_UINT_Max();
+Check_DATE_TO_UINT_Min();
+Check_DATE_TO_UINT_TooHigh();
+Check_DATE_TO_UDINT_Max();
+Check_DATE_TO_UDINT_Min();
+Check_DATE_TO_ULINT_Max();
+Check_DATE_TO_ULINT_Min();
+Check_DATE_TO_REAL_Max();
+Check_DATE_TO_REAL_Min();
+Check_DATE_TO_LREAL_Max();
+Check_DATE_TO_LREAL_Min();
+Check_DATE_TO_TIME_Max();
+Check_DATE_TO_TIME_Min();
+Check_DATE_TO_TIME_TooHigh();
+Check_DATE_TO_TOD_Max();
+Check_DATE_TO_TOD_Min();
+Check_DATE_TO_TOD_TooHigh();
+Check_DATE_TO_DATE_Max();
+Check_DATE_TO_DATE_Min();
+Check_DATE_TO_DT_Max();
+Check_DATE_TO_DT_Min();
+Check_DATE_TO_STRING_Max();
+Check_DATE_TO_STRING_Min();]]></ST>
+    </Implementation>
+    <Method Name="Check_DATE_TO_BOOL_Max" Id="{b6b3dae2-354e-416b-bca3-bbe278e91ee2}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_BOOL_Max
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_BOOL_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_BOOL_Min" Id="{1a6773ed-528b-4954-a041-c3c5f09b2b50}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_BOOL_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_BOOL_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_BYTE_Max" Id="{fadb1329-4284-42f6-8491-c1b4831e87e8}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_BYTE_Max
+VAR
+	value : DATE := DatatypeLimits.MAX_VALUE_OF_DATE_WHICH_CAN_BE_HELD_IN_A_BYTE;
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_BYTE_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_BYTE_Min" Id="{fc827a33-b457-45c3-82fc-9bd4d89a2be7}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_BYTE_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_BYTE_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_BYTE_TooHigh" Id="{9923bb41-7322-4e06-92d5-281327771f94}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_BYTE_TooHigh
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : BYTE;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_BYTE_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DATE to BYTE conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_DATE_Max" Id="{81aa3f3b-b98f-4ed1-8840-97f1b1b55b46}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_DATE_Max
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_DATE_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_DATE_Min" Id="{73356df2-5b4e-4ae6-bf78-c3170407f368}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_DATE_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_DATE_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_DINT_Max" Id="{5bc6b442-c0f8-4918-8f70-331115a6f1ab}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_DINT_Max
+VAR
+	value : DATE := DatatypeLimits.MAX_VALUE_OF_DATE_WHICH_CAN_BE_HELD_IN_A_DINT;
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_DINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_DINT_Min" Id="{91868f31-3583-40e3-bb2e-c86624348c08}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_DINT_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_DINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_DINT_TooHigh" Id="{a803f51f-ad4d-422f-af5d-2801aebfb3c6}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_DINT_TooHigh
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : DINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_DINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DATE to DINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_DT_Max" Id="{964c0c12-74fd-4571-b961-0744af966b84}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_DT_Max
+VAR
+	value : DATE := DatatypeLimits.MAX_VALUE_OF_DATE_WHICH_CAN_BE_HELD_IN_A_DT;
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_DT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_DT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_DT_Min" Id="{9d223ed1-d347-46f9-8940-af63daba4a88}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_DT_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_DT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_DT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_DWORD_Max" Id="{724750d9-a6f4-4639-b4f6-79b3dda80293}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_DWORD_Max
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_DWORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_DWORD_Min" Id="{45f6be55-08a3-4056-bdd7-29a374c24e0a}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_DWORD_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_DWORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_INT_Max" Id="{7fd4f82e-b22a-4cdb-a869-d2ea2ebe2f52}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_INT_Max
+VAR
+	value : DATE := DatatypeLimits.MAX_VALUE_OF_DATE_WHICH_CAN_BE_HELD_IN_A_INT;
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_INT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_INT_Min" Id="{1cba908a-6075-424d-a882-d5e2fcfc4ca5}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_INT_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_INT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_INT_TooHigh" Id="{f969b085-13d0-4e0e-b2d6-03cccc537660}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_INT_TooHigh
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : INT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_INT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DATE to INT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_LINT_Max" Id="{ba5cd9ac-b6b0-412d-a1f8-ba7dea73511b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_LINT_Max
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_LINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_LINT_Min" Id="{c91b4dc5-c8b8-4390-a7e6-2e5f864e5921}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_LINT_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_LINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_LREAL_Max" Id="{200c4c64-a23e-437c-b372-37d7e869bae2}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_LREAL_Max
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_LREAL_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_LREAL_Min" Id="{6449feca-cd7f-43cf-be92-1222bc1a54b0}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_LREAL_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_LREAL_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_LWORD_Max" Id="{a374fe68-d08c-47d9-b321-6b7416b25c60}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_LWORD_Max
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_LWORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_LWORD_Min" Id="{2cf88fed-33e5-468d-a38b-0f78bdedff22}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_LWORD_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_LWORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_REAL_Max" Id="{740354ba-23c9-4246-9106-9fdfe023d610}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_REAL_Max
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_REAL_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_REAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_REAL_Min" Id="{9e578dc5-8b12-443f-9fb6-fbcf5702290d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_REAL_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_REAL_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_REAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_SINT_Max" Id="{1bb92d04-7df2-4283-8024-2b0278febd97}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_SINT_Max
+VAR
+	value : DATE := DatatypeLimits.MAX_VALUE_OF_DATE_WHICH_CAN_BE_HELD_IN_A_SINT;
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_SINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_SINT_Min" Id="{890a9a6e-77d9-445e-bf29-211530af3bac}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_SINT_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_SINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_SINT_TooHigh" Id="{f8cbb06b-2466-496c-b544-788a80e37111}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_SINT_TooHigh
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : SINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_SINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DATE to SINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_STRING_Max" Id="{689a94f3-9659-4b4a-bfb0-c5d52b2151db}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_STRING_Max
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_STRING_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_STRING(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_STRING_Min" Id="{f43b51d0-704c-40bc-bc37-726ec71206e4}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_STRING_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_STRING_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_STRING(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_TIME_Max" Id="{eff2ac62-0fb3-4707-9170-bf9bb135c33c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_TIME_Max
+VAR
+	value : DATE := DatatypeLimits.MAX_VALUE_OF_DATE_WHICH_CAN_BE_HELD_IN_A_TIME;
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_TIME_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_TIME(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_TIME_Min" Id="{3c74a3cc-def8-41ef-8318-2c01f3d22f74}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_TIME_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_TIME_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_TIME(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_TIME_TooHigh" Id="{f3bf30dc-ed0c-44ab-a5c1-273333398792}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_TIME_TooHigh
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : TIME;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_TIME_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DATE to TIME conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_TOD_Max" Id="{fa657899-09f2-45a7-9c9e-9d267b279a43}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_TOD_Max
+VAR
+	value : DATE := DatatypeLimits.MAX_VALUE_OF_DATE_WHICH_CAN_BE_HELD_IN_A_TOD;
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_TOD_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_TOD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_TOD_Min" Id="{ffc07fc5-42c4-4f2a-a337-ef4e1bf7e148}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_TOD_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_TOD_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_TOD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_TOD_TooHigh" Id="{ca578516-cfd3-4fc9-90b5-abd7dd544b89}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_TOD_TooHigh
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : TOD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_TOD_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DATE to TOD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_UDINT_Max" Id="{2731c144-ce5b-4597-8ae3-07787a1bc185}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_UDINT_Max
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_UDINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_UDINT_Min" Id="{58a85f47-abcc-48bf-b9b0-a56cc420ba9a}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_UDINT_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_UDINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_UINT_Max" Id="{989fbe29-f7a0-46b7-bcfd-7572d4d4dbc9}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_UINT_Max
+VAR
+	value : DATE := DatatypeLimits.MAX_VALUE_OF_DATE_WHICH_CAN_BE_HELD_IN_A_UINT;
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_UINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_UINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_UINT_Min" Id="{71d9337f-aea6-4faa-a57f-1b1c0f6ca433}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_UINT_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_UINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_UINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_UINT_TooHigh" Id="{5ed01af1-ae71-40a6-ba91-0fd8ae7328d0}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_UINT_TooHigh
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : UINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_UINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DATE to UINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_ULINT_Max" Id="{bea2004f-f015-4720-ac42-9038ca36b3ff}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_ULINT_Max
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_ULINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_ULINT_Min" Id="{c12c6a86-3494-4b07-a65e-dd022bcf83b6}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_ULINT_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_ULINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_USINT_Max" Id="{05714185-8fe4-4003-88df-c04542edc5b6}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_USINT_Max
+VAR
+	value : DATE := DatatypeLimits.MAX_VALUE_OF_DATE_WHICH_CAN_BE_HELD_IN_A_USINT;
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_USINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_USINT_Min" Id="{ccf91d8b-531b-4785-b4f6-9f003d1119da}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_USINT_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_USINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_USINT_TooHigh" Id="{c4965378-9398-4977-a9b9-65b4ee57f9bb}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_USINT_TooHigh
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : USINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_USINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DATE to USINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_WORD_Max" Id="{e94f2207-79c5-4827-beff-75e4163c0d06}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_WORD_Max
+VAR
+	value : DATE := DatatypeLimits.MAX_VALUE_OF_DATE_WHICH_CAN_BE_HELD_IN_A_WORD;
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_WORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_WORD_Min" Id="{b0bebb01-6840-4f9c-a214-04851e4df413}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_WORD_Min
+VAR
+	value : DATE := DatatypeLimits.DATE_MIN_VALUE;
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_WORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+equal := actual = DATE_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DATE to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DATE to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DATE_TO_WORD_TooHigh" Id="{cedf8902-e779-4b2d-a156-e9ccd888dd96}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DATE_TO_WORD_TooHigh
+VAR
+	value : DATE := DatatypeLimits.DATE_MAX_VALUE;
+	actual : WORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DATE_TO_WORD_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DATE_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DATE to WORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

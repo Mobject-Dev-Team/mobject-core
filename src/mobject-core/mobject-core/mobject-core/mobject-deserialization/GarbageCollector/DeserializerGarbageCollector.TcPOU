@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="DeserializerGarbageCollector" Id="{a2d13600-3a8b-0dae-11f4-4cd4a12e110c}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK DeserializerGarbageCollector EXTENDS Disposable Implements I_DeserializerGarbageCollector
+VAR
+	deserializers : Stack;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Destructor" Id="{9906d8a3-2bc1-07d6-0628-d23ea0e782be}" />
+    <Folder Name="Protected" Id="{b223644a-099d-04e9-244c-2d09f2f0d47b}" />
+    <Method Name="Deregister" Id="{92c86215-acbb-06e1-3ab8-293e8b67c707}">
+      <Declaration><![CDATA[METHOD PUBLIC Deregister
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[deserializers.TryRemoveItem(Deserializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeAll" Id="{377fe7c3-f7ee-0d85-3021-e98d7b263f4a}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED DisposeAll
+VAR
+	deserializer : I_Deserializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE deserializers.TryPop(deserializer) DO
+	deserializer.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{c237a9c7-3537-0e75-0c0b-5183bf72ce10}">
+      <Declaration><![CDATA[METHOD PUBLIC Execute
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DisposeAll();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{4ea47dc7-4fa3-084f-1979-71b80d8eb36a}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeAll();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Register" Id="{5df58f2b-6090-05cf-32ae-fd4af66147b6}">
+      <Declaration><![CDATA[METHOD PUBLIC Register
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[deserializers.Push(Deserializer);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_UDINT_TO_LINT" Id="{b7f07b39-b462-4822-91ff-2fa8a7ae22df}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_UDINT_TO_LINT : BOOL
+VAR_INPUT
+	in : UDINT;
+	out : REFERENCE TO LINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := UDINT_TO_LINT(in);
+TryConvert_UDINT_TO_LINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

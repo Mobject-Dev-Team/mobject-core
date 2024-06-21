@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="InvalidKeyDeserializationError_TestSuite" Id="{8cf1f599-e25f-4d5a-87c0-0a529559a1ef}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK InvalidKeyDeserializationError_TestSuite EXTENDS TcUnit.FB_TestSuite]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestAccept();
+TestErrorType();
+TestIsSameAsWithSameErrors();
+TestIsSameAsWithDifferentErrors();
+TestMessage();
+TestSerializeWith();]]></ST>
+    </Implementation>
+    <Method Name="TestAccept" Id="{47b1936d-9514-404d-b83e-35573df34a69}">
+      <Declaration><![CDATA[METHOD PUBLIC TestAccept
+VAR
+	error : InvalidKeyDeserializationError;
+	visitor : MockErrorVisitor(ExpectedError := error);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestAccept');
+
+error.Accept(visitor);
+
+AssertTrue(
+	Condition := visitor.VisitedCorrectError,
+	Message := 'Did not invoke VisitError on the visitor'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestErrorType" Id="{0bfd4c2f-190a-41b8-957b-8c45886809a3}">
+      <Declaration><![CDATA[METHOD PUBLIC TestErrorType
+VAR
+	error : InvalidKeyDeserializationError;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestErrorType');
+
+AssertEquals_String(
+	Actual := error.ErrorType,
+	Expected := 'INVALID_KEY_DESERIALIZATION_ERROR',
+	Message := 'Did not return the expected ErrorType'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIsSameAsWithDifferentErrors" Id="{47bf52fa-50ef-4535-9a56-e1296c31cde0}">
+      <Declaration><![CDATA[METHOD PUBLIC TestIsSameAsWithDifferentErrors
+VAR
+	error1 : InvalidKeyDeserializationError;
+	error2 : MockError(MockErrorType:='ERROR_TYPE_B',MockMessage:='Message 2');
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsSameAsWithDifferentErrors');
+
+AssertFalse(
+	Condition := error1.IsSameAs(error2),
+	Message := 'Did not correctly identify errors as being different type'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIsSameAsWithSameErrors" Id="{2f92e87d-0d32-4856-9f2b-5a2a39afe90d}">
+      <Declaration><![CDATA[METHOD PUBLIC TestIsSameAsWithSameErrors
+VAR
+	error1 : InvalidKeyDeserializationError;
+	error2 : MockError(MockErrorType:='INVALID_KEY_DESERIALIZATION_ERROR',MockMessage:='Message');
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsSameAsWithSameErrors');
+
+AssertTrue(
+	Condition := error1.IsSameAs(error2),
+	Message := 'Did not correctly identify errors as being the same type'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMessage" Id="{0c46d65d-d09b-4756-b36e-395149ae86d1}">
+      <Declaration><![CDATA[METHOD PUBLIC TestMessage
+VAR
+	error : InvalidKeyDeserializationError;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestMessage');
+
+AssertEquals_String(
+	Actual := error.Message,
+	Expected := 'Deserialization Failed, Key Cannot Be Empty',
+	Message := 'Did not return the expected Message'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSerializeWith" Id="{08733638-fe34-45ec-bc50-175fad58f945}">
+      <Declaration><![CDATA[METHOD PUBLIC TestSerializeWith
+VAR
+	error : InvalidKeyDeserializationError;
+	serializer : MockJsonSerializer;
+	result : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestSerializeWith');
+
+error.SerializeWith(serializer);
+serializer.TryGetSerializedData(ADR(result), SIZEOF(result));
+
+AssertEquals_String(
+	Actual := result,
+	Expected := '{"errorType":"INVALID_KEY_DESERIALIZATION_ERROR","message":"Deserialization Failed, Key Cannot Be Empty"}',
+	Message := 'Did not serialize correctly'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

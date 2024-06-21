@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_STRING_TO_LREAL" Id="{837c6bc4-c23c-4baf-bff7-7a8bfa5099b6}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_STRING_TO_LREAL : BOOL
+VAR_INPUT
+	in : STRING;
+	out : REFERENCE TO LREAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in <> LREAL_TO_STRING(STRING_TO_LREAL(in)) THEN
+	RETURN;
+END_IF
+
+out := STRING_TO_LREAL(in);
+TryConvert_STRING_TO_LREAL := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

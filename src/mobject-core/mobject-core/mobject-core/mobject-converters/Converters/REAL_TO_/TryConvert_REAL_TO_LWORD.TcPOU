@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_REAL_TO_LWORD" Id="{fad25a1f-0849-4cd3-b8f7-00da5107fbe5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_REAL_TO_LWORD : BOOL
+VAR_INPUT
+	in : REAL;
+	out : REFERENCE TO LWORD;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_LWORD THEN
+	RETURN;
+END_IF
+
+IF in < DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_LWORD THEN
+	RETURN;
+END_IF
+
+out := REAL_TO_LWORD(in);
+TryConvert_REAL_TO_LWORD := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

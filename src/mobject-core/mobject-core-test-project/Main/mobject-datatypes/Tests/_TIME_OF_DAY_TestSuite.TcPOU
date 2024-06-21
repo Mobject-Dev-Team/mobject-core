@@ -1,0 +1,397 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="_TIME_OF_DAY_TestSuite" Id="{f39326f3-91d6-09cd-318b-bdffb52712be}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK _TIME_OF_DAY_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestAddress();
+TestClearReference();
+TestClone();
+TestTypeNameReturnsExpected();
+TestMakeReferenceToFollowsReference();
+TestMakeReferenceToUpdatesReference();
+TestSize();
+TestValueReturnsExpectedAfterInit();
+TestValueReturnsExpectedAfterChange();
+TestSerializeTypeWith();
+TestSerializeWith();
+TestTryDeserializeFrom();
+TestTryMakeReferenceToFollowsReference();
+TestTryMakeReferenceToUpdatesReference();
+]]></ST>
+    </Implementation>
+    <Method Name="TestAddress" Id="{988f6ef3-58fd-025f-018a-0dded8ac6a59}">
+      <Declaration><![CDATA[METHOD PUBLIC TestAddress
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+    notExpected : PVOID := 0;
+    actual : PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestAddress');
+
+actual := _type.Address;
+
+AssertFalse(
+    Condition := (notExpected = actual),
+    Message := 'Type did not return a valid address.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestClearReference" Id="{b50b897d-a9b0-0e5b-3c95-be8e3eb84447}">
+      <Declaration><![CDATA[METHOD PUBLIC TestClearReference
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+	target : TIME_OF_DAY := TIME_OF_DAY#0:0:0;
+    expected : TIME_OF_DAY := TIME_OF_DAY#0:0:0;
+    actual : TIME_OF_DAY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestClearReference');
+
+_type.MakeReferenceTo(target);
+_type.ClearReference();
+target := TIME_OF_DAY#12:34:56.789;
+
+actual := _type.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value incorrectly followed target change'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestClone" Id="{1673675f-be72-004c-1eda-f2aa5c4d2256}">
+      <Declaration><![CDATA[METHOD PUBLIC TestClone
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#12:34:56.789);
+	clone : I_Datatype;
+	isValidClone : BOOL;
+	compareResult : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestClone');
+
+clone := _type.Clone();
+
+isValidClone := clone <> 0;
+
+IF isValidClone THEN
+	compareResult := memcmp(_type.Address, clone.Address, clone.Size);
+END_IF
+
+AssertTrue(
+	Condition := isValidClone,
+	Message := 'Clone did not produce a clone'
+);
+
+AssertEquals_DINT(
+	Expected := 0,
+    Actual := compareResult,
+    Message := 'Clone did not return a valid clone.'
+);
+
+clone.Dispose();
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMakeReferenceToFollowsReference" Id="{c7fe7cf5-b751-0e07-17c5-4ec304b1e7ef}">
+      <Declaration><![CDATA[METHOD PUBLIC TestMakeReferenceToFollowsReference
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+	target : TIME_OF_DAY := TIME_OF_DAY#0:0:0;
+    expected : TIME_OF_DAY := TIME_OF_DAY#12:34:56.789;
+    actual : TIME_OF_DAY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestMakeReferenceToFollowsReference');
+
+_type.MakeReferenceTo(target);
+target := TIME_OF_DAY#12:34:56.789;;
+
+actual := _type.Value;
+
+AssertEquals_TIME_OF_DAY(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not follow target change'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMakeReferenceToUpdatesReference" Id="{d4079af7-4fbb-06c2-248c-3c8b5f3655cc}">
+      <Declaration><![CDATA[METHOD PUBLIC TestMakeReferenceToUpdatesReference
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+	target : TIME_OF_DAY := TIME_OF_DAY#0:0:0;
+    expected : TIME_OF_DAY := TIME_OF_DAY#12:34:56.789;
+    actual : TIME_OF_DAY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestMakeReferenceToUpdatesReference');
+
+_type.MakeReferenceTo(target);
+_type.Value := TIME_OF_DAY#12:34:56.789;
+
+actual := target;
+
+AssertEquals_TIME_OF_DAY(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not update target'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSerializeTypeWith" Id="{b676f000-62e4-0d6e-2db0-6c4672c2fed1}">
+      <Declaration><![CDATA[METHOD PUBLIC TestSerializeTypeWith
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+    serializer : JsonSerializer;
+    expected : STRING := '{"typeName":"TIME_OF_DAY"}';
+    actual : STRING(500);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestSerializeTypeWith');
+
+serializer.Reset();
+_type.SerializeTypeWith(serializer);
+serializer.TryGetSerializedData(ADR(actual), SIZEOF(actual));
+
+AssertEquals_STRING(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Serialization of type did not return correct string.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSerializeWith" Id="{1fa10dd3-349e-0e9c-19ba-19e3647c1bed}">
+      <Declaration><![CDATA[METHOD PUBLIC TestSerializeWith
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#12:34:56.789);
+    serializer : JsonSerializer;
+    expected : STRING := '"TOD#12:34:56.789"';
+    actual : STRING(500);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestSerializeWith');
+
+serializer.Reset();
+_type.SerializeWith(serializer);
+serializer.TryGetSerializedData(ADR(actual), SIZEOF(actual));
+
+AssertEquals_STRING(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Serialization of type data did not return correct string.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSize" Id="{861f73b9-8a3d-0b90-0477-3f329ea125e7}">
+      <Declaration><![CDATA[METHOD PUBLIC TestSize
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+    expected : UDINT := SIZEOF(TIME_OF_DAY);
+    actual : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestSize');
+
+actual := _type.Size;
+
+AssertEquals_UDINT(
+    Expected := Expected,
+    Actual := actual,
+    Message := 'Type did not return the correct size.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryDeserializeFrom" Id="{342b2651-7b26-0935-1822-e6089e39f968}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryDeserializeFrom
+VAR
+    deserializer : JsonDeserializer;
+    feedback : DeserializerFeedback;
+    json : STRING := '"TIME_OF_DAY#12:34:56.789"';
+    _type : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+    expected : TIME_OF_DAY := TIME_OF_DAY#12:34:56.789;
+    actual : TIME_OF_DAY;
+ END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryDeserializeFrom');
+
+deserializer.Reset();
+deserializer.TryLoad(json);
+_type.TryDeserializeFrom(Deserializer, Feedback);
+
+actual := _type.Value;
+
+AssertEquals_TIME_OF_DAY(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Type did not deserialize correctly.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryMakeReferenceToFollowsReference" Id="{315a64da-89ab-0896-35be-004615c67ff0}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryMakeReferenceToFollowsReference
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+	target : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+    expected : TIME_OF_DAY := TIME_OF_DAY#12:34:56.789;
+    actual : TIME_OF_DAY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryMakeReferenceToFollowsReference');
+
+_type.TryMakeReferenceTo(target);
+target.Value := TIME_OF_DAY#12:34:56.789;
+
+actual := _type.Value;
+
+AssertEquals_TIME_OF_DAY(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not follow target change'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryMakeReferenceToUpdatesReference" Id="{5fe6d6a2-de92-04b4-0ad2-2b051f7d3754}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryMakeReferenceToUpdatesReference
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+	target : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+    expected : TIME_OF_DAY := TIME_OF_DAY#12:34:56.789;
+    actual : TIME_OF_DAY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryMakeReferenceToUpdatesReference');
+
+_type.TryMakeReferenceTo(target);
+_type.Value := TIME_OF_DAY#12:34:56.789;
+
+actual := target.Value;
+
+AssertEquals_TIME_OF_DAY(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not update target'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTypeNameReturnsExpected" Id="{01f33255-772f-0ebf-0d3c-fde31d67b515}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTypeNameReturnsExpected
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+    expected : STRING := 'TIME_OF_DAY';
+    actual : STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTypeNameReturnsExpected');
+
+actual := _type.TypeName;
+
+AssertEquals_STRING(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Type did not return correct iec type.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestValueReturnsExpectedAfterChange" Id="{87771126-5098-0f7f-1a68-edfcaea9cee3}">
+      <Declaration><![CDATA[METHOD PUBLIC TestValueReturnsExpectedAfterChange
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#0:0:0);
+    expected : TIME_OF_DAY := TIME_OF_DAY#12:34:56.789;
+    actual : TIME_OF_DAY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestValueReturnsExpectedAfterChange');
+
+_type.Value := TIME_OF_DAY#12:34:56.789;
+
+actual := _type.Value;
+
+AssertEquals_TIME_OF_DAY(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Expected value not returned after change.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestValueReturnsExpectedAfterInit" Id="{2ce61011-6e0a-0b3f-2845-8447f0b1ead1}">
+      <Declaration><![CDATA[METHOD PUBLIC TestValueReturnsExpectedAfterInit
+VAR
+    _type : _TIME_OF_DAY(TIME_OF_DAY#12:34:56.789);
+    expected : TIME_OF_DAY := TIME_OF_DAY#12:34:56.789;
+    actual : TIME_OF_DAY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestValueReturnsExpectedAfterInit');
+
+actual := _type.Value;
+
+AssertEquals_TIME_OF_DAY(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Expected value not returned after Init.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

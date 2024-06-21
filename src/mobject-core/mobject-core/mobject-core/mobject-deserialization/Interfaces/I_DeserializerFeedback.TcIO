@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_DeserializerFeedback" Id="{e2154fa2-f084-03dc-3107-7048cbfc51d1}">
+    <Declaration><![CDATA[INTERFACE I_DeserializerFeedback
+]]></Declaration>
+    <Method Name="LogDeserializationFailedError" Id="{97165afb-fdf9-0d6b-0fab-b05985d82993}">
+      <Declaration><![CDATA[METHOD PUBLIC LogDeserializationFailedError
+VAR_INPUT
+	Message : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="LogError" Id="{394f1705-74f4-0ebf-351f-ea1e64c66b75}">
+      <Declaration><![CDATA[METHOD PUBLIC LogError
+VAR_INPUT
+	Error : I_Error;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="LogIncorrectKeyTypeError" Id="{156f843a-cbbc-0f13-1264-7da7656c3b8f}">
+      <Declaration><![CDATA[METHOD PUBLIC LogIncorrectKeyTypeError
+VAR_INPUT
+	ExpectedType : T_MAXSTRING;
+	ActualKey : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="LogIncorrectTypeError" Id="{d0cd5346-54fd-0ee3-0168-9fa312501952}">
+      <Declaration><![CDATA[METHOD PUBLIC LogIncorrectTypeError
+VAR_INPUT
+	ExpectedType : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="LogInvalidKeyError" Id="{99ca1fe4-f0e7-093a-2d17-9d88d7c15fcc}">
+      <Declaration><![CDATA[METHOD PUBLIC LogInvalidKeyError
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="LogMissingKeyError" Id="{563169ac-8ca8-0a71-1292-80b7673ae5ea}">
+      <Declaration><![CDATA[METHOD PUBLIC LogMissingKeyError
+VAR_INPUT
+	ExpectedKey : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

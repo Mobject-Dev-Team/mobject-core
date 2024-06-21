@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_BYTE_TO_DWORD" Id="{8c3be1b1-6058-43ad-bd63-ba976ba81354}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_BYTE_TO_DWORD : BOOL
+VAR_INPUT
+	in : BYTE;
+	out : REFERENCE TO DWORD;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := BYTE_TO_DWORD(in);
+TryConvert_BYTE_TO_DWORD := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

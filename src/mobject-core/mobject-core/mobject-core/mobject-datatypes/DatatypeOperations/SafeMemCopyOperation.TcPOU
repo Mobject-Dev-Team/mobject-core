@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="SafeMemCopyOperation" Id="{3fc77062-f732-474c-a8ea-007ea8126945}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK SafeMemCopyOperation EXTENDS Disposable IMPLEMENTS I_DatatypeOperation
+VAR
+	source : I_Datatype;
+	destination : I_Datatype;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{2f0874a3-84d5-4ec9-9ae1-badd817e47a9}" />
+    <Method Name="Execute" Id="{aa4b5bd4-b214-4709-a00d-aae796131268}">
+      <Declaration><![CDATA[METHOD Execute
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[destination.TryCopyFrom(source);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{42940293-215f-4a4e-8899-0f68e0cff581}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Source : I_Datatype;
+	Destination : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.source := Source;
+This^.destination := Destination;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

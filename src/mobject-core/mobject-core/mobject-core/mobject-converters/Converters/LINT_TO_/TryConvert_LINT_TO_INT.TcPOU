@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_LINT_TO_INT" Id="{ca4c27fc-8c2a-44c2-8cb8-f5821ce058b5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_LINT_TO_INT : BOOL
+VAR_INPUT
+	in : LINT;
+	out : REFERENCE TO INT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_LINT_WHICH_CAN_BE_HELD_IN_A_INT THEN
+	RETURN;
+END_IF
+
+IF in < DatatypeLimits.MIN_VALUE_OF_LINT_WHICH_CAN_BE_HELD_IN_A_INT THEN
+	RETURN;
+END_IF
+
+out := LINT_TO_INT(in);
+TryConvert_LINT_TO_INT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

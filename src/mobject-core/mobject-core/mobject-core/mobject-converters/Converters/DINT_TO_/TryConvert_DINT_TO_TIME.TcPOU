@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_DINT_TO_TIME" Id="{be97dc96-b560-4b0e-b352-e98b6de86185}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_DINT_TO_TIME : BOOL
+VAR_INPUT
+	in : DINT;
+	out : REFERENCE TO TIME;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in < DatatypeLimits.MIN_VALUE_OF_DINT_WHICH_CAN_BE_HELD_IN_A_TIME THEN
+	RETURN;
+END_IF
+
+out := DINT_TO_TIME(in);
+TryConvert_DINT_TO_TIME := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

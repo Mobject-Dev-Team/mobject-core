@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_STRING_TO_WORD" Id="{3475f70c-fccb-4c6f-ad05-efa1ec9687be}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_STRING_TO_WORD : BOOL
+VAR_INPUT
+	in : STRING;
+	out : REFERENCE TO WORD;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in <> WORD_TO_STRING(STRING_TO_WORD(in)) THEN
+	RETURN;
+END_IF
+
+out := STRING_TO_WORD(in);
+TryConvert_STRING_TO_WORD := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

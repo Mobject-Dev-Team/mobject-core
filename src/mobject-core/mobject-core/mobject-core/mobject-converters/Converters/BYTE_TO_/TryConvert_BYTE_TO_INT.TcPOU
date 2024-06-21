@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_BYTE_TO_INT" Id="{92376eb1-e993-4d61-876f-6e45f02e1949}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_BYTE_TO_INT : BOOL
+VAR_INPUT
+	in : BYTE;
+	out : REFERENCE TO INT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := BYTE_TO_INT(in);
+TryConvert_BYTE_TO_INT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

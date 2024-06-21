@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MobjectCollectionsUnitTests" Id="{09eef593-2021-07a3-385d-088f16a8c3c6}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MobjectCollectionsUnitTests
+VAR
+	dictionary_TestSuite : Dictionary_TestSuite;
+	dictionaryForwardEnumerator_TestSuite : DictionaryForwardEnumerator_TestSuite;
+	dictionaryKeyValueForwardEnumerator_TestSuite : DictionaryKeyValueForwardEnumerator_TestSuite;
+	orderedDictionary_TestSuite : OrderedDictionary_TestSuite;
+	orderedDictionaryForwardEnumerator_TestSuite : OrderedDictionaryForwardEnumerator_TestSuite;
+	orderedDicKeyValueForwardEnumerator_TestSuite : OrderedDicKeyValueForwardEnumerator_TestSuite;
+    linkedList_TestSuite : LinkedList_TestSuite;
+	linkedListForwardEnumerator_TestSuite : LinkedListForwardEnumerator_TestSuite;
+    list_TestSuite : List_TestSuite;
+    listEnumerator_TestSuite : ListForwardEnumerator_TestSuite;
+	queue_TestSuite : Queue_TestSuite;
+	queueForwardEnumerator_TestSuite : QueueForwardEnumerator_TestSuite;
+    stack_TestSuite : Stack_TestSuite;
+	stackForwardEnumerator_TestSuite : StackForwardEnumerator_TestSuite;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

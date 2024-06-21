@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="StructureMemberHost" Id="{7f70d07f-f6a5-0694-2c54-b05f0be872bd}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK StructureMemberHost IMPLEMENTS I_Serializable, I_StructureMembers
+VAR
+	members : OrderedDictionary;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Accept" Id="{115c5327-dd46-0860-11cc-7d243482d78c}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_DatatypeVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	member : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := members.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(member) THEN
+		member.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddMember" Id="{7337d267-82bc-03e8-24e0-7a349c732187}">
+      <Declaration><![CDATA[METHOD PUBLIC AddMember
+VAR_INPUT
+	MemberName : T_MAXSTRING;
+	Member : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[members.AddOrUpdate(MemberName, Member);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetMemberEnumerator" Id="{5d6e4271-329d-0eb5-05f0-d833da199a4e}">
+      <Declaration><![CDATA[METHOD PUBLIC GetMemberEnumerator : I_KeyValueForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetMemberEnumerator := members.GetKeyValueEnumerator();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeTypeWith" Id="{8c399602-edce-0ec3-005c-e97d58c88794}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_KeyValueForwardEnumerator;
+	member : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF members.Count = 0 THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('members');
+Serializer.StartObject();
+
+enumerator := members.GetKeyValueEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(member) THEN
+		Serializer.AddKey(enumerator.Key);
+		member.SerializeTypeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{eee860ec-2cb6-02b9-176d-286cd003f84f}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_KeyValueForwardEnumerator;
+	member : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := members.GetKeyValueEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(member) THEN
+		Serializer.AddKey(enumerator.Key);
+		member.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{ed640114-d0e7-031a-0a14-af6bf894ce0e}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	membersEnumerator : I_DeserializerObjectForwardEnumerator;
+	member : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[membersEnumerator := Deserializer.GetObjectEnumerator();
+
+WHILE membersEnumerator.MoveNext() DO
+	
+	IF NOT TryGetMemberByName(membersEnumerator.Key, member) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT member.TryDeserializeFrom(membersEnumerator.Current, Feedback) THEN
+		RETURN;
+	END_IF
+
+END_WHILE
+
+membersEnumerator.Dispose();
+TryDeserializeFrom := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetMemberByName" Id="{fa454eee-97ad-08f2-2dff-b264ae88621d}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetMemberByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Datatype;
+END_VAR
+VAR
+	member : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT members.TryGetValue(Name, member) THEN
+	RETURN;
+END_IF
+
+Destination := member;
+TryGetMemberByName := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="WriteBoolToBitOperation" Id="{77960676-50e4-46ca-9a25-2dc838a8dff5}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK WriteBoolToBitOperation EXTENDS Disposable IMPLEMENTS I_DatatypeOperation
+VAR
+	source : REFERENCE TO _BOOL;
+	destination : I_BitDatatype;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{b9064319-43a5-47f9-834f-c427a5e1a32f}" />
+    <Method Name="Execute" Id="{0eb96d2c-ecad-4b74-b2fa-67b43b1b6d7d}">
+      <Declaration><![CDATA[METHOD Execute
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[destination.Value := source.Value;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{0d2c3979-8f8c-4763-947a-548c8c43a736}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Source : REFERENCE TO _BOOL;
+	Destination : I_BitDatatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.source REF= Source;
+THIS^.destination := Destination;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

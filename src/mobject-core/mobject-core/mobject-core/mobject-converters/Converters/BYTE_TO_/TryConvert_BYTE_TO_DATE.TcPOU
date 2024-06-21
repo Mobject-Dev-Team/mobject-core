@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_BYTE_TO_DATE" Id="{d58bf9f8-0b72-4e26-9c64-9c0d052d5d23}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_BYTE_TO_DATE : BOOL
+VAR_INPUT
+	in : BYTE;
+	out : REFERENCE TO DATE;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := BYTE_TO_DATE(in);
+TryConvert_BYTE_TO_DATE := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

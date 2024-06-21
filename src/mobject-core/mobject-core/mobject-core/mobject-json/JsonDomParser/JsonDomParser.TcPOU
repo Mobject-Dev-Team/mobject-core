@@ -1,0 +1,456 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="JsonDomParser" Id="{048d3e08-6373-4b59-994b-eb9b3c040869}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK JsonDomParser EXTENDS FB_JsonDynDomParser
+VAR
+	currentlyParsingType : (NOTHING, DOT_NOTATION_PROPERTY, BRACKET_NOTATION_PROPERTY_OR_ARRAY, BRACKET_NOTATION_PROPERTY_ELEMENT, BRACKET_NOTATION_ARRAY_ELEMENT);
+	readWriteDataType : FB_JsonReadWriteDataType;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Private" Id="{cd819330-408d-42a0-9939-701e9f01a08c}" />
+    <Method Name="TryLocate" Id="{8864f71f-8926-44d0-b55f-e3bd08f7a1b4}">
+      <Declaration><![CDATA[METHOD PUBLIC TryLocate : BOOL
+VAR_INPUT
+	Path : T_MaxString;
+	Destination : REFERENCE TO SJsonValue;
+END_VAR
+VAR
+	jsonDomNavigator : JsonDomNavigator(THIS^);
+	jsonPathSyntaxParser : JsonPathSyntaxParser;
+	jsonValue : SJsonValue;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonPathSyntaxParser.Parse(Path, jsonDomNavigator);
+jsonValue := jsonDomNavigator.CurrentNode;
+
+IF jsonValue = 0 THEN
+	RETURN;
+END_IF
+
+Destination := jsonValue;
+TryLocate := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryModify" Id="{f470a3c6-dfb6-437a-bee7-391b757b63a8}">
+      <Declaration><![CDATA[METHOD PUBLIC TryModify : BOOL
+VAR_INPUT
+	Path : T_MaxString;
+	Source : ANY;
+END_VAR
+VAR
+	jsonDomNavigator : JsonDomNavigator(THIS^);
+	jsonPathSyntaxParser : JsonPathSyntaxParser;
+	jsonValue : SJsonValue;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonPathSyntaxParser.Parse(Path, jsonDomNavigator);
+jsonValue := jsonDomNavigator.CurrentNode;
+
+IF jsonValue = 0 THEN
+	RETURN;
+END_IF
+
+IF IsObject(jsonValue) THEN
+	RETURN;
+END_IF
+
+IF TrySetBool(jsonValue, Source) THEN
+	TryModify := TRUE;
+	RETURN;
+END_IF
+
+IF TrySetString(jsonValue, Source) THEN
+	TryModify := TRUE;
+	RETURN;
+END_IF
+
+IF TrySetInt(jsonValue, Source) THEN
+	TryModify := TRUE;
+	RETURN;
+END_IF
+
+IF TrySetUint(jsonValue, Source) THEN
+	TryModify := TRUE;
+	RETURN;
+END_IF
+
+IF TrySetDouble(jsonValue, Source) THEN
+	TryModify := TRUE;
+	RETURN;
+END_IF
+
+IF TrySetInt64(jsonValue, Source) THEN
+	TryModify := TRUE;
+	RETURN;
+END_IF
+
+IF TrySetUint64(jsonValue, Source) THEN
+	TryModify := TRUE;
+	RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryRead" Id="{b92f3f74-6ebb-4320-a716-e2d4e3159d64}">
+      <Declaration><![CDATA[METHOD PUBLIC TryRead : BOOL
+VAR_INPUT
+	Path : T_MaxString;
+	Destination : ANY;
+END_VAR
+VAR
+	jsonDomNavigator : JsonDomNavigator(THIS^);
+	jsonPathSyntaxParser : JsonPathSyntaxParser;
+	jsonValue : SJsonValue;
+	_BOOL : BOOL;
+	_DINT : DINT;
+	_LINT : LINT;
+	_UDINT : UDINT;
+	_ULINT : ULINT;
+	_LREAL : LREAL;
+	_STRING : POINTER TO STRING(1);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonPathSyntaxParser.Parse(Path, jsonDomNavigator);
+jsonValue := jsonDomNavigator.CurrentNode;
+
+IF jsonValue = 0 THEN
+	RETURN;
+END_IF
+
+IF IsBool(jsonValue) THEN
+	_BOOL := GetBool(jsonValue);
+	TryRead := TryConvert_BOOL_TO_DESTINATION(_BOOL,Destination);
+	RETURN;
+END_IF
+
+IF IsInt(jsonValue) THEN
+	_DINT := GetInt(jsonValue);
+	TryRead := TryConvert_DINT_TO_DESTINATION(_DINT,Destination);
+	RETURN;
+END_IF
+
+IF IsInt64(jsonValue) THEN
+	_LINT := GetInt64(jsonValue);
+	TryRead := TryConvert_LINT_TO_DESTINATION(_LINT,Destination);
+	RETURN;
+END_IF
+
+IF IsUInt(jsonValue) THEN
+	_UDINT := GetUInt(jsonValue);
+	TryRead := TryConvert_UDINT_TO_DESTINATION(_UDINT,Destination);
+	RETURN;
+END_IF
+
+IF IsUInt64(jsonValue) THEN
+	_ULINT := GetUInt64(jsonValue);
+	TryRead := TryConvert_ULINT_TO_DESTINATION(_ULINT,Destination);
+	RETURN;
+END_IF
+
+IF IsDouble(jsonValue) THEN
+	_LREAL := GetDouble(jsonValue);
+	TryRead := TryConvert_LREAL_TO_DESTINATION(_LREAL,Destination);
+	RETURN;
+END_IF
+
+IF IsString(jsonValue) AND Destination.TypeClass = __SYSTEM.TYPE_CLASS.TYPE_STRING THEN
+	_STRING := Destination.pValue;
+	IF (CopyString(jsonValue,_STRING^,DINT_TO_UDINT(Destination.diSize)) > 0) THEN;
+		TryRead := TRUE;
+		RETURN;
+	END_IF
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TrySetBool" Id="{15d8a976-35f3-46f2-848d-dbdde9c3a4e4}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE TrySetBool : BOOL
+VAR_INPUT
+	JsonValue : SJsonValue;
+	Source : ANY;
+END_VAR
+VAR
+	_BOOL : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Source.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_BOOL THEN	
+	RETURN;
+END_IF
+
+memcpy(ADR(_BOOL),Source.pValue,DINT_TO_UDINT(Source.diSize));
+SetBool(jsonValue,_BOOL);
+TrySetBool := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TrySetDouble" Id="{96c72bce-1e0f-43c0-8148-7665adbb5a60}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE TrySetDouble : BOOL
+VAR_INPUT
+	JsonValue : SJsonValue;
+	Source : ANY;
+END_VAR
+VAR
+	convertSuccessful : BOOL;
+	_REAL : REAL;
+	_LREAL : LREAL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE Source.TypeClass OF 
+
+	__SYSTEM.TYPE_CLASS.TYPE_REAL : 
+		memcpy(ADR(_REAL),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TryConvert_Source_TO_Destination(_REAL,_LREAL);
+	
+	__SYSTEM.TYPE_CLASS.TYPE_LREAL : 
+		memcpy(ADR(_LREAL),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TRUE;
+		
+ELSE 
+		
+	RETURN;
+		
+END_CASE
+
+IF NOT convertSuccessful THEN
+	RETURN;
+END_IF
+
+SetDouble(jsonValue,_LREAL);
+TrySetDouble := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TrySetInt" Id="{3eb08cc1-c687-4f4c-87ab-8cb74ac9eb5d}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE TrySetInt : BOOL
+VAR_INPUT
+	JsonValue : SJsonValue;
+	Source : ANY;
+END_VAR
+VAR
+	convertSuccessful : BOOL;
+	_SINT : USINT;	
+	_INT : UINT;
+	_DINT : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE Source.TypeClass OF
+		
+	__SYSTEM.TYPE_CLASS.TYPE_SINT : 
+		memcpy(ADR(_SINT),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TryConvert_Source_TO_Destination(_SINT,_DINT);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_INT : 
+		memcpy(ADR(_INT),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TryConvert_Source_TO_Destination(_INT,_DINT);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_DINT : 
+		memcpy(ADR(_DINT),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TRUE;
+		
+ELSE 
+		
+	RETURN;
+		
+END_CASE
+
+IF NOT convertSuccessful THEN
+	RETURN;
+END_IF
+
+SetInt(jsonValue,_DINT); // Not a typo, SetInt actually takes a DINT
+TrySetInt := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TrySetInt64" Id="{7e810c93-21e1-42da-ba0c-221582999a16}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE TrySetInt64 : BOOL
+VAR_INPUT
+	JsonValue : SJsonValue;
+	Source : ANY;
+END_VAR
+VAR
+	_LINT : LINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Source.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_LINT THEN	
+	RETURN;
+END_IF
+
+memcpy(ADR(_LINT),Source.pValue,DINT_TO_UDINT(Source.diSize));
+SetInt64(jsonValue,_LINT);
+TrySetInt64 := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TrySetString" Id="{086fee2c-4a61-4b9c-8b00-5ca7a064caac}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE TrySetString : BOOL
+VAR_INPUT
+	JsonValue : SJsonValue;
+	Source : ANY;
+END_VAR
+VAR
+	_STRING : POINTER TO STRING(1);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Source.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_STRING THEN	
+	RETURN;
+END_IF
+
+_STRING := Source.pValue;
+
+SetString(jsonValue,_STRING^);
+TrySetString := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TrySetUint" Id="{163d2c4d-723f-489d-b9d9-62abc1400562}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE TrySetUint : BOOL
+VAR_INPUT
+	JsonValue : SJsonValue;
+	Source : ANY;
+END_VAR
+VAR
+	convertSuccessful : BOOL;
+	_BYTE : BYTE;
+	_WORD : WORD;
+	_DWORD : DWORD;	
+	_USINT : USINT;	
+	_UINT : UINT;
+	_UDINT : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE Source.TypeClass OF 
+
+	__SYSTEM.TYPE_CLASS.TYPE_BYTE : 
+		memcpy(ADR(_BYTE),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TryConvert_Source_TO_Destination(_BYTE,_UDINT);
+	
+	__SYSTEM.TYPE_CLASS.TYPE_WORD : 
+		memcpy(ADR(_WORD),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TryConvert_Source_TO_Destination(_WORD,_UDINT);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_DWORD : 
+		memcpy(ADR(_DWORD),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TryConvert_Source_TO_Destination(_DWORD,_UDINT);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_USINT : 
+		memcpy(ADR(_USINT),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TryConvert_Source_TO_Destination(_USINT,_UDINT);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_UINT : 
+		memcpy(ADR(_UINT),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TryConvert_Source_TO_Destination(_UINT,_UDINT);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_UDINT : 
+		memcpy(ADR(_UDINT),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TRUE;
+		
+ELSE 
+		
+	RETURN;
+		
+END_CASE
+
+IF NOT convertSuccessful THEN
+	RETURN;
+END_IF
+
+SetUint(jsonValue,_UDINT); // Not a typo, SetUnit actually takes a UDINT
+TrySetUint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TrySetUint64" Id="{53c2fc42-7ec3-488e-ab20-6cd98339ec04}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE TrySetUint64 : BOOL
+VAR_INPUT
+	JsonValue : SJsonValue;
+	Source : ANY;
+END_VAR
+VAR
+	convertSuccessful : BOOL;
+	_LWORD : LWORD;
+	_ULINT : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE Source.TypeClass OF 
+
+	__SYSTEM.TYPE_CLASS.TYPE_LWORD : 
+		memcpy(ADR(_LWORD),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TryConvert_Source_TO_Destination(_LWORD,_ULINT);
+	
+	__SYSTEM.TYPE_CLASS.TYPE_ULINT : 
+		memcpy(ADR(_ULINT),Source.pValue,DINT_TO_UDINT(Source.diSize));
+		convertSuccessful := TRUE;
+		
+ELSE 
+		
+	RETURN;
+		
+END_CASE
+
+IF NOT convertSuccessful THEN
+	RETURN;
+END_IF
+
+SetUint64(jsonValue,_ULINT);
+TrySetUint64 := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryWrite" Id="{0e63da1b-2496-44a7-a59a-845e982851e0}">
+      <Declaration><![CDATA[METHOD PUBLIC TryWrite : BOOL
+VAR_INPUT
+	Path : T_MaxString;
+	Source : ANY;
+END_VAR
+VAR
+	jsonDomCreator : JsonDomCreator(THIS^);
+	jsonPathSyntaxParser : JsonPathSyntaxParser;
+	jsonValue : SJsonValue;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonPathSyntaxParser.Parse(Path, jsonDomCreator);
+jsonValue := jsonDomCreator.CurrentNode;
+
+IF jsonValue = 0 THEN
+	RETURN;
+END_IF
+
+IF IsObject(jsonValue) THEN
+	RETURN;
+END_IF
+
+IF TrySetBool(jsonValue, Source) THEN
+	TryWrite := TRUE;
+	RETURN;
+END_IF
+
+IF TrySetString(jsonValue, Source) THEN
+	TryWrite := TRUE;
+	RETURN;
+END_IF
+
+IF TrySetInt(jsonValue, Source) THEN
+	TryWrite := TRUE;
+	RETURN;
+END_IF
+
+IF TrySetUint(jsonValue, Source) THEN
+	TryWrite := TRUE;
+	RETURN;
+END_IF
+
+IF TrySetDouble(jsonValue, Source) THEN
+	TryWrite := TRUE;
+	RETURN;
+END_IF
+
+IF TrySetInt64(jsonValue, Source) THEN
+	TryWrite := TRUE;
+	RETURN;
+END_IF
+
+IF TrySetUint64(jsonValue, Source) THEN
+	TryWrite := TRUE;
+	RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

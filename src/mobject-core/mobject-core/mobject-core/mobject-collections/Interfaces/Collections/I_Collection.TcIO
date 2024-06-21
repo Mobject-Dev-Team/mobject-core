@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Collection" Id="{e7f89aff-14bc-0be8-387c-5ab3e36ae5d1}">
+    <Declaration><![CDATA[INTERFACE I_Collection EXTENDS I_Enumerable, I_Disposable, I_EventEmitter]]></Declaration>
+    <Method Name="AddItem" Id="{3321707e-5223-084a-181b-e35fd2ea7498}">
+      <Declaration><![CDATA[METHOD PUBLIC AddItem
+VAR_INPUT
+	Item : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="Clear" Id="{b40ed4c5-4656-0a83-2293-9026e8df8fea}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear]]></Declaration>
+    </Method>
+    <Method Name="Contains" Id="{4ec944f1-f927-0da2-0139-0a26751de37c}">
+      <Declaration><![CDATA[METHOD PUBLIC Contains : BOOL;
+VAR_INPUT
+	Item : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Property Name="Count" Id="{fe805b05-a521-0dd5-0144-5d12a9a5b8e0}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Count : DINT]]></Declaration>
+      <Get Name="Get" Id="{d74e11c0-dbc2-0848-1607-26d4a522339a}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="IsEmpty" Id="{28ac3299-f5f6-0c85-1e2c-e00cea7d5429}">
+      <Declaration><![CDATA[PROPERTY IsEmpty : BOOL]]></Declaration>
+      <Get Name="Get" Id="{3dd0abf2-c4fa-057b-22db-c661ab76148b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryCopyTo" Id="{7df10eec-14df-009c-0ca4-3d5307f345ef}">
+      <Declaration><![CDATA[METHOD PUBLIC TryCopyTo : BOOL
+VAR_INPUT
+	Destination : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryCopyToLocation" Id="{5d16536b-e85c-04b6-017e-1df6335c5b2c}">
+      <Declaration><![CDATA[METHOD PUBLIC TryCopyToLocation : BOOL
+VAR_INPUT
+	DestinationAddress : PVOID;
+	DestinationSize : UDINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryRemoveItem" Id="{6cd647ad-d1f2-0a49-167b-34400b836a82}">
+      <Declaration><![CDATA[METHOD PUBLIC TryRemoveItem : BOOL
+VAR_INPUT
+	Item : ANY;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

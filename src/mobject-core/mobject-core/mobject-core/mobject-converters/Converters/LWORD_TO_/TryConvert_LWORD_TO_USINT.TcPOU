@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_LWORD_TO_USINT" Id="{4bc680be-57b3-4274-9a39-8e3476e3cd5f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_LWORD_TO_USINT : BOOL
+VAR_INPUT
+	in : LWORD;
+	out : REFERENCE TO USINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_LWORD_WHICH_CAN_BE_HELD_IN_A_USINT THEN
+	RETURN;
+END_IF
+
+out := LWORD_TO_USINT(in);
+TryConvert_LWORD_TO_USINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="JsonDeserializerObjectForwardEnumerator_TestSuite" Id="{57843a87-0373-48c5-bac3-58578158a4cd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK JsonDeserializerObjectForwardEnumerator_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestIsValidAtStart();
+TestIsNotValidAfterParentReset();
+TestMoveNextReturnsFalseAtTheEnd();
+TestMoveNextReturnsTrueSingleItem();
+TestMoveNextReturnsFalseWhenEmpty();
+TestMoveNextReturnsTrueMultipleItems();
+TestEnumerateThroughKeys();]]></ST>
+    </Implementation>
+    <Method Name="TestEnumerateThroughKeys" Id="{eb6a0b33-6884-4679-9f50-bbeb58aaebe8}">
+      <Declaration><![CDATA[METHOD PRIVATE TestEnumerateThroughKeys
+VAR
+	jsonDeserializer : JsonDeserializer;
+	enumerator : I_DeserializerObjectForwardEnumerator;
+    json : STRING := '{"key1":"value1", "key2":"value2", "key3":"value3"}';
+	out1, out2, out3 : STRING;
+	expected1 : STRING := 'key1';
+	expected2 : STRING := 'key2';
+	expected3 : STRING := 'key3';
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestEnumerateThroughKeys');
+
+jsonDeserializer.TryLoad(json);
+enumerator := jsonDeserializer.GetObjectEnumerator();
+
+enumerator.MoveNext();
+out1 := enumerator.Key;
+
+enumerator.MoveNext();
+out2 := enumerator.Key;
+
+enumerator.MoveNext();
+out3 := enumerator.Key;
+
+enumerator.Dispose();
+
+AssertEquals(
+	Expected := expected1,
+	Actual := out1,
+	Message := 'Did not produce the expected result'
+);
+
+AssertEquals(
+	Expected := expected2,
+	Actual := out2,
+	Message := 'Did not produce the expected result'
+);
+
+AssertEquals(
+	Expected := expected3,
+	Actual := out3,
+	Message := 'Did not produce the expected result'
+);
+	
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIsNotValidAfterParentReset" Id="{fa66a7da-7f69-4d4d-afeb-f1320cd868de}">
+      <Declaration><![CDATA[METHOD PRIVATE TestIsNotValidAfterParentReset
+VAR
+	jsonDeserializer : JsonDeserializer;
+	enumerator : I_DeserializerObjectForwardEnumerator;
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsNotValidAfterParentReset');
+
+enumerator := jsonDeserializer.GetObjectEnumerator();
+
+jsonDeserializer.Reset();
+result := enumerator.IsValid;
+
+enumerator.Dispose();
+
+AssertFalse(
+	Condition := result,
+	Message := 'IsValid incorrectly returned true after parent was reset'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIsValidAtStart" Id="{2f1ccaa1-7cea-4187-a8ae-3ed24dca9353}">
+      <Declaration><![CDATA[METHOD PRIVATE TestIsValidAtStart
+VAR
+	jsonDeserializer : JsonDeserializer;
+	enumerator : I_DeserializerObjectForwardEnumerator;
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsValidAtStart');
+
+enumerator := jsonDeserializer.GetObjectEnumerator();
+
+result := enumerator.IsValid;
+enumerator.Dispose();
+
+AssertTrue(
+	Condition := result,
+	Message := 'IsValid returned false'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMoveNextReturnsFalseAtTheEnd" Id="{9522a4c2-e76c-44c3-925a-072113f56c86}">
+      <Declaration><![CDATA[METHOD PRIVATE TestMoveNextReturnsFalseAtTheEnd
+VAR
+	jsonDeserializer : JsonDeserializer;
+	enumerator : I_DeserializerObjectForwardEnumerator;
+    json : STRING := '{"key1":"value1"}';
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckMoveNextReturnsFalseAtTheEnd');
+
+jsonDeserializer.TryLoad(json);
+enumerator := jsonDeserializer.GetObjectEnumerator();
+
+enumerator.MoveNext();
+result := enumerator.MoveNext();
+
+enumerator.Dispose();
+
+AssertFalse(result,
+    'MoveNext did not correctly signal the end of the enumeration');
+	
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMoveNextReturnsFalseWhenEmpty" Id="{3c98912f-00ef-479e-bec6-09180b21eebc}">
+      <Declaration><![CDATA[METHOD PRIVATE TestMoveNextReturnsFalseWhenEmpty
+VAR
+	jsonDeserializer : JsonDeserializer;
+	enumerator : I_DeserializerObjectForwardEnumerator;
+    json : STRING := '{}';
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckMoveNextReturnsFalseWhenEmpty');
+
+jsonDeserializer.TryLoad(json);
+enumerator := jsonDeserializer.GetObjectEnumerator();
+
+result := enumerator.MoveNext();
+
+enumerator.Dispose();
+
+AssertFalse(result,
+    'MoveNext did not correctly signal an empty array');
+	
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMoveNextReturnsTrueMultipleItems" Id="{579ca3c1-52f1-4995-bbad-0548e53a4c78}">
+      <Declaration><![CDATA[METHOD PRIVATE TestMoveNextReturnsTrueMultipleItems
+VAR
+	jsonDeserializer : JsonDeserializer;
+	enumerator : I_DeserializerObjectForwardEnumerator;
+    json : STRING := '{"key1":"value1", "key2":"value2"}';
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckMoveNextReturnsTrueMultipleItems');
+
+jsonDeserializer.TryLoad(json);
+enumerator := jsonDeserializer.GetObjectEnumerator();
+
+enumerator.MoveNext();
+result := enumerator.MoveNext();
+
+enumerator.Dispose();
+
+AssertTrue(
+	Condition := result,
+	Message := 'MoveNext did not correctly signal there were more items to follow'
+);
+	
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMoveNextReturnsTrueSingleItem" Id="{dd0dac8c-df04-40fe-84c1-b4bf3f13d92f}">
+      <Declaration><![CDATA[METHOD PRIVATE TestMoveNextReturnsTrueSingleItem
+VAR
+	jsonDeserializer : JsonDeserializer;
+	enumerator : I_DeserializerObjectForwardEnumerator;
+    json : STRING := '{"key1":"value1"}';
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckMoveNextReturnsTrueSingleItem');
+
+jsonDeserializer.TryLoad(json);
+enumerator := jsonDeserializer.GetObjectEnumerator();
+
+result := enumerator.MoveNext();
+
+enumerator.Dispose();
+
+AssertTrue(
+	Condition := result,
+	Message := 'MoveNext did not correctly signal there were more items to follow, i.e. the first item'
+);
+	
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MobjectDatatypesUnitTests" Id="{b716a62d-e363-0cde-3529-ab22dc768e65}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MobjectDatatypesUnitTests
+VAR
+	_BIT_UsingMockStructure_TestSuite : _BIT_UsingMockStructure_TestSuite;
+	_BOOL_TestSuite : _BOOL_TestSuite;
+    _BYTE_TestSuite : _BYTE_TestSuite;
+    _WORD_TestSuite : _WORD_TestSuite;
+    _DWORD_TestSuite : _DWORD_TestSuite;
+    _LWORD_TestSuite : _LWORD_TestSuite;
+    _SINT_TestSuite : _SINT_TestSuite;
+    _INT_TestSuite : _INT_TestSuite;
+    _DINT_TestSuite : _DINT_TestSuite;
+    _LINT_TestSuite : _LINT_TestSuite;
+    _USINT_TestSuite : _USINT_TestSuite;
+    _UINT_TestSuite : _UINT_TestSuite;
+    _UDINT_TestSuite : _UDINT_TestSuite;
+    _ULINT_TestSuite : _ULINT_TestSuite;
+    _REAL_TestSuite : _REAL_TestSuite;
+    _LREAL_TestSuite : _LREAL_TestSuite;
+    //_TIME_TestSuite : _TIME_TestSuite;
+    //_LTIME_TestSuite : _LTIME_TestSuite;
+    _TOD_TestSuite : _TOD_TestSuite;
+    _TIME_OF_DAY_TestSuite : _TIME_OF_DAY_TestSuite;
+    //_DATE_TestSuite : _TIME_TestSuite;
+    //_DATE_AND_TIME_TestSuite : _DATE_AND_TIME_TestSuite;
+    _DT_TestSuite : _DT_TestSuite;
+    //_LDATE, LDATE_AND_TIME, _LDT, LTIME_OF_DAY & _LTOD require TC build >=4026.0
+    _STRING_TestSuite : _STRING_TestSuite;
+	
+	aliasDatatype_TestSuite : AliasDatatype_TestSuite;
+	datatype_TestSuite : Datatype_TestSuite;
+	numericDatatype_TestSuite : NumericDatatype_TestSuite;
+	structuredDatatype_TestSuite : StructuredDatatype_TestSuite;
+	enumDatatype_TestSuite : EnumDatatype_TestSuite;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

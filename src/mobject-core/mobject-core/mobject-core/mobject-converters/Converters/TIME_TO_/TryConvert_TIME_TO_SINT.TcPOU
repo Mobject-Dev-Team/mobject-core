@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_TIME_TO_SINT" Id="{599528bf-0918-4898-9813-0acfbe037174}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_TIME_TO_SINT : BOOL
+VAR_INPUT
+	in : TIME;
+	out : REFERENCE TO SINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_TIME_WHICH_CAN_BE_HELD_IN_A_SINT THEN
+	RETURN;
+END_IF
+
+out := TIME_TO_SINT(in);
+TryConvert_TIME_TO_SINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

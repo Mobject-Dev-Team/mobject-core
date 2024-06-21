@@ -1,0 +1,789 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Queue_TestSuite" Id="{797d66eb-db42-0f5a-2536-b67bdfbe2893}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC Queue_TestSuite EXTENDS TcUnit.FB_TestSuite]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// check datatypes are handled correctly
+CheckListWorksWithIntegers();
+CheckListWorksWithStrings();
+CheckListWorksWithArrays();
+
+// all other checks
+CheckQueueImplementsI_Queue();
+CheckContains();
+CheckClear();
+CheckCount();
+CheckAddItem();
+CheckTryRemoveItem();
+CheckTryDequeueRemovesTheItem();
+CheckTryDequeueReturnsTheCorrectValue();
+CheckTryPeekReturnsTheCorrectValue();
+CheckTryPeekDoesNotRemoveTheItem();
+CheckOnChangedEvent();
+CheckOnDisposedEvent();
+CheckOnceEvent();
+CheckOffEvent();
+CheckTryCopyTo();
+CheckTryCopyToLocation();
+CheckQueueOrderIsCorrect();
+CheckListReturnsEnumerator();
+CheckEnumeratorIsInvalidAfterChange();
+CheckIsEmptyWhenEmpty();
+CheckIsEmptyWhenFull();]]></ST>
+    </Implementation>
+    <Method Name="CheckAddItem" Id="{e4869e4c-1ae3-0ed7-307d-4ea09d860c8f}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckAddItem
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	result : BOOL;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckAddItem');
+
+// @TEST-FIXTURE
+queue.Enqueue(in1); // (lifo->) 123
+queue.Enqueue(in2); // (lifo->) 123, 456
+
+// @TEST-RUN
+queue.AddItem(in3); // (lifo->) 123, 456, 789
+result := queue.Contains(in3);
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := result,
+	Message := 'Method returned false'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckClear" Id="{7b966737-d6a4-012c-2a3c-431e7bba25f0}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckClear
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckClear');
+
+// @TEST-FIXTURE
+queue.Enqueue(in1); // (lifo->) 123
+queue.Enqueue(in2); // (lifo->) 123, 456
+queue.Enqueue(in2); // (lifo->) 123, 456, 789
+
+// @TEST-RUN
+queue.Clear();
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := queue.Count = 0,
+	Message := 'The count is not zero'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckContains" Id="{4eb88b29-de7d-0cfa-0044-7e0afb1882ba}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckContains
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	result : BOOL;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckContains');
+
+// @TEST-FIXTURE
+queue.Enqueue(in1); // (lifo->) 123
+queue.Enqueue(in2); // (lifo->) 123, 456
+queue.Enqueue(in2); // (lifo->) 123, 456, 789
+
+// @TEST-RUN
+result := queue.Contains(in2);
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := result,
+	Message := 'Did not find the item in the queue'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckCount" Id="{bbe87ac6-8047-0b97-3778-8417535957b8}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckCount
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	total : DINT;
+	expected : DINT := 3;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckCount');
+
+// @TEST-FIXTURE
+queue.Enqueue(in1); // (lifo->) 123
+queue.Enqueue(in2); // (lifo->) 123, 456
+queue.Enqueue(in2); // (lifo->) 123, 456, 789
+
+// @TEST-RUN
+total := queue.Count;
+
+// @TEST-ASSSERT
+AssertEquals(
+	Expected := expected,
+	Actual := total,
+	Message := 'Incorrect count'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckEnumeratorIsInvalidAfterChange" Id="{b69acecc-4f61-01bd-1225-f0308ea0c51f}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckEnumeratorIsInvalidAfterChange
+VAR
+	in : INT := 123;
+	result : BOOL;
+	queue : Queue;
+	enumerator : I_ForwardEnumerator;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckEnumeratorIsInvalidAfterChange');
+
+// @TEST-FIXTURE
+enumerator := queue.GetEnumerator();
+queue.Enqueue(in);
+
+// @TEST-RUN
+result := enumerator.IsValid;
+enumerator.Dispose();
+
+// @TEST-ASSSERT
+AssertFalse(
+	Condition := result,
+	Message := 'Method returned true'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckIsEmptyWhenEmpty" Id="{0cc6109d-559c-089e-34af-9b51cc76c8c0}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckIsEmptyWhenEmpty
+VAR
+	result : BOOL;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckIsEmptyWhenEmpty');
+
+// @TEST-RUN
+result := queue.IsEmpty;
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := result,
+	Message := 'Incorrect state of IsEmpty'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckIsEmptyWhenFull" Id="{b177137e-2e2b-002f-22f8-b9a21612a6fe}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckIsEmptyWhenFull
+VAR
+	in : INT := 123;
+	result : BOOL;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckIsEmptyWhenFull');
+
+// @TEST-FIXTURE
+queue.Enqueue(in);
+
+// @TEST-RUN
+result := queue.IsEmpty;
+
+// @TEST-ASSSERT
+AssertFalse(
+	Condition := result,
+	Message := 'Incorrect state of IsEmpty'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckListReturnsEnumerator" Id="{3657cc7e-1e44-0822-3126-9b006b117860}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckListReturnsEnumerator
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	enumerator : I_ForwardEnumerator;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckListReturnsEnumerator');
+
+// @TEST-FIXTURE
+queue.Enqueue(in1); // (lifo->) 123
+queue.Enqueue(in2); // (lifo->) 123, 456
+queue.Enqueue(in2); // (lifo->) 123, 456, 789
+
+// @TEST-RUN
+enumerator := queue.GetEnumerator();
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := (enumerator <> 0),
+	Message := 'Did not return an enumerator'
+);
+
+// @TEST-DISPOSE
+enumerator.Dispose();
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckListWorksWithArrays" Id="{e3aad8c8-42a5-013c-3488-cb0f4a2751df}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckListWorksWithArrays
+VAR
+	in : ARRAY [0..1] OF REAL := [0.1,2.3];
+	out : ARRAY [0..1] OF REAL;
+	expected : ARRAY [0..1] OF REAL := [0.1,2.3];
+	result : BOOL;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckListWorksWithArrays');
+
+// @TEST-FIXTURE
+queue.Enqueue(in);
+
+// @TEST-RUN
+result := queue.TryDequeue(out);
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := result,
+	Message := 'Method returned false'
+);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckListWorksWithIntegers" Id="{faae508d-51e9-0359-1aae-c9b3ac1a6edd}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckListWorksWithIntegers
+VAR
+	in : INT := 123;
+	out : INT;
+	expected : INT := 123;
+	result : BOOL;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckListWorksWithIntegers');
+
+// @TEST-FIXTURE
+queue.Enqueue(in);
+
+// @TEST-RUN
+result := queue.TryDequeue(out);
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := result,
+	Message := 'Method returned false'
+);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckListWorksWithStrings" Id="{b1f551b1-b563-0921-2451-7ea1f31af6a6}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckListWorksWithStrings
+VAR
+	in : STRING := 'test';
+	out : STRING;
+	expected : STRING := 'test';
+	result : BOOL;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckListWorksWithStrings');
+
+// @TEST-FIXTURE
+queue.Enqueue(in);
+
+// @TEST-RUN
+result := queue.TryDequeue(out);
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := result,
+	Message := 'Method returned false'
+);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckOffEvent" Id="{59d25123-5abc-0362-087c-e5885ff5c65d}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckOffEvent
+VAR
+	value : INT := 123;
+	queue : queue;
+	handler : CollectionChangedEventHandler(ExpectedOriginator := queue);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckOffEvent');
+
+// @TEST-FIXTURE
+queue.OnEvent('OnChanged',handler);
+queue.OffEvent('OnChanged',handler);
+
+// @TEST-RUN
+queue.Enqueue(value);
+
+// @TEST-ASSSERT
+AssertFalse(
+	Condition := handler.EventReceived,
+	Message := 'OnceEvent emitted the OnChanged event more than once'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckOnceEvent" Id="{8b749545-909a-06d8-066d-482a44adfb76}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckOnceEvent
+VAR
+	value : INT := 123;
+	queue : Queue;
+	handler : CollectionChangedEventHandler(ExpectedOriginator := queue);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckOnceEvent');
+
+// @TEST-FIXTURE
+queue.OnceEvent('OnChanged',handler);
+queue.Enqueue(value);
+handler.Reset();
+
+// @TEST-RUN
+queue.Enqueue(value);
+
+// @TEST-ASSSERT
+AssertFalse(
+	Condition := handler.EventReceived,
+	Message := 'OnceEvent emitted the OnChanged event more than once'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckOnChangedEvent" Id="{7df3baa3-d460-090b-2849-10f9d87026ce}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckOnChangedEvent
+VAR
+	value : INT := 123;
+	queue : Queue;
+	handler : CollectionChangedEventHandler(ExpectedOriginator := queue);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckOnChangedEvent');
+
+// @TEST-FIXTURE
+queue.OnEvent('OnChanged', handler);
+
+// @TEST-RUN
+queue.Enqueue(value);
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := handler.EventReceived,
+	Message := 'Did not emit the OnChanged event'
+);
+
+AssertTrue(
+	Condition := handler.FromExpectedOriginator,
+	Message := 'Did not include itself in the OnChanged event'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckOnDisposedEvent" Id="{57fb3c21-428a-00de-140d-634fe3b98826}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckOnDisposedEvent
+VAR
+	value : INT := 123;
+	pQueue : POINTER TO Queue;
+	handler : CollectionDisposedEventHandler(ExpectedOriginator := 0);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckOnDisposedEvent');
+
+// @TEST-FIXTURE
+pQueue := __NEW(Queue);
+handler.SetExpectedOriginator(pQueue^);
+pQueue^.OnEvent('OnDisposed', handler);
+
+// @TEST-RUN
+pQueue^.Dispose();
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := handler.EventReceived,
+	Message := 'Did not emit the OnDisposed event'
+);
+
+AssertTrue(
+	Condition := handler.FromExpectedOriginator,
+	Message := 'Did not include itself in the OnDisposed event'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckQueueImplementsI_Queue" Id="{209747d2-18ce-067a-305b-113ae3961216}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckQueueImplementsI_Queue
+VAR
+	queue : Queue;
+    iQueue : I_Queue := queue;
+    result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckQueueImplementsI_Queue');
+
+// @TEST-FIXTURE
+
+// @TEST-RUN
+result := iQueue <> 0;
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := result,
+	Message := 'Did not implement I_Queue'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckQueueOrderIsCorrect" Id="{19f54d16-c79e-009c-29b5-a41530dfcf8f}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckQueueOrderIsCorrect
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	out1, out2, out3 : INT;
+	expected1 : INT := 123;
+	expected2 : INT := 456;
+	expected3 : INT := 789;
+	result1, result2, result3 : BOOL;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckQueueOrderIsCorrect');
+
+// @TEST-FIXTURE
+queue.Enqueue(in1); // (lifo->) 123
+queue.Enqueue(in2); // (lifo->) 123, 456
+queue.Enqueue(in3); // (lifo->) 123, 456, 789
+
+// @TEST-RUN
+result1 := queue.TryDequeue(out1); // (lifo->) 456, 789
+result2 := queue.TryDequeue(out2); // (lifo->) 789
+result3 := queue.TryDequeue(out3); // (lifo->) 
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := result1 AND result2 AND result3,
+	Message := 'Method returned false'
+);
+
+AssertEquals(
+	Expected := expected1,
+	Actual := out1,
+	Message := 'Did not produce the expected result'
+);
+
+AssertEquals(
+	Expected := expected2,
+	Actual := out2,
+	Message := 'Did not produce the expected result'
+);
+
+AssertEquals(
+	Expected := expected3,
+	Actual := out3,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryCopyTo" Id="{b9a22170-b027-09ba-297a-abfc3d615d90}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryCopyTo
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	out : ARRAY [0..2] OF INT;
+	expected : ARRAY [0..2] OF INT := [123,456,789];
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryCopyTo');
+
+// @TEST-FIXTURE
+queue.Enqueue(in1); // (lifo->) 123
+queue.Enqueue(in2); // (lifo->) 123, 456
+queue.Enqueue(in3); // (lifo->) 123, 456, 789
+
+// @TEST-RUN
+queue.TryCopyTo(out);
+
+// @TEST-ASSSERT
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryCopyToLocation" Id="{436503c9-8ba9-09b8-34e4-c5bc1748282f}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryCopyToLocation
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	out : ARRAY [0..2] OF INT;
+	expected : ARRAY [0..2] OF INT := [123,456,789];
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryCopyToLocation');
+
+// @TEST-FIXTURE
+queue.Enqueue(in1); // (lifo->) 123
+queue.Enqueue(in2); // (lifo->) 123, 456
+queue.Enqueue(in3); // (lifo->) 123, 456, 789
+
+// @TEST-RUN
+queue.TryCopyToLocation(ADR(out),SIZEOF(out));
+
+// @TEST-ASSSERT
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryDequeueRemovesTheItem" Id="{44510620-c2b0-0c4e-2ab9-934455d8f36d}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryDequeueRemovesTheItem
+VAR
+	in : INT := 123;
+	out : INT;
+	total : DINT;
+	expected : DINT := 0;
+	queue : Queue;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryDequeueDoesNotRemoveTheItem');
+
+// @TEST-FIXTURE
+queue.Enqueue(in); // (lifo->) 123
+
+// @TEST-RUN
+queue.TryDequeue(out);
+total := queue.Count;
+
+// @TEST-ASSSERT
+AssertEquals(
+	Expected := expected,
+	Actual := total,
+	Message := 'Incorrect count'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryDequeueReturnsTheCorrectValue" Id="{8f7080d5-d897-0783-24df-6e1f823e1beb}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryDequeueReturnsTheCorrectValue
+VAR
+	in : INT := 123;
+	out : INT;
+	expected : INT := 123;
+	result : BOOL;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryDequeueReturnsTheCorrectValue');
+
+// @TEST-FIXTURE
+queue.Enqueue(in);
+
+// @TEST-RUN
+result := queue.TryPeek(out);
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := result,
+	Message := 'Method returned false'
+);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryPeekDoesNotRemoveTheItem" Id="{34c5d657-d4af-00f1-29f7-39a60fc4522a}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryPeekDoesNotRemoveTheItem
+VAR
+	in : INT := 123;
+	out : INT;
+	total : DINT;
+	expected : DINT := 1;
+	queue : Queue;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryPeekDoesNotRemoveTheItem');
+
+// @TEST-FIXTURE
+queue.Enqueue(in); // (lifo->) 123
+
+// @TEST-RUN
+queue.TryPeek(out);
+total := queue.Count;
+
+// @TEST-ASSSERT
+AssertEquals(
+	Expected := expected,
+	Actual := total,
+	Message := 'Incorrect count'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryPeekReturnsTheCorrectValue" Id="{d65cf93f-d03c-0b1a-2ae6-a95db1082214}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryPeekReturnsTheCorrectValue
+VAR
+	in : INT := 123;
+	out : INT;
+	expected : INT := 123;
+	result : BOOL;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryPeekReturnsTheCorrectValue');
+
+// @TEST-FIXTURE
+queue.Enqueue(in);
+
+// @TEST-RUN
+result := queue.TryPeek(out);
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := result,
+	Message := 'Method returned false'
+);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryRemoveItem" Id="{0ed745f6-17c7-041a-0571-109b2d2a52ac}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryRemoveItem
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	result : BOOL;
+	queue : Queue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryRemoveItem');
+
+// @TEST-FIXTURE
+queue.Enqueue(in1); // (lifo->) 123
+queue.Enqueue(in2); // (lifo->) 123, 456
+queue.Enqueue(in3); // (lifo->) 123, 456, 789
+
+// @TEST-RUN
+queue.TryRemoveItem(in2); // (lifo->) 123, 789
+result := queue.Contains(in2);
+
+// @TEST-ASSSERT
+AssertFalse(
+	Condition := result,
+	Message := 'Method returned true'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

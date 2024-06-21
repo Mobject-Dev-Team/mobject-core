@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Error" Id="{4adafacb-b574-4617-b98d-8589a49bb768}">
+    <Declaration><![CDATA[INTERFACE I_Error EXTENDS I_Serializable, I_Disposable
+]]></Declaration>
+    <Method Name="Accept" Id="{cfad112c-b668-0cce-1c8e-c8092aad6555}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ErrorVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="ErrorType" Id="{8eb1b3a2-02e8-0416-2ba9-4db886e86833}">
+      <Declaration><![CDATA[PROPERTY ErrorType : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{255ac49f-57eb-0d0a-2ada-8a2bc7aa3977}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="IsSameAs" Id="{c8fdad5a-bf3a-0136-0cd6-3a0bc91534a1}">
+      <Declaration><![CDATA[METHOD PUBLIC IsSameAs : BOOL
+VAR_INPUT
+	Error : I_Error;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Message" Id="{75ba50e0-0833-4d43-9651-b2ef617ee169}">
+      <Declaration><![CDATA[PROPERTY Message : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{a1363b93-8f5c-4c53-ad03-a7de886e4eb1}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

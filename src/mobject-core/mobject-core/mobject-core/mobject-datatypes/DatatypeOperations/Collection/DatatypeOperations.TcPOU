@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="DatatypeOperations" Id="{d80f1e98-7cc8-4915-9764-eb67bae060ba}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK DatatypeOperations
+VAR
+	operations : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Destructor" Id="{41506be8-7988-4142-92e1-81ce0096d8b5}" />
+    <Folder Name="Private" Id="{ae9caf2b-b342-4062-941d-c7206ecc9d87}" />
+    <Method Name="AddMemoryCopyOperation" Id="{a3d29056-2e78-440a-8969-72722b85a122}">
+      <Declaration><![CDATA[METHOD PUBLIC AddMemoryCopyOperation
+VAR_INPUT
+	Source : I_Datatype;
+	Destination : I_Datatype;
+END_VAR
+VAR
+	operation : I_DatatypeOperation;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[operation := CreateMemoryCopyOperation(Source,Destination);
+operations.Push(operation);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddSafeMemoryCopyOperation" Id="{9b519e7c-2bba-4f27-9428-8195008e8adc}">
+      <Declaration><![CDATA[METHOD PUBLIC AddSafeMemoryCopyOperation
+VAR_INPUT
+	Source : I_Datatype;
+	Destination : I_Datatype;
+END_VAR
+VAR
+	operation : I_DatatypeOperation;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[operation := CreateSafeMemoryCopyOperation(Source,Destination);
+operations.Push(operation);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddWriteBitToBoolOperation" Id="{195b19d3-7710-48c0-8c2c-aa310b50a8b4}">
+      <Declaration><![CDATA[METHOD PUBLIC AddWriteBitToBoolOperation
+VAR_INPUT
+	Source : I_BitDatatype;
+	Destination : Reference to _BOOL;
+END_VAR
+VAR
+	operation : I_DatatypeOperation;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[operation := CreateWriteBitToBoolOperation(Source,Destination);
+operations.Push(operation);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddWriteBoolToBitOperation" Id="{7c3a0344-fac1-46fe-b427-dd4bfd926afb}">
+      <Declaration><![CDATA[METHOD PUBLIC AddWriteBoolToBitOperation
+VAR_INPUT
+	Source : REFERENCE TO _BOOL;
+	Destination : I_BitDatatype;
+END_VAR
+VAR
+	operation : I_DatatypeOperation;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[operation := CreateWriteBoolToBitOperation(Source,Destination);
+operations.Push(operation);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Clear" Id="{69236ec4-4fb3-4d52-a63c-06f3bf214ac5}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear
+VAR
+	operation : I_DatatypeOperation;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE operations.TryPop(operation) DO
+	operation.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateMemoryCopyOperation" Id="{96503550-eb59-496d-aa73-e722d3c814a7}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateMemoryCopyOperation : I_DatatypeOperation
+VAR_INPUT
+	OperationSource : I_Datatype;
+	OperationDestination : I_Datatype;
+END_VAR
+VAR
+	pOperation : POINTER TO MemCopyOperation;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pOperation := __NEW(MemCopyOperation(Source := OperationSource, Destination := OperationDestination));
+CreateMemoryCopyOperation := pOperation^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateSafeMemoryCopyOperation" Id="{f6bf3de6-f1c6-46d0-85cb-db6e1763334c}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateSafeMemoryCopyOperation : I_DatatypeOperation
+VAR_INPUT
+	OperationSource : I_Datatype;
+	OperationDestination : I_Datatype;
+END_VAR
+VAR
+	pOperation : POINTER TO SafeMemCopyOperation;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pOperation := __NEW(SafeMemCopyOperation(Source := OperationSource, Destination := OperationDestination));
+CreateSafeMemoryCopyOperation := pOperation^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateWriteBitToBoolOperation" Id="{f17d4fd7-3697-4624-bbdc-c74a42113d5d}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateWriteBitToBoolOperation : I_DatatypeOperation
+VAR_INPUT
+	OperationSource : I_BitDatatype;
+	OperationDestination : REFERENCE TO _BOOL;
+END_VAR
+VAR
+	pOperation : POINTER TO WriteBitToBoolOperation;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pOperation := __NEW(WriteBitToBoolOperation(Source := OperationSource, Destination := OperationDestination));
+CreateWriteBitToBoolOperation := pOperation^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateWriteBoolToBitOperation" Id="{386d42a1-fc3c-46fc-b120-4cb60012c100}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateWriteBoolToBitOperation : I_DatatypeOperation
+VAR_INPUT
+	OperationSource : REFERENCE TO _BOOL;
+	OperationDestination : I_BitDatatype;
+END_VAR
+VAR
+	pOperation : POINTER TO WriteBoolToBitOperation;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pOperation := __NEW(WriteBoolToBitOperation(Source := OperationSource, Destination := OperationDestination));
+CreateWriteBoolToBitOperation := pOperation^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{a5b2c75c-db56-4f5d-8cf1-8cb873c827aa}">
+      <Declaration><![CDATA[METHOD PUBLIC Execute
+VAR
+	enumerator : I_ForwardEnumerator;
+	operation : I_DatatypeOperation;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := operations.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(operation) THEN
+		operation.Execute();
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{9d8b6598-440c-4ceb-8eb9-372707423e00}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+operations.Clear();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

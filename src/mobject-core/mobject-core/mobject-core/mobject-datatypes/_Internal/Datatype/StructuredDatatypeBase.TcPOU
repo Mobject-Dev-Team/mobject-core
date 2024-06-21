@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="StructuredDatatypeBase" Id="{bc150211-39c1-00b8-3052-dd0ac967ae97}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ABSTRACT StructuredDatatypeBase EXTENDS UserDefinedDatatypeBase IMPLEMENTS I_StructuredDatatype
+VAR
+	membersHost : StructureMemberHost;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Protected" Id="{8a6cc4e9-0cf9-09ae-2600-c49f7b78b747}" />
+    <Method Name="Accept" Id="{2525fe4e-c2d7-023a-24ad-be353676dbec}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_DatatypeVisitor;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitDatatype(THIS^);
+membersHost.Accept(Visitor);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddMember" Id="{995388ce-ce9f-07a0-3c1c-5a4b1c1db70b}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddMember
+VAR_INPUT
+	MemberName : T_MAXSTRING;
+	Member : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[membersHost.AddMember(MemberName, Member);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Members" Id="{e924424f-68fd-420c-bfcc-0c00d9c8ca5c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Members : I_StructureMembers]]></Declaration>
+      <Get Name="Get" Id="{ea72665e-07db-45f6-a55b-a366cd94ac39}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Members := membersHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="OnSerializeTypeWith" Id="{9c6c9b2c-d674-0a1a-1c74-9c425d9519f1}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnSerializeTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.OnSerializeTypeWith(Serializer);
+membersHost.SerializeTypeWith(Serializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{e3b387e1-ec15-0ad5-11fd-34ceb26b6d8f}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+membersHost.SerializeWith(Serializer);
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{8f0213c3-fd2f-0a33-177e-22ac430367f1}">
+      <Declaration><![CDATA[METHOD TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryDeserializeFrom := membersHost.TryDeserializeFrom(Deserializer, Feedback);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAsStructuredDatatype" Id="{1c036e15-2be0-05af-3425-145ddbe4724f}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsStructuredDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_StructuredDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Destination := THIS^;
+TryResolveAsStructuredDatatype := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="TypeName" Id="{bc10a3bf-cc5b-009c-23fd-26e2e5d92aaf}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TypeName : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{23cab9a1-ba8e-0b29-2f33-7ba99b4bdbfd}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TypeName := 'STRUCT';]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

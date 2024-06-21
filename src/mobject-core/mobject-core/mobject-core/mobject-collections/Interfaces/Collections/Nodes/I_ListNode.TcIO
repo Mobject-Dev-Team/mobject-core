@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_ListNode" Id="{92604193-4296-06cc-11b0-8b3359e8272f}">
+    <Declaration><![CDATA[INTERFACE I_ListNode EXTENDS I_CollectionNode;
+]]></Declaration>
+  </Itf>
+</TcPlcObject>

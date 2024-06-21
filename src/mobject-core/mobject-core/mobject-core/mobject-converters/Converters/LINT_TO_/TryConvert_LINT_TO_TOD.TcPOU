@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_LINT_TO_TOD" Id="{de48b6ec-c08d-40c4-9c7e-9ff68ea88b56}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_LINT_TO_TOD : BOOL
+VAR_INPUT
+	in : LINT;
+	out : REFERENCE TO TOD;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_LINT_WHICH_CAN_BE_HELD_IN_A_TOD THEN
+	RETURN;
+END_IF
+
+IF in < DatatypeLimits.MIN_VALUE_OF_LINT_WHICH_CAN_BE_HELD_IN_A_TOD THEN
+	RETURN;
+END_IF
+
+out := LINT_TO_TOD(in);
+TryConvert_LINT_TO_TOD := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

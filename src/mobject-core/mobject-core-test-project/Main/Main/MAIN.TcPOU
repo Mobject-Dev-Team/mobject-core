@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MAIN" Id="{42ba3a90-05d7-0643-1254-d4b210024561}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// unit tests
+MobjectDisposableUnitTests();
+MobjectEventsUnitTests();
+MobjectCollectionsUnitTests();
+MobjectDeserializationUnitTests();
+MobjectErrorsUnitTests();
+MobjectDatatypesUnitTests();
+MobjectConvertersUnitTests();
+
+// examples
+MobjectCollectionsExample();
+
+// tcunit
+TcUnit.RUN();]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_REAL_TO_STRING" Id="{30b663ee-c3e4-4219-8896-43c68360581f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_REAL_TO_STRING : BOOL
+VAR_INPUT
+	in : REAL;
+	out : REFERENCE TO STRING;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := REAL_TO_STRING(in);
+TryConvert_REAL_TO_STRING := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

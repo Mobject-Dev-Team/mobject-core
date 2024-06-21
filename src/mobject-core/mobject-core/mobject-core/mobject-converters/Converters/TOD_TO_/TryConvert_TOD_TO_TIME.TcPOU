@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_TOD_TO_TIME" Id="{43d13a6f-ee8d-48f3-b659-037a1e580a97}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_TOD_TO_TIME : BOOL
+VAR_INPUT
+	in : TOD;
+	out : REFERENCE TO TIME;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := TOD_TO_TIME(in);
+TryConvert_TOD_TO_TIME := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

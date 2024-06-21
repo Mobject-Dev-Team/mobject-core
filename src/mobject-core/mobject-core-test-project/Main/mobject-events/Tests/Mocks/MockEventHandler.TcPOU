@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MockEventHandler" Id="{e5c40a76-6be0-0e8c-0e05-686c087ef0ee}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK MockEventHandler IMPLEMENTS I_EventHandler
+VAR
+	_eventsHandled : INT;
+	lastEventHandled : I_Event;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="EqualsLastEvent" Id="{571368ef-4b3a-012d-1567-fbfa76757fe9}">
+      <Declaration><![CDATA[METHOD PUBLIC EqualsLastEvent : bool
+VAR_INPUT
+	Event : I_Event;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[EqualsLastEvent := lastEventHandled = Event;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="EventsHandled" Id="{42cd2462-2608-0be5-029b-b79da3772aeb}">
+      <Declaration><![CDATA[PROPERTY EventsHandled : int]]></Declaration>
+      <Get Name="Get" Id="{e57a048e-861f-057f-3abe-0f111a61f346}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[EventsHandled := _eventsHandled;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="HandleEvent" Id="{deed9fc6-275c-0842-21ab-1ab8f27699a5}">
+      <Declaration><![CDATA[METHOD HandleEvent
+VAR_INPUT
+	Event	: I_Event;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_eventsHandled := _eventsHandled + 1;
+lastEventHandled := Event;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

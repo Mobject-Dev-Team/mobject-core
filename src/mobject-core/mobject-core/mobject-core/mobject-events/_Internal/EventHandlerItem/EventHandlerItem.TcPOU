@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="EventHandlerItem" Id="{f1740da3-00c1-49c4-98a2-5604b67a44ab}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK EventHandlerItem EXTENDS Disposable IMPLEMENTS I_EventHandlerItem
+VAR
+	name : T_MAXSTRING;
+	handler : I_EventHandler;
+	_next : I_EventHandlerItem;
+	_previous : I_EventHandlerItem;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{ea9f4b43-77e8-41a8-81b1-2aa78ad5a1ff}" />
+    <Method Name="Emit" Id="{1124dac4-8426-4846-a4c3-72ce9d7cfffb}">
+      <Declaration><![CDATA[METHOD PUBLIC Emit
+VAR_INPUT
+	EventName : T_MaxString;
+	Event : I_Event;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF EventName <> name THEN
+	RETURN;
+END_IF
+
+IF handler = 0 THEN
+	RETURN;
+END_IF
+
+handler.HandleEvent(Event);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EqualTo" Id="{9c357721-07bc-4c25-9731-c98d09e0fd05}">
+      <Declaration><![CDATA[METHOD PUBLIC EqualTo : BOOL
+VAR_INPUT
+	Name : T_MaxString;
+	Handler : I_EventHandler;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF THIS^.handler <> Handler THEN
+	RETURN;
+END_IF
+
+IF THIS^.name <> Name THEN
+	RETURN;
+END_IF
+
+EqualTo := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{928a1fc1-2c2d-4794-934b-73a6eef52d60}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : T_MAXSTRING;
+	Handler : I_EventHandler;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.name := Name;
+THIS^.handler := Handler;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Next" Id="{eb704fec-d02d-4248-acb4-7640209a702e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Next : I_EventHandlerItem]]></Declaration>
+      <Get Name="Get" Id="{af3433d4-8ac9-4e3b-a120-4dad57222558}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Next := _next;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{ad7b668b-bca0-4ea8-beda-3ac9e32ca2d6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_next := Next;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Previous" Id="{9f049b1d-10c0-43b8-8561-0a7c3d08324d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Previous : I_EventHandlerItem]]></Declaration>
+      <Get Name="Get" Id="{5a659dd8-76b3-42ae-afe1-7fb2a4c30a7e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Previous := _previous;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{a2a4ab67-d3d4-406a-91d2-ea43b3bcf65b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_previous := Previous;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+  </POU>
+</TcPlcObject>

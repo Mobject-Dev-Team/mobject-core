@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_INT_TO_USINT" Id="{6f22af9a-857c-479a-a6bd-2cd1023db667}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_INT_TO_USINT : BOOL
+VAR_INPUT
+	in : INT;
+	out : REFERENCE TO USINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_INT_WHICH_CAN_BE_HELD_IN_A_USINT THEN
+	RETURN;
+END_IF
+
+IF in < DatatypeLimits.MIN_VALUE_OF_INT_WHICH_CAN_BE_HELD_IN_A_USINT THEN
+	RETURN;
+END_IF
+
+out := INT_TO_USINT(in);
+TryConvert_INT_TO_USINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

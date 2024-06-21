@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_DT_TO_UINT" Id="{2ddd65e0-3d7e-4d52-a20a-0287e102b1e2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_DT_TO_UINT : BOOL
+VAR_INPUT
+	in : DT;
+	out : REFERENCE TO UINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_DT_WHICH_CAN_BE_HELD_IN_A_UINT THEN
+	RETURN;
+END_IF
+
+out := DT_TO_UINT(in);
+TryConvert_DT_TO_UINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

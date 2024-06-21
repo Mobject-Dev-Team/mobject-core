@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NumericDatatypeBase" Id="{96cfe585-e451-066a-0b8c-26079dae1329}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ABSTRACT NumericDatatypeBase EXTENDS DatatypeBase IMPLEMENTS I_NumericDatatype
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Protected" Id="{39e73c2d-fc59-01cc-09ba-b5d6d4e55439}" />
+    <Property Name="IsFloat" Id="{db9b3e2c-dfd9-0457-2028-dc261a7bc18d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ABSTRACT IsFloat : BOOL]]></Declaration>
+      <Get Name="Get" Id="{b25b2249-b422-0a33-39c0-da7eeed061cf}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="IsSigned" Id="{c40a7ef2-5152-09e9-260c-22ed7cb9a4b4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ABSTRACT IsSigned : BOOL]]></Declaration>
+      <Get Name="Get" Id="{e4a632e5-5d3c-041e-06ba-ac7365bc6ee4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="OnSerializeTypeWith" Id="{963c15a2-db3f-0007-3cd1-83c01d967ee1}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnSerializeTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.OnSerializeTypeWith(Serializer);
+Serializer.AddKey('minValue');
+SerializeMinValue(Serializer);
+Serializer.AddKey('maxValue');
+SerializeMaxValue(Serializer);
+Serializer.AddKeyBool('isSigned', IsSigned);
+Serializer.AddKeyBool('isFloat', IsFloat);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeMaxValue" Id="{4743dd8e-8f0a-023c-3b23-c1b80869f102}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED ABSTRACT SerializeMaxValue
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeMinValue" Id="{4191d32a-4a49-06f3-0bae-3e913877ee68}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED ABSTRACT SerializeMinValue
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

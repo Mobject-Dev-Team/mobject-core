@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="JsonDeserializerEvent" Id="{bde7cac3-a8b4-42f5-b669-71c52f522440}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ABSTRACT JsonDeserializerEvent EXTENDS Disposable
+VAR
+	_target : I_JsonDeserializer;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{a1c25903-46f1-4e47-a7e7-a785b043ae40}" />
+    <Method Name="FB_init" Id="{41cf3fbe-96af-4936-9e7e-189acd725b80}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Target : I_JsonDeserializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[This^._target := Target;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Target" Id="{50af4fa2-96cc-40f4-934e-d560b97fc473}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_JsonDeserializer]]></Declaration>
+      <Get Name="Get" Id="{8cb5f925-adb1-4214-b6e6-04b1bd2dd977}">
+        <Declaration><![CDATA[PUBLIC]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Target := _target;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

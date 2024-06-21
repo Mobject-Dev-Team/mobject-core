@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_EventEmitter" Id="{c55f25fc-a4d5-47c7-8a12-0023ae60d758}">
+    <Declaration><![CDATA[INTERFACE I_EventEmitter EXTENDS __SYSTEM.IQueryInterface 
+]]></Declaration>
+    <Method Name="OffEvent" Id="{cc0bcb0d-5cfc-48cb-adfb-7d9cc53f386b}">
+      <Declaration><![CDATA[METHOD PUBLIC OffEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="OnceEvent" Id="{fa95f361-7d3a-00a0-1a77-01b9b1274a14}">
+      <Declaration><![CDATA[METHOD PUBLIC OnceEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="OnEvent" Id="{2e03d535-13cf-4113-b076-7f6e39ef2987}">
+      <Declaration><![CDATA[METHOD PUBLIC OnEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

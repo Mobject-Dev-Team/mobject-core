@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Disposable" Id="{7157366b-07e8-46fc-aa2f-38c2e2eab868}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ABSTRACT Disposable IMPLEMENTS I_Disposable
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Destructor" Id="{a244c56d-214c-0539-02cc-30986d16b566}" />
+    <Method Name="Dispose" Id="{6c98f403-5dd6-4f9d-bc0a-e406c48a07a8}">
+      <Declaration><![CDATA[METHOD PUBLIC Dispose
+VAR
+	pDisposable : POINTER TO Disposable;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pDisposable := THIS;
+__DELETE(pDisposable);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{0d1dd945-173c-0626-2abd-474b81e0db04}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// by default you would return if this is an in copy code, i.e. online change to this class
+IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+// A word of warning. FB_exit does not NOT operate in the same way as a typical inherited method. If a child class does not implement FB_exit then it does not
+// gain this one for itself. 
+// The system will automatically call each FB_exit on each layer of inheritance one by one, starting with the child class and making it's way to the parent.
+// Therefore code in here will only be triggered once the system reaches this layer of the object's deletion. The child class and all of it's variables
+// will already have had FB_exit called by the time we reach this point!]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

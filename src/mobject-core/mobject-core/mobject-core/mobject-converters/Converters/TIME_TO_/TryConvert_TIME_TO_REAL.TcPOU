@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_TIME_TO_REAL" Id="{b5c4798a-f0b9-4063-9575-f9ba6d52b9ed}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_TIME_TO_REAL : BOOL
+VAR_INPUT
+	in : TIME;
+	out : REFERENCE TO REAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := TIME_TO_REAL(in);
+TryConvert_TIME_TO_REAL := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

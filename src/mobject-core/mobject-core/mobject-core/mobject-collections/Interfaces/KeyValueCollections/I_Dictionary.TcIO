@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Dictionary" Id="{91bde817-22ff-081e-25d4-89211365f690}">
+    <Declaration><![CDATA[INTERFACE I_Dictionary EXTENDS I_KeyValueCollection]]></Declaration>
+    <Method Name="AddOrUpdate" Id="{f3549c3e-ed42-0456-05f2-e68111d45ad0}">
+      <Declaration><![CDATA[METHOD PUBLIC AddOrUpdate
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Clear" Id="{ecfd842e-4cad-0513-3524-7bbb21c87db7}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="ContainsKey" Id="{68868f76-ddd8-0770-046a-4441296f172a}">
+      <Declaration><![CDATA[METHOD PUBLIC ContainsKey : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="GetKeys" Id="{1b64f1c9-20c6-01ac-24ea-07e90cc03ed1}">
+      <Declaration><![CDATA[METHOD PUBLIC GetKeys : I_Collection]]></Declaration>
+    </Method>
+    <Property Name="IsEmpty" Id="{7702851e-c769-0572-0733-78f4afa8f11c}">
+      <Declaration><![CDATA[PROPERTY IsEmpty : BOOL]]></Declaration>
+      <Get Name="Get" Id="{e0ba63b8-3ed6-001d-13f9-ec2e71f0b253}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="Remove" Id="{0bf75b74-ab7d-0b87-363c-293f8b25ff0a}">
+      <Declaration><![CDATA[METHOD PUBLIC Remove
+VAR_INPUT
+	Key : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryAdd" Id="{40ea6c35-853c-0419-1b69-116a6cbbb0f5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryAdd : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetValue" Id="{21e53c0b-8099-03e5-35f2-98ac44b12379}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetValue : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination	: ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetValueTo" Id="{41e7f9d7-d4a2-0802-3f5d-df4f81e820a2}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetValueTo : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	DestinationAddress : PVOID;
+	DestinationSize : UDINT;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

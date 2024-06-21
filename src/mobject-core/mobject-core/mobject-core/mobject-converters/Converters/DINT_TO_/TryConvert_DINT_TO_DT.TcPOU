@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_DINT_TO_DT" Id="{5a226ae1-0cbb-41cb-bdcf-9ad3fb47480d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_DINT_TO_DT : BOOL
+VAR_INPUT
+	in : DINT;
+	out : REFERENCE TO DT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in < DatatypeLimits.MIN_VALUE_OF_DINT_WHICH_CAN_BE_HELD_IN_A_DT THEN
+	RETURN;
+END_IF
+
+out := DINT_TO_DT(in);
+TryConvert_DINT_TO_DT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

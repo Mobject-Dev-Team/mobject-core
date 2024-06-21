@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_DATE_TO_DT" Id="{b894486b-013d-4432-8229-5931d5cab688}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_DATE_TO_DT : BOOL
+VAR_INPUT
+	in : DATE;
+	out : REFERENCE TO DT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_DATE_WHICH_CAN_BE_HELD_IN_A_DT THEN
+	RETURN;
+END_IF
+
+out := DATE_TO_DT(in);
+TryConvert_DATE_TO_DT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

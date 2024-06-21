@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_DT_TO_USINT" Id="{d97a54cd-ec34-42c9-a075-d8b163f94deb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_DT_TO_USINT : BOOL
+VAR_INPUT
+	in : DT;
+	out : REFERENCE TO USINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_DT_WHICH_CAN_BE_HELD_IN_A_USINT THEN
+	RETURN;
+END_IF
+
+out := DT_TO_USINT(in);
+TryConvert_DT_TO_USINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,789 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MockJsonSerializer" Id="{1d1a8645-e864-45d9-90ec-4e02c31a1960}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+// this code has been taken from mobject-json to prevent circular referencing 
+FUNCTION_BLOCK MockJsonSerializer EXTENDS Disposable IMPLEMENTS I_Serializer;
+VAR
+	jsonSaxWriter : FB_JsonSaxWriter;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Destructor" Id="{84652026-9275-4242-8f85-6acea39b12cf}" />
+    <Method Name="AddBase64" Id="{10e8d10f-831a-4b16-ad0d-0895854bf639}">
+      <Declaration><![CDATA[METHOD PUBLIC AddBase64 : I_Serializer
+VAR_INPUT
+	pBytes : POINTER TO BYTE;
+	nBytes : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddBase64(pBytes, nBytes);
+AddBase64 := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddBool" Id="{d0f2ecd1-1aae-4678-ae30-d6eaf9595860}">
+      <Declaration><![CDATA[METHOD PUBLIC AddBool : I_Serializer
+VAR_INPUT
+	Value : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddBool(Value);
+AddBool := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddByte" Id="{bfc8cbe1-1ba7-036e-221f-ff6f80f024cd}">
+      <Declaration><![CDATA[METHOD PUBLIC AddByte : I_Serializer
+VAR_INPUT
+	Value : BYTE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddUDint(BYTE_TO_UDINT(Value));
+AddByte := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddBytesAsHex" Id="{bb62da06-f6a0-42e6-8ff4-5beca097bd24}">
+      <Declaration><![CDATA[METHOD PUBLIC AddBytesAsHex : I_Serializer
+VAR_INPUT
+	pBytes : POINTER TO BYTE;
+	nBytes : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddHexBinary(pBytes, nBytes);
+AddBytesAsHex := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDateTime" Id="{311cfb23-22ee-4169-a276-11dacda360a7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDateTime : I_Serializer
+VAR_INPUT
+	Value : DATE_AND_TIME;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddDateTime(Value);
+AddDateTime := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDcTime" Id="{77ec9f0d-694e-4532-90cc-f58675c221ca}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDcTime : I_Serializer
+VAR_INPUT
+	Value : DCTIME;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddDcTime(Value);
+AddDcTime := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDint" Id="{a0ed6a32-c667-4f59-b2aa-48d57081ac9c}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDint : I_Serializer
+VAR_INPUT
+	Value : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddDint(Value);
+AddDint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDword" Id="{7fa86fb5-aa36-038e-0a74-b9df5e86b2d1}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDword : I_Serializer
+VAR_INPUT
+	Value : DWORD;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddUDint(DWORD_TO_UDINT(Value));
+AddDword := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddFileTime" Id="{3bcee9d4-5bcb-4f7f-a901-6ca9554c1d70}">
+      <Declaration><![CDATA[METHOD PUBLIC AddFileTime : I_Serializer
+VAR_INPUT
+	Value : FILETIME;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddFileTime(Value);
+AddFileTime := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddInt" Id="{e7adac66-44e6-0c72-2535-ce0375ab7676}">
+      <Declaration><![CDATA[METHOD PUBLIC AddInt : I_Serializer
+VAR_INPUT
+	Value : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddDint(INT_TO_DINT(Value));
+AddInt := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKey" Id="{7f0ab8b3-9e37-47af-9755-0d202c6c9125}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKey : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddKey(Key);
+AddKey := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyBase64" Id="{9f0f9c33-f0bf-4c2d-b5ef-0383a882e91a}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyBase64 : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	pBytes : POINTER TO BYTE;
+	nBytes : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddBase64(pBytes, nBytes);
+AddKeyBase64 := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyBool" Id="{5b77f144-6bd5-4d1f-80aa-c5a3efe6c647}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyBool : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddBool(Value);
+AddKeyBool := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyByte" Id="{644f1dc3-1d1c-0688-06bd-c4f0f8bfed54}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyByte : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : BYTE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddByte(Value);
+AddKeyByte := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyBytesAsHex" Id="{aa5679ed-5c2c-4375-9e91-a358528a862b}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyBytesAsHex : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	pBytes : POINTER TO BYTE;
+	nBytes : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddBytesAsHex(pBytes, nBytes);
+AddKeyBytesAsHex := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyDateTime" Id="{e4fd58ef-a4b8-463f-8048-7c3d2b524e1b}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyDateTime : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : DATE_AND_TIME;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddDateTime(Value);
+AddKeyDateTime := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyDcTime" Id="{a1100377-76f7-453a-a85e-5adaa74b7d2a}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyDcTime : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : DCTIME;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddDcTime(Value);
+AddKeyDcTime := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyDint" Id="{4a0196f0-6dee-4006-98da-60b0204a4660}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyDint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddDint(Value);
+AddKeyDint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyDword" Id="{97cf1f9a-7b7c-011c-1b77-51009add3e6d}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyDword : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : DWORD;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddDword(Value);
+AddKeyDword := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyFileTime" Id="{a3ee9cf8-efab-4eee-9f7f-c60e7325fca7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyFileTime : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : FILETIME;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddFileTime(Value);
+AddKeyFileTime := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyInt" Id="{7e64a5cc-8cb1-07a1-3f7e-0dea194dc4d0}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyInt : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddInt(Value);
+AddKeyInt := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyLint" Id="{2ec69089-bcb2-4bd9-a738-0142c923e6b0}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyLint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : LINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddLint(Value);
+AddKeyLint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyLreal" Id="{808a1d40-b942-40ab-928f-84777223a0ef}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyLreal : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : LREAL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddLreal(Value);
+AddKeyLreal := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyLtime" Id="{989dd5da-1abc-0fff-2517-f48e41cb7dce}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyLtime : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : LTIME;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddLTIME(Value);
+AddKeyLtime := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyLword" Id="{0f660364-14e2-0332-1f45-409922184a1f}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyLword : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : LWORD;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddLword(Value);
+AddKeyLword := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyNull" Id="{8f69966a-23b9-44ec-8aec-76baca7108f7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyNull : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddNull();
+AddKeyNull := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyObject" Id="{e75e7792-2570-0ef7-3caf-4de1aa4c02c0}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyObject : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Object : I_Serializable;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+Object.SerializeWith(THIS^);
+AddKeyObject := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyRawJson" Id="{4b95cadd-ae02-0a6f-0ae8-15177318b186}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyRawJson : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	RawObject : REFERENCE TO STRING;;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddRawJson(RawObject);
+AddKeyRawJson := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyReal" Id="{2de241d1-46fe-4b38-acab-09814dfdb134}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyReal : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : REAL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddReal(Value);
+AddKeyReal := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeySint" Id="{48c5c642-3352-0187-127c-8908f9559b45}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeySint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : SINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddSint(Value);
+AddKeySint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyString" Id="{76d352fb-4a69-08b5-338f-cfddb198f883}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyString : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddString(Value);
+AddKeyString := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyStringByRef" Id="{970c95bb-8b43-4c3f-ab8a-095aa37d9384}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyStringByRef : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : REFERENCE TO STRING;;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddStringByRef(Value);
+AddKeyStringByRef := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyTime" Id="{50f6787a-eedd-065e-2d05-84b642f02391}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyTime : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : TIME;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddTime(Value);
+AddKeyTime := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyTod" Id="{9be68ae3-39b1-0483-0bd8-696617622d3a}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyTod : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : TOD;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddTod(Value);
+AddKeyTod := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyUdint" Id="{a28593e5-8f3c-4fb8-b9c5-d01576fe237e}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyUdint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddUdint(Value);
+AddKeyUdint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyUint" Id="{c614f925-d46c-062e-2e40-11eb3bb4ef1e}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyUint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : UINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddUint(Value);
+AddKeyUint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyUlint" Id="{8c5f055f-bee4-4664-83d1-2c74ccf33a3c}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyUlint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddUlint(Value);
+AddKeyUlint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyUsint" Id="{7d6e7e22-0570-0e16-3632-5abefdeb415e}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyUsint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : USINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddUsint(Value);
+AddKeyUsint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddKeyWord" Id="{57d4f198-31cd-0879-009c-24ceb598123f}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyWord : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : WORD;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddKey(Key);
+AddWord(Value);
+AddKeyWord := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddLint" Id="{4b6554aa-efa2-40f8-ab58-d064199a9b3e}">
+      <Declaration><![CDATA[METHOD PUBLIC AddLint : I_Serializer
+VAR_INPUT
+	Value : LINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddLint(Value);
+AddLint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddLreal" Id="{76292622-c853-47ef-8f53-0b08b772771c}">
+      <Declaration><![CDATA[METHOD PUBLIC AddLreal : I_Serializer
+VAR_INPUT
+	Value : LREAL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddLreal(Value);
+AddLreal := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddLtime" Id="{0ceb23e7-b176-0c01-29b6-6b8738c1e8ae}">
+      <Declaration><![CDATA[METHOD PUBLIC AddLtime : I_Serializer
+VAR_INPUT
+	Value : LTIME;
+END_VAR
+VAR
+	converted : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[converted := LTIME_TO_STRING(Value);
+jsonSaxWriter.AddString(converted);
+AddLtime := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddLword" Id="{919de613-402d-082a-1b4a-caa54ced1ac3}">
+      <Declaration><![CDATA[METHOD PUBLIC AddLword : I_Serializer
+VAR_INPUT
+	Value : LWORD;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddUlint(LWORD_TO_ULINT(Value));
+AddLword := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddNull" Id="{9894a10a-6a49-4b12-96b7-4b1046413029}">
+      <Declaration><![CDATA[METHOD PUBLIC AddNull : I_Serializer
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddNull();
+AddNull := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddObject" Id="{223ce590-4a54-0b57-1136-d8a85783480b}">
+      <Declaration><![CDATA[METHOD PUBLIC AddObject
+VAR_INPUT
+	Object : I_Serializable;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Object.SerializeWith(This^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddRawJson" Id="{aed677a6-8caa-467f-9337-e46706f8a8fb}">
+      <Declaration><![CDATA[METHOD PUBLIC AddRawJson
+VAR_INPUT
+	RawObject : REFERENCE TO STRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddRawObject(RawObject);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddReal" Id="{6574c458-e207-4ee3-bab6-ca0046a64bcb}">
+      <Declaration><![CDATA[METHOD PUBLIC AddReal : I_Serializer
+VAR_INPUT
+	Value : REAL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// real to lreal is used to negate an issue with TC4024.55 which prevents max REAL from being serailized.  
+// so a REAL_TO_LREAL conversion is made to ensure this is always possible.  
+jsonSaxWriter.AddLReal(REAL_TO_LREAL(Value));
+AddReal := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddSint" Id="{d2c1fd1b-1375-08ed-28e6-2703ffcead2b}">
+      <Declaration><![CDATA[METHOD PUBLIC AddSint : I_Serializer
+VAR_INPUT
+	Value : SINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddDint(SINT_TO_DINT(Value));
+AddSint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddString" Id="{5c18e6f4-341f-04c3-3283-11e091cf0245}">
+      <Declaration><![CDATA[METHOD PUBLIC AddString : I_Serializer
+VAR_INPUT
+	Value : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddString(Value);
+AddString := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddStringByRef" Id="{d206a6c7-f41b-4b80-b09d-3c17f4ca0a42}">
+      <Declaration><![CDATA[METHOD PUBLIC AddStringByRef : I_Serializer
+VAR_INPUT
+	Value : REFERENCE TO STRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddString(Value);
+AddStringByRef := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddTime" Id="{bf40b8a1-485b-0dd0-1b4b-942df7fa9405}">
+      <Declaration><![CDATA[METHOD PUBLIC AddTime : I_Serializer
+VAR_INPUT
+	Value : TIME;
+END_VAR
+VAR
+	converted : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[converted := TIME_TO_STRING(Value);
+jsonSaxWriter.AddString(converted);
+AddTime := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddTod" Id="{f3ba768f-8a95-007c-399d-8237bc59ad42}">
+      <Declaration><![CDATA[METHOD PUBLIC AddTod : I_Serializer
+VAR_INPUT
+	Value : TOD;
+END_VAR
+VAR
+	converted : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[converted := TOD_TO_STRING(Value);
+jsonSaxWriter.AddString(converted);
+AddTod := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddUdint" Id="{80beb933-e442-4731-9638-8e0c198bdcf3}">
+      <Declaration><![CDATA[METHOD PUBLIC AddUdint : I_Serializer
+VAR_INPUT
+	Value : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddUdint(Value);
+AddUdint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddUint" Id="{7c22a29a-2575-0492-27bb-64dc4b290b0d}">
+      <Declaration><![CDATA[METHOD PUBLIC AddUint : I_Serializer
+VAR_INPUT
+	Value : UINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddDint(UINT_TO_DINT(Value));
+AddUint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddUlint" Id="{ba3dc460-e346-485e-99b7-c784ca57a10a}">
+      <Declaration><![CDATA[METHOD PUBLIC AddUlint : I_Serializer
+VAR_INPUT
+	Value : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddUlint(Value);
+AddUlint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddUsint" Id="{92b9ee12-802e-0e1f-271d-44eb856f4bfc}">
+      <Declaration><![CDATA[METHOD PUBLIC AddUsint : I_Serializer
+VAR_INPUT
+	Value : USINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddDint(USINT_TO_DINT(Value));
+AddUsint := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddWord" Id="{0dc392d9-7b45-0eb4-2e69-0a734906f090}">
+      <Declaration><![CDATA[METHOD PUBLIC AddWord : I_Serializer
+VAR_INPUT
+	Value : WORD;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.AddUDint(WORD_TO_UDINT(Value));
+AddWord := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Clone" Id="{787e9c3f-6492-4add-bb0c-21b58accdc23}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Serializer
+VAR
+	pClone : POINTER TO MockJsonSerializer;
+	jsonSize : UDINT;
+	pJsonString : POINTER TO STRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pClone := __NEW(MockJsonSerializer);
+Clone := pClone^;
+
+jsonSize := jsonSaxWriter.GetDocumentLength();
+
+IF jsonSize = 0 THEN
+	// no further cloning to do. 
+	RETURN;
+END_IF
+
+pJsonString := __NEW(BYTE, jsonSize);
+
+IF jsonSaxWriter.CopyDocument(pJsonString^, jsonSize) = 0 THEN
+	__DELETE(pJsonString);
+	RETURN;
+END_IF
+
+pClone^.AddRawJson(pJsonString^);
+__DELETE(pJsonString);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EndArray" Id="{bce9e853-40b3-42a9-b12d-7dd112cbc971}">
+      <Declaration><![CDATA[METHOD PUBLIC EndArray : I_Serializer
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.EndArray();
+EndArray := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EndObject" Id="{25e7fd2b-5289-4966-81b3-ca6c9fd33a12}">
+      <Declaration><![CDATA[METHOD PUBLIC EndObject : I_Serializer
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.EndObject();
+EndObject := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{81d139f2-cadf-4e09-86d8-e15c88634cb5}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+jsonSaxWriter.ResetDocument();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetSerializedDataLength" Id="{a11ae62e-3376-48d5-adc8-c55c595bb770}">
+      <Declaration><![CDATA[METHOD PUBLIC GetSerializedDataLength : UDINT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetSerializedDataLength := jsonSaxWriter.GetDocumentLength();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reset" Id="{78034486-e251-43c3-a1c7-7c48995f6e67}">
+      <Declaration><![CDATA[METHOD PUBLIC Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.ResetDocument();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="StartArray" Id="{e95c3196-e540-4807-949b-a77e50b764d4}">
+      <Declaration><![CDATA[METHOD PUBLIC StartArray : I_Serializer
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.StartArray();
+StartArray := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="StartObject" Id="{5b4eb96d-ad48-4e19-8df2-8bbde31d24e9}">
+      <Declaration><![CDATA[METHOD PUBLIC StartObject : I_Serializer
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonSaxWriter.StartObject();
+StartObject := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryCopySerializedData" Id="{8aa56d43-65d1-4fb8-8b66-9583d33308ba}">
+      <Declaration><![CDATA[METHOD TryCopySerializedData : BOOL
+VAR_INPUT
+	DestinationAddress : PVOID;
+	DestinationSize : UDINT;
+END_VAR
+VAR
+	pString : POINTER TO STRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pString := DestinationAddress;
+TryCopySerializedData := jsonSaxWriter.CopyDocument(pString^, DestinationSize) > 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetSerializedData" Id="{f16d01d9-8fdf-4336-a0b3-062c4177af92}">
+      <Declaration><![CDATA[METHOD TryGetSerializedData : BOOL
+VAR_INPUT
+	DestinationAddress : PVOID;
+	DestinationSize : UDINT;
+END_VAR
+VAR
+	pString : POINTER TO STRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pString := DestinationAddress;
+
+IF jsonSaxWriter.CopyDocument(pString^, DestinationSize) = 0 THEN
+	RETURN;
+END_IF
+
+jsonSaxWriter.ResetDocument();
+TryGetSerializedData := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

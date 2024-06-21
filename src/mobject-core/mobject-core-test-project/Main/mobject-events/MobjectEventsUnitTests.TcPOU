@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MobjectEventsUnitTests" Id="{f5065049-6869-034f-178d-2c0b223ac755}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MobjectEventsUnitTests
+VAR
+	eventEmitter_TestSuite : EventEmitter_TestSuite;
+	eventEmitterInterface_TestSuite : EventEmitterInterface_TestSuite;
+	eventTargetInterface_TestSuite : EventTargetInterface_TestSuite;
+	eventHandlerInterface_TestSuite : EventHandlerInterface_TestSuite;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

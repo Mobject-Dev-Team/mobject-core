@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Queue" Id="{09b3322b-c832-090a-1623-e3f7735cbe68}">
+    <Declaration><![CDATA[INTERFACE I_Queue EXTENDS I_Collection]]></Declaration>
+    <Method Name="Enqueue" Id="{3fa5d10e-cd5f-0481-38a0-020258383a83}">
+      <Declaration><![CDATA[METHOD PUBLIC Enqueue
+VAR_INPUT
+	Item : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryDequeue" Id="{a35d87d9-3b0a-095e-1451-845334d474da}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDequeue : BOOL;
+VAR_INPUT
+	Destination : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryPeek" Id="{f7be56f0-d686-0ac6-2fc3-a0a70ee864a4}">
+      <Declaration><![CDATA[METHOD PUBLIC TryPeek : BOOL;
+VAR_INPUT
+	Destination : ANY;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

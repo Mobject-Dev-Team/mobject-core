@@ -1,0 +1,1570 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="REAL_TO_TestSuite" Id="{8be49d60-e116-4490-8c25-37bd381360c2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC REAL_TO_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Check_REAL_TO_BOOL_Max();
+Check_REAL_TO_BOOL_Min();
+Check_REAL_TO_BYTE_Max();
+Check_REAL_TO_BYTE_Min();
+Check_REAL_TO_BYTE_TooHigh();
+Check_REAL_TO_BYTE_TooLow();
+Check_REAL_TO_WORD_Max();
+Check_REAL_TO_WORD_Min();
+Check_REAL_TO_WORD_TooHigh();
+Check_REAL_TO_WORD_TooLow();
+Check_REAL_TO_DWORD_Max();
+Check_REAL_TO_DWORD_Min();
+Check_REAL_TO_DWORD_TooHigh();
+Check_REAL_TO_DWORD_TooLow();
+Check_REAL_TO_LWORD_Max();
+Check_REAL_TO_LWORD_Min();
+Check_REAL_TO_LWORD_TooHigh();
+Check_REAL_TO_LWORD_TooLow();
+Check_REAL_TO_SINT_Max();
+Check_REAL_TO_SINT_Min();
+Check_REAL_TO_SINT_TooHigh();
+Check_REAL_TO_SINT_TooLow();
+Check_REAL_TO_INT_Max();
+Check_REAL_TO_INT_Min();
+Check_REAL_TO_INT_TooHigh();
+Check_REAL_TO_INT_TooLow();
+Check_REAL_TO_DINT_Max();
+Check_REAL_TO_DINT_Min();
+Check_REAL_TO_DINT_TooHigh();
+Check_REAL_TO_DINT_TooLow();
+Check_REAL_TO_LINT_Max();
+Check_REAL_TO_LINT_Min();
+Check_REAL_TO_LINT_TooHigh();
+Check_REAL_TO_LINT_TooLow();
+Check_REAL_TO_USINT_Max();
+Check_REAL_TO_USINT_Min();
+Check_REAL_TO_USINT_TooHigh();
+Check_REAL_TO_USINT_TooLow();
+Check_REAL_TO_UINT_Max();
+Check_REAL_TO_UINT_Min();
+Check_REAL_TO_UINT_TooHigh();
+Check_REAL_TO_UINT_TooLow();
+Check_REAL_TO_UDINT_Max();
+Check_REAL_TO_UDINT_Min();
+Check_REAL_TO_UDINT_TooHigh();
+Check_REAL_TO_UDINT_TooLow();
+Check_REAL_TO_ULINT_Max();
+Check_REAL_TO_ULINT_Min();
+Check_REAL_TO_ULINT_TooHigh();
+Check_REAL_TO_ULINT_TooLow();
+Check_REAL_TO_REAL_Max();
+Check_REAL_TO_REAL_Min();
+Check_REAL_TO_LREAL_Max();
+Check_REAL_TO_LREAL_Min();
+Check_REAL_TO_TIME_Max();
+Check_REAL_TO_TIME_Min();
+Check_REAL_TO_TIME_TooHigh();
+Check_REAL_TO_TIME_TooLow();
+Check_REAL_TO_TOD_Max();
+Check_REAL_TO_TOD_Min();
+Check_REAL_TO_TOD_TooHigh();
+Check_REAL_TO_TOD_TooLow();
+Check_REAL_TO_DATE_Max();
+Check_REAL_TO_DATE_Min();
+Check_REAL_TO_DATE_TooHigh();
+Check_REAL_TO_DATE_TooLow();
+Check_REAL_TO_DT_Max();
+Check_REAL_TO_DT_Min();
+Check_REAL_TO_DT_TooHigh();
+Check_REAL_TO_DT_TooLow();
+Check_REAL_TO_STRING_Max();
+Check_REAL_TO_STRING_Min();]]></ST>
+    </Implementation>
+    <Method Name="Check_REAL_TO_BOOL_Max" Id="{b8e5ea16-4c9a-4578-8261-eb6bcbfde9d7}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_BOOL_Max
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_BOOL_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_BOOL_Min" Id="{386f2c57-08fb-49d3-bee3-c7888329c7ef}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_BOOL_Min
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_BOOL_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_BYTE_Max" Id="{412dc104-5e71-4cbe-abf2-d8be969cbeed}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_BYTE_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_BYTE;
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_BYTE_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_BYTE_Min" Id="{b897e27f-cdfa-49e0-b7da-07d28c06c300}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_BYTE_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_BYTE;
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_BYTE_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_BYTE_TooHigh" Id="{d266a2e1-9c2a-4d1f-aef9-f546598556e2}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_BYTE_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : BYTE;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_BYTE_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to BYTE conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_BYTE_TooLow" Id="{2b9c3f34-bba2-4628-a528-b932eadfe72b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_BYTE_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : BYTE;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_BYTE_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to BYTE conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DATE_Max" Id="{05b2ff33-e3cd-4f89-9dad-5d34d85759db}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DATE_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_DATE;
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DATE_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_DATE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DATE_Min" Id="{b9ca476a-9bd1-4648-9381-64820a9bbfd5}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DATE_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_DATE;
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DATE_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_DATE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DATE_TooHigh" Id="{c8ac324d-f7d9-41ed-a4bf-8b0d7fde1708}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DATE_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : DATE;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DATE_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to DATE conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DATE_TooLow" Id="{13abc59f-786f-4731-88bb-b876daf9f573}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DATE_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : DATE;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DATE_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to DATE conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DINT_Max" Id="{fc2030bd-b022-4029-bca9-33b01fca2111}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DINT_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_DINT;
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DINT_Min" Id="{c99ca3a6-5870-40d9-82f5-78b7c3edcf61}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DINT_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_DINT;
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DINT_TooHigh" Id="{97827bdd-671b-4a3e-b05c-b4745f3e874d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DINT_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : DINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to DINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DINT_TooLow" Id="{c2ccc4ab-5c6b-435b-8af0-e209a327bd6c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DINT_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : DINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DINT_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to DINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DT_Max" Id="{c5ee4888-c848-4915-ac97-927905ddfd31}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DT_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_DT;
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DT_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_DT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DT_Min" Id="{93986777-ea63-4be4-9fc8-87ed42fadf03}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DT_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_DT;
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DT_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_DT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DT_TooHigh" Id="{b95beb04-9e4b-4fd6-9abf-3330121eca6c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DT_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : DT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to DT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DT_TooLow" Id="{d72aa4de-3d4f-4071-950e-0201695268ee}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DT_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : DT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DT_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to DT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DWORD_Max" Id="{d81a1469-d6a7-4024-a118-bbb2fae7fadc}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DWORD_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_DWORD;
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DWORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DWORD_Min" Id="{4bf48fe3-d075-46ae-9852-05ed6c89a784}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DWORD_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_DWORD;
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DWORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DWORD_TooHigh" Id="{2e104326-e4a7-4e09-8fc2-0130437482ca}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DWORD_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : DWORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DWORD_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to DWORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_DWORD_TooLow" Id="{10031c00-8d6b-4d3e-9263-a3e33781de73}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_DWORD_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : DWORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_DWORD_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to DWORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_INT_Max" Id="{56bbbbfc-6b92-4610-8086-d219571fb83c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_INT_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_INT;
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_INT_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_INT_Min" Id="{a437ceb7-13a7-4904-8213-5038ec4ab9fe}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_INT_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_INT;
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_INT_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_INT_TooHigh" Id="{dc5e8787-dcf7-41d9-88f9-5822405ebb6f}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_INT_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : INT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_INT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to INT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_INT_TooLow" Id="{393de6a5-f442-40e7-93cf-4cb07c925f5d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_INT_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : INT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_INT_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to INT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_LINT_Max" Id="{1daecfa7-b0f2-4432-855a-fe746706d7a0}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_LINT_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_LINT;
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_LINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_LINT_Min" Id="{b56cd75a-522a-43ca-9ece-f64bccd6e4b9}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_LINT_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_LINT;
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_LINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_LINT_TooHigh" Id="{a9111f33-bdba-4ba9-95f3-c2fb30250359}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_LINT_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : LINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_LINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to LINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_LINT_TooLow" Id="{df0ceebd-b582-4228-88e6-91178bdf5f8e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_LINT_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : LINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_LINT_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to LINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_LREAL_Max" Id="{f6ad94a0-5797-41f8-86ba-e36688d5e4ea}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_LREAL_Max
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_LREAL_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_LREAL_Min" Id="{afe39bc1-5451-4c3a-a5fc-b724fc8c2aee}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_LREAL_Min
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_LREAL_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_LWORD_Max" Id="{feb4496e-befc-4aa9-b517-91355a0621a0}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_LWORD_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_LWORD;
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_LWORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_LWORD_Min" Id="{ad62d6ab-9078-47c0-aac4-f991c9f8c752}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_LWORD_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_LWORD;
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_LWORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_LWORD_TooHigh" Id="{b2de867c-65ac-4cf6-939b-b833d8e7f872}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_LWORD_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : LWORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_LWORD_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to LWORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_LWORD_TooLow" Id="{3f399a79-df73-41c3-bf27-e495c833c2b9}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_LWORD_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : LWORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_LWORD_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to LWORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_REAL_Max" Id="{c10df028-b74d-4030-bf94-035c8f7ccd7e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_REAL_Max
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_REAL_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_REAL_Min" Id="{4d0b2db7-8c84-4b12-bf18-5ff98e27413d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_REAL_Min
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_REAL_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_SINT_Max" Id="{6b203263-f604-4b91-b83f-510e86fc730f}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_SINT_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_SINT;
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_SINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_SINT_Min" Id="{2aff8f5f-8ffe-4b11-b1c0-5bf131e22c7e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_SINT_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_SINT;
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_SINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_SINT_TooHigh" Id="{9085bfd6-e24f-44c2-a138-f9a3d6200574}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_SINT_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : SINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_SINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to SINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_SINT_TooLow" Id="{1216c61f-e79d-44c7-b744-9956d9e389d3}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_SINT_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : SINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_SINT_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to SINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_STRING_Max" Id="{8c6f9abc-7082-4329-aad7-fca2c180123b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_STRING_Max
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_STRING_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_STRING(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_STRING_Min" Id="{adcd737a-5421-4d51-a6c2-2805e73261b7}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_STRING_Min
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_STRING_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_STRING(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_TIME_Max" Id="{2aaa423c-8ad7-4c2f-94b9-06d4f491b685}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_TIME_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_TIME;
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_TIME_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_TIME(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_TIME_Min" Id="{9427a455-ec58-4358-a70f-cbdf04fa203d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_TIME_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_TIME;
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_TIME_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_TIME(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_TIME_TooHigh" Id="{aac71ed2-efec-4eec-88c4-7140730d838c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_TIME_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : TIME;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_TIME_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to TIME conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_TIME_TooLow" Id="{7805a0a9-10bf-40b7-a9b7-1cf411143ed9}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_TIME_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : TIME;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_TIME_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to TIME conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_TOD_Max" Id="{7ecec023-d464-4af4-81b5-48e0176b66a1}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_TOD_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_TOD;
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_TOD_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_TOD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_TOD_Min" Id="{9a43f655-64ba-4d4e-ab51-6d8b0f327fbe}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_TOD_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_TOD;
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_TOD_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_TOD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_TOD_TooHigh" Id="{f65186a9-9c8e-4164-9fc9-413fb5743d10}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_TOD_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : TOD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_TOD_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to TOD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_TOD_TooLow" Id="{440c2903-726d-4ea9-a5b4-ca1b256b4eeb}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_TOD_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : TOD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_TOD_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to TOD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_UDINT_Max" Id="{3f8d3716-f364-42ec-9f42-980ba8cb6e8e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_UDINT_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_UDINT;
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_UDINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_UDINT_Min" Id="{2b1853f5-a663-4d8a-bbd0-5ad7ba59f29b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_UDINT_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_UDINT;
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_UDINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_UDINT_TooHigh" Id="{48e2fd85-9589-4bf2-b33e-9c3cd40abb6e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_UDINT_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : UDINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_UDINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to UDINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_UDINT_TooLow" Id="{78d3fac2-d46c-49e9-9c5e-4aed7545dfdf}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_UDINT_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : UDINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_UDINT_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to UDINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_UINT_Max" Id="{48d96194-d512-43e5-9c50-af1ae948ad47}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_UINT_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_UINT;
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_UINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_UINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_UINT_Min" Id="{597041c1-cba2-4f5c-ba1e-b74e5b92a0b3}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_UINT_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_UINT;
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_UINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_UINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_UINT_TooHigh" Id="{3470ac97-c96c-498a-b642-30ca7e58c181}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_UINT_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : UINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_UINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to UINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_UINT_TooLow" Id="{7929dcba-fc7e-4701-83ca-d172728660b7}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_UINT_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : UINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_UINT_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to UINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_ULINT_Max" Id="{fcaa3926-7524-4dac-a9ed-9a6cc9289eb4}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_ULINT_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_ULINT;
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_ULINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_ULINT_Min" Id="{9bea1c1e-cb61-4546-841d-2e2cfe4b229c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_ULINT_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_ULINT;
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_ULINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_ULINT_TooHigh" Id="{0da64fd6-9af5-441d-adde-1af2c1dfe129}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_ULINT_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : ULINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_ULINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to ULINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_ULINT_TooLow" Id="{7ae31fbc-4e19-49a1-8dbb-d5289f75b5f0}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_ULINT_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : ULINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_ULINT_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to ULINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_USINT_Max" Id="{969f07f9-5f68-4369-a493-5015dbbdb256}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_USINT_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_USINT;
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_USINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_USINT_Min" Id="{321aecd8-3081-4ceb-a03f-9265b592550d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_USINT_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_USINT;
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_USINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_USINT_TooHigh" Id="{e175e84d-c7d4-4076-85ed-1b0ff01b7168}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_USINT_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : USINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_USINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to USINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_USINT_TooLow" Id="{43bf0ef6-ae1a-4ab5-a60d-b009ffbbbdfb}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_USINT_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : USINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_USINT_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to USINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_WORD_Max" Id="{69f2dd07-aa3f-47a5-a54d-43672783909d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_WORD_Max
+VAR
+	value : REAL := DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_WORD;
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_WORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_WORD_Min" Id="{2cd82b7c-2f79-4a17-bab7-35303e73bda1}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_WORD_Min
+VAR
+	value : REAL := DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_WORD;
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_WORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+equal := actual = REAL_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert REAL to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report REAL to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_WORD_TooHigh" Id="{8883e067-19eb-4a87-b468-91d35201eb14}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_WORD_TooHigh
+VAR
+	value : REAL := DatatypeLimits.REAL_MAX_VALUE;
+	actual : WORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_WORD_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to WORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_REAL_TO_WORD_TooLow" Id="{035f9a63-e6f6-43b4-b9c7-544a937545b2}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_REAL_TO_WORD_TooLow
+VAR
+	value : REAL := DatatypeLimits.REAL_MIN_VALUE;
+	actual : WORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_REAL_TO_WORD_TooLow');
+
+// @TEST-RUN
+converted := TryConvert_REAL_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report REAL to WORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

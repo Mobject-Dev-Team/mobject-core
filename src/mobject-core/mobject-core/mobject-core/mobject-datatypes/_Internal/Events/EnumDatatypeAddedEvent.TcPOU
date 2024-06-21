@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="EnumDatatypeAddedEvent" Id="{bff7a8fa-a624-0127-38a3-cd4031d2f5d2}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK EnumDatatypeAddedEvent EXTENDS Disposable IMPLEMENTS I_EnumDatatypeAddedEvent
+VAR
+	_target : I_EnumDatatype;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{6bad2482-2c6a-0dbc-115a-2a0eeade0273}" />
+    <Method Name="FB_init" Id="{2e42f182-e43d-0232-22c0-52369e1af156}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Target : I_EnumDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[This^._target := Target;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Target" Id="{b17a6e2e-3337-0fc0-3c1d-8bac96d8f35a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_EnumDatatype]]></Declaration>
+      <Get Name="Get" Id="{7ee46344-83f5-089c-074d-5321cdfda7c7}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Target := _target;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,316 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="OrderedDictionaryTreeNode" Id="{930a83ed-432c-07f9-2b7a-4eaed2f824fa}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK OrderedDictionaryTreeNode EXTENDS Disposable IMPLEMENTS I_OrderedDictionaryTreeNode
+VAR
+	_key : T_MAXSTRING;
+	pBuffer : POINTER TO BYTE;
+	bufferSize : UDINT;
+    _height : DINT;
+    _left : I_OrderedDictionaryTreeNode;
+    _right : I_OrderedDictionaryTreeNode;
+	_next : I_OrderedDictionaryTreeNode;
+    _previous : I_OrderedDictionaryTreeNode;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{155faa69-7235-0949-1844-4cf36621f57f}" />
+    <Folder Name="Destructor" Id="{a95d87fd-1a1d-0a01-06c3-55923247efdb}" />
+    <Folder Name="Private" Id="{18744f92-0f64-0fe8-24b7-248857e86cf3}" />
+    <Method Name="Clone" Id="{e4293b1d-77e5-080f-1893-41e5c6e255f9}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone
+VAR_INPUT
+	Node : I_OrderedDictionaryTreeNode;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DestroyBuffer();
+CreateBuffer(Node.NodeBufferSize);
+CopySourceToBuffer(Node.NodeBufferPointer);
+_key := Node.Key;
+_previous := Node.Previous;
+_next := Node.Next;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CopyBufferToDestination" Id="{462ec0cf-039d-0748-31a7-8a5653c5865e}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CopyBufferToDestination
+VAR_INPUT
+	DestinationAddress : PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[MEMCPY(DestinationAddress, pBuffer, bufferSize);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CopySourceToBuffer" Id="{7da920bd-00d4-04fd-0f13-74719c199352}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CopySourceToBuffer
+VAR_INPUT
+	SourceAddress : PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[MEMCPY(pBuffer, SourceAddress, bufferSize);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateBuffer" Id="{c0b25cc2-0ee0-05f3-3906-b54d9cc9805d}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateBuffer
+VAR_INPUT
+	SizeInBytes : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[bufferSize := SizeInBytes;
+pBuffer := __NEW(BYTE, SizeInBytes);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="DataSize" Id="{c696dedc-97e5-0acc-1b25-51ecd81390b0}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DataSize : UDINT
+]]></Declaration>
+      <Get Name="Get" Id="{0d903eb4-bdc5-06e4-15ce-b35218b2f0c5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[DataSize := bufferSize;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="DestroyBuffer" Id="{7c1d721a-68db-0e28-122b-bf176ea601fc}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DestroyBuffer
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF pBuffer = 0 THEN
+	RETURN;
+END_IF
+
+__DELETE(pBuffer);
+bufferSize := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Equals" Id="{88d38c15-b942-0c4b-1410-bb7c2722a9dd}">
+      <Declaration><![CDATA[METHOD PUBLIC Equals : BOOL
+VAR_INPUT
+	Symbol : ANY;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF pBuffer = 0 THEN
+	RETURN;
+END_IF
+
+IF bufferSize <> DINT_TO_UDINT(symbol.diSize) THEN
+	RETURN;
+END_IF
+
+Equals := MEMCMP(Symbol.pValue, pBuffer, bufferSize) = 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{e9d955aa-8a56-0b3d-32ef-a9c6a72d6fcb}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DestroyBuffer();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{70a57118-afed-0320-03c7-219b04330711}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	NodeKey : T_MAXSTRING;
+	NodeSource : ANY;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_key := NodeKey;
+CreateBuffer(DINT_TO_UDINT(NodeSource.diSize));
+CopySourceToBuffer(NodeSource.pValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Height" Id="{f922a7cd-282f-0a85-34b8-b68e87e741e5}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Height : DINT]]></Declaration>
+      <Get Name="Get" Id="{66cc4b5c-6033-09ec-1265-7eac5ad46453}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Height := _height;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{b0dcadf9-22d9-099f-3c85-616c45d5b9d7}">
+        <Declaration><![CDATA[PUBLIC 
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_height := Height;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Key" Id="{8d244171-95b0-0c65-2904-a1ebf1bc33b3}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Key : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{6ae9e000-adff-0b4d-00d6-59326a63f20d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Key := _key;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Left" Id="{5a359682-9d00-0a38-23ed-a88df9167731}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Left : I_OrderedDictionaryTreeNode]]></Declaration>
+      <Get Name="Get" Id="{4eaaeb82-2f00-0713-1e14-af3a3a52c035}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Left := _left;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{946651c4-a415-0e50-2cfe-c8aa4452aab7}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_left := Left;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Next" Id="{01f5c77a-a9e8-0d9c-0d96-f9291645ff71}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Next : I_OrderedDictionaryTreeNode]]></Declaration>
+      <Get Name="Get" Id="{531d4310-b55a-067d-0faf-419c60ea4e86}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Next := _next;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{3bb09dc1-58cc-0aa2-3f04-2c803cd79d3e}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_next := Next;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="NodeBufferPointer" Id="{9665908a-5de2-09f6-0124-1a3a4ec54b3a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC NodeBufferPointer : Pointer To Byte]]></Declaration>
+      <Get Name="Get" Id="{b76ae335-6137-0d5b-1df8-9097f4fe3a7f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NodeBufferPointer := pBuffer;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="NodeBufferSize" Id="{bb8163bc-298b-0600-1674-8a319dea428f}">
+      <Declaration><![CDATA[PROPERTY PUBLIC NodeBufferSize : UDINT]]></Declaration>
+      <Get Name="Get" Id="{01218a4a-29a4-00c2-119b-76199d0c1a02}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NodeBufferSize := bufferSize;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Previous" Id="{17693b97-69a3-0779-03ad-bf9be43f0700}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Previous : I_OrderedDictionaryTreeNode]]></Declaration>
+      <Get Name="Get" Id="{29eff2d3-9e97-0a62-379c-60185e7b353d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Previous := _previous;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{267f5de6-f14c-024f-33fb-92d2df819dce}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_previous := Previous;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="Reinitialize" Id="{63b308b5-8fef-03da-181b-f5aeaea63803}">
+      <Declaration><![CDATA[METHOD Reinitialize
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Source : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_key := Key;
+
+IF pBuffer <> 0 THEN
+	DestroyBuffer();
+END_IF
+
+CreateBuffer(DINT_TO_UDINT(Source.diSize));
+CopySourceToBuffer(Source.pValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Right" Id="{b3ab5f3d-8a61-08c7-0460-b84b8ba48f62}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Right : I_OrderedDictionaryTreeNode]]></Declaration>
+      <Get Name="Get" Id="{ce06b8ce-13f4-09eb-1f16-a84eedd7940d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Right := _right;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{e614df0e-edb4-025c-04dd-675e4e620ff7}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_right := Right;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="TryGet" Id="{d681ab01-0e8c-0f7c-19c7-c7eaff85c3d4}">
+      <Declaration><![CDATA[METHOD TryGet : BOOL
+VAR_INPUT
+	Destination	: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGet := TryGetTo(Destination.pValue, DINT_TO_UDINT(Destination.diSize));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetTo" Id="{c3cd2ab6-2c40-0908-1b92-7515d9fb8f33}">
+      <Declaration><![CDATA[METHOD TryGetTo : BOOL
+VAR_INPUT
+	DestinationAddress : PVOID;
+	DestinationSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF pBuffer = 0 THEN
+	RETURN;
+END_IF
+
+IF bufferSize <> DestinationSize THEN
+	RETURN;
+END_IF
+
+CopyBufferToDestination(DestinationAddress);
+TryGetTo := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

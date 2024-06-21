@@ -1,0 +1,1010 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="UINT_TO_TestSuite" Id="{269de2f4-c46c-43a2-9a7f-4a0400f0455a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC UINT_TO_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Check_UINT_TO_BOOL_Max();
+Check_UINT_TO_BOOL_Min();
+Check_UINT_TO_BYTE_Max();
+Check_UINT_TO_BYTE_Min();
+Check_UINT_TO_BYTE_TooHigh();
+Check_UINT_TO_WORD_Max();
+Check_UINT_TO_WORD_Min();
+Check_UINT_TO_DWORD_Max();
+Check_UINT_TO_DWORD_Min();
+Check_UINT_TO_LWORD_Max();
+Check_UINT_TO_LWORD_Min();
+Check_UINT_TO_SINT_Max();
+Check_UINT_TO_SINT_Min();
+Check_UINT_TO_SINT_TooHigh();
+Check_UINT_TO_INT_Max();
+Check_UINT_TO_INT_Min();
+Check_UINT_TO_INT_TooHigh();
+Check_UINT_TO_DINT_Max();
+Check_UINT_TO_DINT_Min();
+Check_UINT_TO_LINT_Max();
+Check_UINT_TO_LINT_Min();
+Check_UINT_TO_USINT_Max();
+Check_UINT_TO_USINT_Min();
+Check_UINT_TO_USINT_TooHigh();
+Check_UINT_TO_UINT_Max();
+Check_UINT_TO_UINT_Min();
+Check_UINT_TO_UDINT_Max();
+Check_UINT_TO_UDINT_Min();
+Check_UINT_TO_ULINT_Max();
+Check_UINT_TO_ULINT_Min();
+Check_UINT_TO_REAL_Max();
+Check_UINT_TO_REAL_Min();
+Check_UINT_TO_LREAL_Max();
+Check_UINT_TO_LREAL_Min();
+Check_UINT_TO_TIME_Max();
+Check_UINT_TO_TIME_Min();
+Check_UINT_TO_TOD_Max();
+Check_UINT_TO_TOD_Min();
+Check_UINT_TO_DATE_Max();
+Check_UINT_TO_DATE_Min();
+Check_UINT_TO_DT_Max();
+Check_UINT_TO_DT_Min();
+Check_UINT_TO_STRING_Max();
+Check_UINT_TO_STRING_Min();]]></ST>
+    </Implementation>
+    <Method Name="Check_UINT_TO_BOOL_Max" Id="{2fe1ca15-56ae-4394-babc-3695d1fd74da}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_BOOL_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_BOOL_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_BOOL_Min" Id="{6fd9adef-8052-4bee-80b6-702527df86a2}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_BOOL_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_BOOL_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_BYTE_Max" Id="{bd0b0166-2f69-4dc2-8aa0-592bb87f1c5a}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_BYTE_Max
+VAR
+	value : UINT := DatatypeLimits.MAX_VALUE_OF_UINT_WHICH_CAN_BE_HELD_IN_A_BYTE;
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_BYTE_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_BYTE_Min" Id="{707e6753-74e9-485d-bf63-0d5a7a1ec095}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_BYTE_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_BYTE_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_BYTE_TooHigh" Id="{86914067-1d80-4673-b84c-f761c296898d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_BYTE_TooHigh
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : BYTE;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_BYTE_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report UINT to BYTE conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_DATE_Max" Id="{84c67267-587a-4818-9c71-5bc20eb5b996}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_DATE_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_DATE_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_DATE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_DATE_Min" Id="{3b4090a5-df6d-469c-b989-2aed429f2d5d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_DATE_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_DATE_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_DATE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_DINT_Max" Id="{ce6ebe6d-f4cd-4be7-b1d0-04a205bbd31f}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_DINT_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_DINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_DINT_Min" Id="{4a50445e-1a3c-44d4-b681-427a389471e5}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_DINT_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_DINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_DT_Max" Id="{c568cab1-d09a-4419-8e19-c20e03aeb36b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_DT_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_DT_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_DT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_DT_Min" Id="{1bbb4481-7abb-4836-8c94-c309a2ce1bdb}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_DT_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_DT_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_DT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_DWORD_Max" Id="{95615f1b-83e6-45ff-bc23-e65c8e9c1c34}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_DWORD_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_DWORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_DWORD_Min" Id="{cb1fa3c1-9474-46fb-bef8-67371b4916e7}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_DWORD_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_DWORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_INT_Max" Id="{a3e17757-d823-44bc-a43b-ae0b03e138cb}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_INT_Max
+VAR
+	value : UINT := DatatypeLimits.MAX_VALUE_OF_UINT_WHICH_CAN_BE_HELD_IN_A_INT;
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_INT_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_INT_Min" Id="{adadc62f-89cb-4414-83cd-9833fdf67aa9}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_INT_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_INT_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_INT_TooHigh" Id="{e6cf6be3-f4ba-4bec-8756-8d3d03ddb709}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_INT_TooHigh
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : INT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_INT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report UINT to INT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_LINT_Max" Id="{3c545a43-c7a0-4f80-98dd-e52521e64abc}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_LINT_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_LINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_LINT_Min" Id="{45493241-9cc6-4808-bdf2-c05eec88bf51}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_LINT_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_LINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_LREAL_Max" Id="{d2e8c5bf-a24c-4cc4-973a-c71ef200bb9f}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_LREAL_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_LREAL_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_LREAL_Min" Id="{dca174b7-19e2-4e2a-be7a-bb52aacaaa13}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_LREAL_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_LREAL_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_LWORD_Max" Id="{d4f5285e-1490-4fab-83e8-4791253418d2}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_LWORD_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_LWORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_LWORD_Min" Id="{04a4fc26-fbdf-4abf-9cfc-7a284c3aef46}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_LWORD_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_LWORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_REAL_Max" Id="{8c3f166b-44f1-43e5-ba88-ed5a572279c8}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_REAL_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_REAL_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_REAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_REAL_Min" Id="{1261f433-35e5-43a0-8f91-60654a95f336}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_REAL_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_REAL_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_REAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_SINT_Max" Id="{c850f4bb-8305-4923-9be9-7975f4c987d1}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_SINT_Max
+VAR
+	value : UINT := DatatypeLimits.MAX_VALUE_OF_UINT_WHICH_CAN_BE_HELD_IN_A_SINT;
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_SINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_SINT_Min" Id="{fda8a5ef-7b0a-45d4-968a-3e06d343a7c4}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_SINT_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_SINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_SINT_TooHigh" Id="{e4520ae1-e6b6-469d-a140-00886a8f4a44}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_SINT_TooHigh
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : SINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_SINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report UINT to SINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_STRING_Max" Id="{8fd723a1-fd6d-4a82-b676-5287105be169}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_STRING_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_STRING_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_STRING(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_STRING_Min" Id="{b2543c74-ca25-423e-b1db-e3f1c5d4cab4}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_STRING_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_STRING_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_STRING(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_TIME_Max" Id="{ba590ad1-38d1-4686-bc27-647c5e94b92a}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_TIME_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_TIME_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_TIME(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_TIME_Min" Id="{f8af8e1c-96da-46ea-b09f-d5a17673eb4f}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_TIME_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_TIME_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_TIME(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_TOD_Max" Id="{05865b4e-ed1d-4c04-bc64-98d8f2c6a866}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_TOD_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_TOD_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_TOD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_TOD_Min" Id="{4d4d2743-5318-408a-a276-bddc146f6ba7}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_TOD_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_TOD_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_TOD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_UDINT_Max" Id="{95055dad-86d1-4035-b652-e563afdf818e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_UDINT_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_UDINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_UDINT_Min" Id="{dac6dc07-85e7-4e6b-b8d2-094610d19752}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_UDINT_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_UDINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_UINT_Max" Id="{6133f67f-616d-46fe-9fa5-513e89830c12}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_UINT_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_UINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_UINT_Min" Id="{b57342ec-ee21-4841-bc55-36745f83b7c5}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_UINT_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_UINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_ULINT_Max" Id="{fac63d5a-9277-4e6a-b69e-6bbd1eaf0cf9}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_ULINT_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_ULINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_ULINT_Min" Id="{b87c1b0f-865a-4619-b1ef-c1cc879f251e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_ULINT_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_ULINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_USINT_Max" Id="{6b4f0eef-e535-4107-9f75-a6e0ec03ba9b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_USINT_Max
+VAR
+	value : UINT := DatatypeLimits.MAX_VALUE_OF_UINT_WHICH_CAN_BE_HELD_IN_A_USINT;
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_USINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_USINT_Min" Id="{9a52845a-ccf6-4b9b-a8f7-f25dba700d9a}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_USINT_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_USINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_USINT_TooHigh" Id="{70fbb024-b984-4165-aabb-16ce4c3d998a}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_USINT_TooHigh
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : USINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_USINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report UINT to USINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_WORD_Max" Id="{d9fc3f7f-57cd-4ec3-ac34-42278d44fbc2}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_WORD_Max
+VAR
+	value : UINT := DatatypeLimits.UINT_MAX_VALUE;
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_WORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_UINT_TO_WORD_Min" Id="{49459f90-e210-4854-ba6e-3717cfc7fa30}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_UINT_TO_WORD_Min
+VAR
+	value : UINT := DatatypeLimits.UINT_MIN_VALUE;
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_UINT_TO_WORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_UINT_TO_Destination(value, actual);
+equal := actual = UINT_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert UINT to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report UINT to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_ULINT_TO_INT" Id="{8b78ffb4-f19e-4eb3-990b-1a943c1d06b4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_ULINT_TO_INT : BOOL
+VAR_INPUT
+	in : ULINT;
+	out : REFERENCE TO INT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_ULINT_WHICH_CAN_BE_HELD_IN_A_INT THEN
+	RETURN;
+END_IF
+
+out := ULINT_TO_INT(in);
+TryConvert_ULINT_TO_INT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

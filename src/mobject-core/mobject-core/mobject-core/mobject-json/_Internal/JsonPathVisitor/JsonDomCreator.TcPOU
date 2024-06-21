@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="JsonDomCreator" Id="{30b78a47-5640-462d-bfaa-11fb31a505e4}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK JsonDomCreator IMPLEMENTS I_JsonPathVisitor
+VAR
+	jsonDomParser : REFERENCE TO JsonDomParser;
+	currentJsonPosition : SJsonValue;
+	_currentNode : SJsonValue;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{7c5666ff-b11b-4f75-9fb6-f49a6c78ed4d}" />
+    <Folder Name="Private" Id="{aa05e3f7-760e-4ac4-8b9d-f16f27587afe}" />
+    <Method Name="ArrayIndexFound" Id="{bf03679a-b8af-425d-9abf-d36ca1287689}">
+      <Declaration><![CDATA[METHOD ArrayIndexFound
+VAR_INPUT
+	Index : UDINT;
+END_VAR
+VAR
+	memberLocation : SJsonValue;
+	i : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF jsonDomParser.IsArray(currentJsonPosition) THEN
+	
+	memberLocation := jsonDomParser.GetArrayValueByIdx(currentJsonPosition, Index);
+	
+	IF memberLocation <> 0 THEN
+		currentJsonPosition := memberLocation;
+		RETURN;
+	END_IF
+	
+	currentJsonPosition := PadStartOfArray(Index, currentJsonPosition);
+
+else
+	
+	memberLocation := jsonDomParser.SetArray(currentJsonPosition,0);
+	currentJsonPosition := PadStartOfArray(Index, memberLocation);
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="CurrentNode" Id="{90d93568-26dc-4838-b6a1-43866e5aea6d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC CurrentNode : SJsonValue]]></Declaration>
+      <Get Name="Get" Id="{6402b83a-86bd-493b-8c50-b8502cb0d424}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CurrentNode := _currentNode;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="EndOfParse" Id="{e8613723-f3e4-45a1-af61-ba2316a3f8cb}">
+      <Declaration><![CDATA[METHOD EndOfParse
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_currentNode := currentJsonPosition;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{d07477d6-a244-4324-9377-c600e1510a6f}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	JsonDomParser : REFERENCE TO JsonDomParser;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.jsonDomParser REF= JsonDomParser;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InvalidSyntaxFound" Id="{9f8596b8-b18a-4f62-95b7-44e2ea34f50c}">
+      <Declaration><![CDATA[METHOD InvalidSyntaxFound
+VAR_INPUT
+	Character : BYTE;
+	Position : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[currentJsonPosition := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PadStartOfArray" Id="{442b5317-5e1a-4738-8bcf-ee20232e7be2}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE PadStartOfArray : SJsonValue
+VAR_INPUT
+	Index : UDINT;
+	ArrayPosition : SJsonValue;
+END_VAR
+VAR
+	i : UDINT;
+	arrayValueLocation : SJsonValue;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i := 0 TO Index DO
+		
+	arrayValueLocation := jsonDomParser.GetArrayValueByIdx(ArrayPosition, Index);
+	IF arrayValueLocation <> 0 THEN
+		CONTINUE;
+	END_IF
+	
+	arrayValueLocation := jsonDomParser.PushbackNullValue(ArrayPosition);
+
+END_FOR
+
+PadStartOfArray := arrayValueLocation;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PropertyFound" Id="{bf75125d-7f3a-44a3-a7d4-33c06602a9f3}">
+      <Declaration><![CDATA[METHOD PropertyFound
+VAR_INPUT
+	Name : T_MAXSTRING;
+END_VAR
+VAR
+	memberLocation : SJsonValue;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[memberLocation := jsonDomParser.FindMember(currentJsonPosition,Name);
+
+IF memberLocation <> 0 THEN
+	currentJsonPosition := memberLocation;
+	RETURN;
+END_IF
+
+currentJsonPosition := jsonDomParser.AddNullMember(currentJsonPosition,Name);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="StartOfParse" Id="{862e7cfc-0cee-4542-a36c-589184932651}">
+      <Declaration><![CDATA[METHOD StartOfParse
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[currentJsonPosition := jsonDomParser.GetDocumentRoot();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

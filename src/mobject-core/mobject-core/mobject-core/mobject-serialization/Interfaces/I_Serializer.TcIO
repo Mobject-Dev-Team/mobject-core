@@ -1,0 +1,415 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Serializer" Id="{68eb7fb9-e369-4d1b-8642-8452368ead18}">
+    <Declaration><![CDATA[INTERFACE I_Serializer EXTENDS I_Disposable]]></Declaration>
+    <Method Name="AddBase64" Id="{ebd13331-efa7-449f-8e6b-6516f92e236e}">
+      <Declaration><![CDATA[METHOD PUBLIC AddBase64 : I_Serializer
+VAR_INPUT
+	pBytes : POINTER TO BYTE;
+	nBytes : DINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddBool" Id="{0d600687-2fc2-422c-8bfb-7d8fe70b1e21}">
+      <Declaration><![CDATA[METHOD PUBLIC AddBool : I_Serializer
+VAR_INPUT
+	Value : BOOL;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddByte" Id="{ed83147d-8c61-01eb-0d95-b18c41744291}">
+      <Declaration><![CDATA[METHOD PUBLIC AddByte : I_Serializer
+VAR_INPUT
+	Value : BYTE;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddBytesAsHex" Id="{8f4cf1ed-d3db-454e-9329-12c7677dabb7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddBytesAsHex : I_Serializer
+VAR_INPUT
+	pBytes : POINTER TO BYTE;
+	nBytes : DINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddDateTime" Id="{0982127e-8f57-4743-ab0f-54244ceac438}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDateTime : I_Serializer
+VAR_INPUT
+	Value : DATE_AND_TIME;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddDcTime" Id="{e73ba01e-35c1-46c8-8c33-d581d211f408}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDcTime : I_Serializer
+VAR_INPUT
+	Value : DCTIME;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddDint" Id="{e8a1b1a9-5fe7-4805-92a0-8feb23a96cd7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDint : I_Serializer
+VAR_INPUT
+	Value : DINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddDword" Id="{bda8161b-d481-09bb-2755-9d1d07d8c803}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDword : I_Serializer
+VAR_INPUT
+	Value : DWORD;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddFileTime" Id="{3962e94d-94d1-4faa-97e7-166d09b1f463}">
+      <Declaration><![CDATA[METHOD PUBLIC AddFileTime : I_Serializer
+VAR_INPUT
+	Value : FILETIME;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddInt" Id="{5c91fdd2-8dfd-072d-368b-ce5e695d4d00}">
+      <Declaration><![CDATA[METHOD PUBLIC AddInt : I_Serializer
+VAR_INPUT
+	Value : INT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKey" Id="{007f1778-e153-473b-ba3c-0a214d3dea44}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKey : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyBase64" Id="{d322b175-2f8d-4c41-94ab-efa39043a889}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyBase64 : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	pBytes : POINTER TO BYTE;
+	nBytes : DINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyBool" Id="{7b2b0b24-0368-40a4-87a5-a03ca894fb31}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyBool : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : BOOL;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyByte" Id="{16c2b6d4-4d1a-0ba8-34a0-4d814015d284}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyByte : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : BYTE;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyBytesAsHex" Id="{acc250e0-ef27-42a8-9760-9e5fcd995ffc}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyBytesAsHex : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	pBytes : POINTER TO BYTE;
+	nBytes : DINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyDateTime" Id="{d5a88c90-4ee6-4b65-ba64-4fe3ccd77f77}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyDateTime : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : DATE_AND_TIME;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyDcTime" Id="{8ae14f6a-1a8e-48ea-8ab4-1172d4a490a5}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyDcTime : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : DCTIME;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyDint" Id="{53fd06c9-d845-4182-a76a-953d9962d8d5}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyDint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : DINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyDword" Id="{c3404ff6-c841-007f-35a6-14a9afa3f3ab}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyDword : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : DWORD;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyFileTime" Id="{2aca319b-a4fd-4602-939a-e86a532d12f4}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyFileTime : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : FILETIME;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyInt" Id="{299dcd66-93e8-0afa-21e3-1250a076eef7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyInt : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : INT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyLint" Id="{e51945bf-79f3-4916-bac7-bf954b5325f9}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyLint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : LINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyLreal" Id="{e1c5823c-86dc-4881-9d6b-6a5672dbdc84}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyLreal : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : LREAL;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyLtime" Id="{d496e46d-0d22-09a0-0abe-3d7096d73067}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyLtime : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : LTIME;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyLword" Id="{61410795-e0ae-06fd-01f3-bfa9f1e5cf45}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyLword : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : LWORD;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyNull" Id="{beb02c26-0005-43b2-8676-aaea288a3019}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyNull : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyObject" Id="{ea57b191-572c-08e8-0e90-978997c2df91}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyObject : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Object : I_Serializable;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyReal" Id="{ac7011ee-5119-46a7-96f2-72a34dd860c1}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyReal : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : REAL;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeySint" Id="{bfad2615-11ad-0474-2852-9c5678d1e75c}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeySint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : SINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyString" Id="{c289714a-3f84-0159-0fba-851d027bd23b}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyString : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : T_MAXSTRING;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyStringByRef" Id="{dbec44b8-8870-4a8b-94c7-16aaa4f323a0}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyStringByRef : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : REFERENCE TO STRING;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyTime" Id="{8fc35cbe-1a3b-090f-3e6c-05b06b18b0c2}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyTime : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : TIME;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyTod" Id="{b021d89e-dcb4-0201-1110-14a9c661aefc}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyTod : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : TOD;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyUdint" Id="{34b04311-ad22-4e9b-aa85-66514f276059}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyUdint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : UDINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyUint" Id="{ea3f1a37-cd20-005d-1442-5ff997217638}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyUint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : UINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyUlint" Id="{04c3e7ae-51ce-45cb-98cf-06390b8cf3af}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyUlint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : ULINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyUsint" Id="{019fc528-eae5-0558-00ef-ad58643fedec}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyUsint : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : USINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyWord" Id="{77e6a092-b26a-0207-3a79-619dd537058d}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyWord : I_Serializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : WORD;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddLint" Id="{1e08c96a-fbc1-4281-ace5-d0091662bc8b}">
+      <Declaration><![CDATA[METHOD PUBLIC AddLint : I_Serializer
+VAR_INPUT
+	Value : LINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddLreal" Id="{df86cb22-bd61-4009-8294-948d0685c713}">
+      <Declaration><![CDATA[METHOD PUBLIC AddLreal : I_Serializer
+VAR_INPUT
+	Value : LREAL;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddLtime" Id="{1684a725-d515-064e-3f13-0df2fa705c8b}">
+      <Declaration><![CDATA[METHOD PUBLIC AddLtime : I_Serializer
+VAR_INPUT
+	Value : LTIME;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddLword" Id="{27156f9b-63b8-0aae-02a6-7a69527c2986}">
+      <Declaration><![CDATA[METHOD PUBLIC AddLword : I_Serializer
+VAR_INPUT
+	Value : LWORD;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddNull" Id="{7d16e46f-4843-4634-a62f-d70bedd45192}">
+      <Declaration><![CDATA[METHOD PUBLIC AddNull : I_Serializer
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddObject" Id="{1bbb7520-b78d-039a-243e-868e17e8f45e}">
+      <Declaration><![CDATA[METHOD PUBLIC AddObject
+VAR_INPUT
+	Object : I_Serializable;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddReal" Id="{465f5fe8-1b19-4da9-9429-9a5f36b62aec}">
+      <Declaration><![CDATA[METHOD PUBLIC AddReal : I_Serializer
+VAR_INPUT
+	Value : REAL;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddSint" Id="{067feae4-b504-003d-0013-50616bfaa6e7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddSint : I_Serializer
+VAR_INPUT
+	Value : SINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddString" Id="{e6783e26-a139-0356-1eee-994cd00bf0fd}">
+      <Declaration><![CDATA[METHOD PUBLIC AddString : I_Serializer
+VAR_INPUT
+	Value : T_MAXSTRING;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddStringByRef" Id="{83d8f89e-6a32-4628-9174-90c15d2b535e}">
+      <Declaration><![CDATA[METHOD PUBLIC AddStringByRef : I_Serializer
+VAR_INPUT
+	Value : REFERENCE TO STRING;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddTime" Id="{7cd121f9-55bb-0e94-0c56-e568a28cf4a5}">
+      <Declaration><![CDATA[METHOD PUBLIC AddTime : I_Serializer
+VAR_INPUT
+	Value : TIME;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddTod" Id="{1557b97e-5c00-0bb0-20f9-ed96c4561aed}">
+      <Declaration><![CDATA[METHOD PUBLIC AddTod : I_Serializer
+VAR_INPUT
+	Value : TOD;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddUdint" Id="{553e295d-4bf3-426d-891d-16f781ca5f7f}">
+      <Declaration><![CDATA[METHOD PUBLIC AddUdint : I_Serializer
+VAR_INPUT
+	Value : UDINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddUint" Id="{87cea9ec-6f9c-0d02-0c39-84e26c548930}">
+      <Declaration><![CDATA[METHOD PUBLIC AddUint : I_Serializer
+VAR_INPUT
+	Value : UINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddUlint" Id="{70a88c81-da92-4615-b9c7-bb8358090fc7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddUlint : I_Serializer
+VAR_INPUT
+	Value : ULINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddUsint" Id="{c448cb35-4a27-0378-3b8e-5e1b2138396a}">
+      <Declaration><![CDATA[METHOD PUBLIC AddUsint : I_Serializer
+VAR_INPUT
+	Value : USINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddWord" Id="{505b0cb7-efeb-03a2-2cfe-7e184cc64f35}">
+      <Declaration><![CDATA[METHOD PUBLIC AddWord : I_Serializer
+VAR_INPUT
+	Value : WORD;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="Clone" Id="{72cde8b5-7554-4255-aab0-d9f4c5153f83}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Serializer]]></Declaration>
+    </Method>
+    <Method Name="EndArray" Id="{1170e508-ce89-4ffe-b284-a52492f65d48}">
+      <Declaration><![CDATA[METHOD PUBLIC EndArray : I_Serializer
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="EndObject" Id="{7f2d05ec-9623-417a-8dc7-fe498cbca7bd}">
+      <Declaration><![CDATA[METHOD PUBLIC EndObject : I_Serializer
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="GetSerializedDataLength" Id="{acdb4be3-4389-4d00-be9f-f255da575edb}">
+      <Declaration><![CDATA[METHOD PUBLIC GetSerializedDataLength : UDINT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Reset" Id="{044ff5d8-3807-4171-a317-9654a131d92d}">
+      <Declaration><![CDATA[METHOD PUBLIC Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="StartArray" Id="{ff0a9481-5f2a-413b-b759-41cf04434169}">
+      <Declaration><![CDATA[METHOD PUBLIC StartArray : I_Serializer
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="StartObject" Id="{8430c01a-e0d1-49f5-b598-409fadf227ef}">
+      <Declaration><![CDATA[METHOD PUBLIC StartObject : I_Serializer
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryCopySerializedData" Id="{c177179f-efd7-4ac4-9b75-b8ac73b4528d}">
+      <Declaration><![CDATA[METHOD TryCopySerializedData : BOOL
+VAR_INPUT
+	DestinationAddress : PVOID;
+	DestinationSize : UDINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetSerializedData" Id="{86011333-e6ba-444a-b773-9d131df7f0b1}">
+      <Declaration><![CDATA[METHOD TryGetSerializedData : BOOL
+VAR_INPUT
+	DestinationAddress : PVOID;
+	DestinationSize : UDINT;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

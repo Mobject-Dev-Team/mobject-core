@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="JsonDeserializerObjectForwardEnumerator" Id="{59dc3943-9da4-493c-96b7-7a6e36e42d58}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK JsonDeserializerObjectForwardEnumerator EXTENDS Disposable IMPLEMENTS I_DeserializerObjectForwardEnumerator, I_EventHandler
+VAR
+	parent : I_JsonDeserializer;
+	jsonParser : REFERENCE TO JsonDomParser;
+	root : SJsonValue;
+	garbageCollector : I_DeserializerGarbageCollector;
+	nullNode : I_Deserializer;
+	moveNextCalled : BOOL := FALSE;
+	invalid : BOOL := FALSE; 
+	currentMemberPosition : SJsonValue;
+	memberBeginPosition : SJsonValue;
+	memberEndPosition : SJsonValue;
+	currentDeserializer : I_Deserializer;
+	currentKey : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{555f4917-8021-4b8d-80b9-7c79a6fa4bef}" />
+    <Folder Name="Destructor" Id="{b03006f4-6625-4f3e-8d1d-466323439277}" />
+    <Folder Name="Protected" Id="{f06a7ad0-6457-42d3-9cba-aa0950b011f1}" />
+    <Method Name="CreateDeserializer" Id="{bce6b0ff-055c-4f72-93f8-4d864daf2b39}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateDeserializer : I_Deserializer
+VAR_INPUT
+	DeserializerRoot : SJsonValue;
+END_VAR
+VAR 
+	pNode : POINTER TO JsonDeserializerNode;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNode := __NEW(JsonDeserializerNode(
+	ParentJsonDeserializer := parent,
+	ParentJsonDomParser := jsonParser, 
+	NodeRoot := DeserializerRoot, 
+	ParentGarbageCollector := garbageCollector, 
+	ParentNullDeserializer := nullNode
+));
+
+CreateDeserializer := pNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Current" Id="{b28994f2-3fcc-42d5-8823-d4c7a3d04c2b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Current : I_Deserializer]]></Declaration>
+      <Get Name="Get" Id="{01837e0e-7665-4534-b332-718b005be336}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF NOT IsValid THEN
+	Current := nullNode;
+	RETURN;
+END_IF
+
+IF currentDeserializer = 0 THEN
+	Current := nullNode;
+	RETURN;
+END_IF
+
+Current := currentDeserializer;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_exit" Id="{02b70892-473e-4d40-9e86-767cbfad5405}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+IF parent = 0 THEN
+	RETURN;
+END_IF
+
+parent.OffEvent('OnChanged',THIS^);
+parent.OffEvent('OnDisposed',THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{f4af10d7-51de-436a-a347-7bdb891c27e1}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	ParentJsonDeserializer : I_JsonDeserializer;
+	ParentJsonDomParser : REFERENCE TO JsonDomParser;
+	NodeRoot : SJsonValue;
+	ParentGarbageCollector : I_DeserializerGarbageCollector;
+	ParentNullDeserializer : I_Deserializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.parent := ParentJsonDeserializer;
+THIS^.jsonParser REF= ParentJsonDomParser;
+THIS^.root := NodeRoot;
+THIS^.garbageCollector := ParentGarbageCollector;
+THIS^.nullNode := ParentNullDeserializer;
+
+Initialize();
+
+Parent.OnEvent('OnChanged',THIS^);
+Parent.OnEvent('OnDisposed',THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="HandleEvent" Id="{487cae95-d5bd-4605-a17f-a83427558bac}">
+      <Declaration><![CDATA[METHOD PUBLIC HandleEvent
+VAR_INPUT
+	Event : I_Event;
+END_VAR
+VAR
+	changedEvent : I_JsonDeserializerChangedEvent;
+	disposedEvent : I_JsonDeserializerDisposedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF __QUERYINTERFACE(Event, changedEvent) THEN
+	invalid := TRUE;
+ELSIF __QUERYINTERFACE(Event, disposedEvent) THEN
+	parent := 0;
+	Dispose();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{71de97cc-7a4e-48cb-8d94-a87533ac967d}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Initialize
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsObject(root) THEN
+	invalid := TRUE;
+	RETURN;
+END_IF
+
+memberBeginPosition := jsonParser.MemberBegin(root);
+memberEndPosition := jsonParser.MemberEnd(root);
+
+IF memberBeginPosition = 0 THEN
+	invalid := TRUE;
+	RETURN;
+END_IF
+
+IF memberEndPosition = 0 THEN
+	invalid := TRUE;
+	RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="IsValid" Id="{7c241358-29e8-4d10-803a-731bb5ad2795}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsValid : BOOL]]></Declaration>
+      <Get Name="Get" Id="{bc4c7a09-80df-4ddc-a6de-26626f2225ac}">
+        <Declaration><![CDATA[PUBLIC]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF invalid THEN
+	RETURN;
+END_IF
+
+IF parent = 0 THEN
+	RETURN;
+END_IF
+
+IsValid := TRUE;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Key" Id="{631075d1-2b87-4ba6-92bd-e01f2a68efa5}">
+      <Declaration><![CDATA[PROPERTY Key : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{5c4dd9b3-0a75-4644-9700-f81616c1861c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Key := currentKey;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="MoveNext" Id="{3cdc46b4-d8c4-4b17-8b59-948b6587e133}">
+      <Declaration><![CDATA[METHOD PUBLIC MoveNext : BOOL]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF invalid THEN
+    RETURN;
+END_IF
+
+// Handle the initial move
+IF NOT moveNextCalled THEN
+    moveNextCalled := TRUE;
+    currentMemberPosition := memberBeginPosition;
+    UpdateCurrentDeserializer(currentMemberPosition);
+	MoveNext := TRUE;
+    RETURN;
+END_IF
+
+// Handle subsequent moves
+IF currentMemberPosition <> memberEndPosition THEN
+	currentMemberPosition := jsonParser.NextMember(currentMemberPosition);
+	UpdateCurrentDeserializer(currentMemberPosition);
+	MoveNext := (currentMemberPosition <> memberEndPosition);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UpdateCurrentDeserializer" Id="{578737d1-9fc4-4e81-86ff-41aef5875fee}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED UpdateCurrentDeserializer
+VAR_INPUT
+	Root : SJsonValue;
+END_VAR
+VAR
+	newRoot : SJsonValue;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF currentDeserializer <> 0 THEN
+	currentDeserializer.Dispose();
+	currentDeserializer := 0;
+END_IF
+
+IF invalid THEN
+	RETURN;
+END_IF
+
+newRoot := jsonParser.GetMemberValue(Root);
+currentKey := jsonParser.GetMemberName(currentMemberPosition);
+
+IF newRoot = 0 THEN
+	RETURN;
+END_IF
+
+currentDeserializer := CreateDeserializer(newRoot);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

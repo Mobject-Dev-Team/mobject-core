@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_LREAL_TO_DATE" Id="{db500841-9d81-47b0-bf22-81b48c73a8e4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_LREAL_TO_DATE : BOOL
+VAR_INPUT
+	in : LREAL;
+	out : REFERENCE TO DATE;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_LREAL_WHICH_CAN_BE_HELD_IN_A_DATE THEN
+	RETURN;
+END_IF
+
+IF in < DatatypeLimits.MIN_VALUE_OF_LREAL_WHICH_CAN_BE_HELD_IN_A_DATE THEN
+	RETURN;
+END_IF
+
+out := LREAL_TO_DATE(in);
+TryConvert_LREAL_TO_DATE := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

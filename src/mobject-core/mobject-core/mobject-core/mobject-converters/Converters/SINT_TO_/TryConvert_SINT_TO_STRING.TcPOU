@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_SINT_TO_STRING" Id="{337c1bfa-96ee-4bab-81b7-472d8984be4e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_SINT_TO_STRING : BOOL
+VAR_INPUT
+	in : SINT;
+	out : REFERENCE TO STRING;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := SINT_TO_STRING(in);
+TryConvert_SINT_TO_STRING := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

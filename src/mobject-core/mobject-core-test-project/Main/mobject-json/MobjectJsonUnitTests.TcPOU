@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MobjectJsonUnitTests" Id="{b4205974-38c2-0574-0681-102544eccc8a}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MobjectJsonUnitTests
+VAR
+	jsonDomParser_TestSuite : JsonDomParser_TestSuite;
+	jsonSerializer_TestSuite : JsonSerializer_TestSuite;
+	jsonDeserializer_TestSuite : JsonDeserializer_TestSuite;
+	jsonDeserializerArrayForwardEnumerator_TestSuite : JsonDeserializerArrayForwardEnumerator_TestSuite;
+	jsonDeserializerObjectForwardEnumerator_TestSuite : JsonDeserializerObjectForwardEnumerator_TestSuite;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

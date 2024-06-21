@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_SINT_TO_USINT" Id="{638baf35-7064-4fdf-ab02-2dd32589dad4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_SINT_TO_USINT : BOOL
+VAR_INPUT
+	in : SINT;
+	out : REFERENCE TO USINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in < DatatypeLimits.MIN_VALUE_OF_SINT_WHICH_CAN_BE_HELD_IN_A_USINT THEN
+	RETURN;
+END_IF
+
+out := SINT_TO_USINT(in);
+TryConvert_SINT_TO_USINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

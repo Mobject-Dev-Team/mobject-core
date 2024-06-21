@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_EnumDatatype" Id="{89587be6-7e6a-096a-2593-84d2b84b6449}">
+    <Declaration><![CDATA[INTERFACE I_EnumDatatype EXTENDS I_UserDefinedDatatype
+]]></Declaration>
+  </Itf>
+</TcPlcObject>

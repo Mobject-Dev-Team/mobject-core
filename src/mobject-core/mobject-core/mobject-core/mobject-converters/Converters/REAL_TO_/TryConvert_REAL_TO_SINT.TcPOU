@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_REAL_TO_SINT" Id="{799c2a03-3df8-4a52-acbc-ebd696a32f1c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_REAL_TO_SINT : BOOL
+VAR_INPUT
+	in : REAL;
+	out : REFERENCE TO SINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_SINT THEN
+	RETURN;
+END_IF
+
+IF in < DatatypeLimits.MIN_VALUE_OF_REAL_WHICH_CAN_BE_HELD_IN_A_SINT THEN
+	RETURN;
+END_IF
+
+out := REAL_TO_SINT(in);
+TryConvert_REAL_TO_SINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

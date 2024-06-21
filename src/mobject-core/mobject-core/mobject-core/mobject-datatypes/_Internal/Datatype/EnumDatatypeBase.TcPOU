@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="EnumDatatypeBase" Id="{557f6aea-7e69-0891-32d1-deff7c86141d}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ABSTRACT EnumDatatypeBase EXTENDS UserDefinedDatatypeBase IMPLEMENTS I_EnumDatatype
+VAR
+	_baseDatatype : I_Datatype;
+	enumerations : OrderedDictionary;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Private" Id="{e241ea96-1755-0bc6-3cc9-66d3a07ef43b}" />
+    <Folder Name="Protected" Id="{9ab0fb1e-e93d-03e6-1f4a-937cd72e4ff2}" />
+    <Method Name="AddBaseDatatype" Id="{6f45e969-2205-0ee5-1741-f9182964d9c7}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddBaseDatatype
+VAR_INPUT
+	BaseType : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_baseDatatype := BaseType;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddEnumeration" Id="{24a8f68d-9038-0527-0d70-33090faf9223}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddEnumeration
+VAR_INPUT
+	Enumeration : T_MAXSTRING;
+	Value : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerations.AddOrUpdate(Enumeration, Value);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="BaseDatatype" Id="{e1b1583d-4cac-0913-138e-f00b2fa46383}">
+      <Declaration><![CDATA[PROPERTY PUBLIC BaseDatatype : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{d0ecfb2e-c358-028d-06a1-f855140a074c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[BaseDatatype := _baseDatatype;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="CreateEnumError" Id="{bd8898fd-4d31-0539-2626-348ce3ac7b9a}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateEnumError : I_Error
+VAR_INPUT
+	Enum : T_MAXSTRING;
+END_VAR
+VAR
+	pError : POINTER TO UnknownEnumerationError;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pError := __NEW(UnknownEnumerationError(EnumString := Enum));
+CreateEnumError := pError^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsEnumeratorValueEqual" Id="{c352cd4e-5c9a-0c6e-2c05-055eddfa29fb}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD ABSTRACT IsEnumeratorValueEqual : BOOL
+VAR_INPUT
+	Enumerator : I_KeyValueForwardEnumerator;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnSerializeTypeWith" Id="{fcf8efb2-c5e6-0e18-18a2-fd640a5efe78}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnSerializeTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.OnSerializeTypeWith(Serializer);
+SerializeEnums(Serializer);
+SerializeBaseType(Serializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeBaseType" Id="{9539c2ca-6d4d-09f6-3fbb-0dcee0a49871}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE SerializeBaseType
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF _baseDatatype = 0 THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('baseType');
+_baseDatatype.SerializeTypeWith(Serializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeEnums" Id="{b1179a12-ba45-0121-2f97-8522e6a18251}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE SerializeEnums
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_KeyValueForwardEnumerator;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.AddKey('enumerations');
+Serializer.StartArray();
+
+enumerator := enumerations.GetKeyValueEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	Serializer.AddString(enumerator.Key);
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{81d643af-d86d-00f7-219b-2740d01e3381}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	returnKey : T_MAXSTRING;
+	enumerator : I_KeyValueForwardEnumerator;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := enumerations.GetKeyValueEnumerator();
+returnKey := 'UNDEFINED';
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF IsEnumeratorValueEqual(enumerator) THEN
+		returnKey := enumerator.key;
+		EXIT;
+	END_IF
+
+END_WHILE
+
+Serializer.AddString(returnKey);
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{ca143265-8c9a-0b61-30ed-8427daa4ec1d}">
+      <Declaration><![CDATA[METHOD TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	key : T_MAXSTRING;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT Deserializer.TryGetString(key, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT enumerations.TryGetValueTo(key, Address, Size) THEN
+	error := CreateEnumError(key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+TryDeserializeFrom := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAsEnumDatatype" Id="{8dfb9594-5a28-0c78-357b-130aad55def2}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsEnumDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_EnumDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Destination := THIS^;
+TryResolveAsEnumDatatype := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="TypeName" Id="{89f04314-69c2-056d-2098-7ce079cb752c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TypeName : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{78f8727d-d0cd-026e-255c-73f22efd70c0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TypeName := 'ENUM';]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_JsonDeserializerDisposedEvent" Id="{a972cec1-feba-428b-bd7d-6fdf767f8322}">
+    <Declaration><![CDATA[INTERFACE I_JsonDeserializerDisposedEvent EXTENDS I_Event]]></Declaration>
+    <Property Name="Target" Id="{2a98b9fc-5cd3-40b2-84bc-77eaeffa75b7}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_JsonDeserializer]]></Declaration>
+      <Get Name="Get" Id="{4b2b3482-3dd2-422d-ad58-8f38bef2cf82}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

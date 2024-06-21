@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_UINT_TO_TIME" Id="{3f9388af-de5b-44db-9064-bf0f9763f36d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_UINT_TO_TIME : BOOL
+VAR_INPUT
+	in : UINT;
+	out : REFERENCE TO TIME;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := UINT_TO_TIME(in);
+TryConvert_UINT_TO_TIME := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

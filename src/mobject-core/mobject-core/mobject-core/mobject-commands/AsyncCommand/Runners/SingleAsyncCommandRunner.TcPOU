@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="SingleAsyncCommandRunner" Id="{531b620a-806f-081f-0364-c81edf0e942d}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK SingleAsyncCommandRunner
+VAR
+	currentCommand : I_AsyncCommand;
+	replacementCommand : I_AsyncCommand;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="Busy" Id="{fa59f12b-1683-0ac2-0762-efba2fd514eb}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Busy : BOOL]]></Declaration>
+      <Get Name="Get" Id="{3a390dff-c1e6-0126-1e1e-89b0c9907a30}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF currentCommand = 0 THEN
+	RETURN;
+END_IF
+
+Busy := currentCommand.Busy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="CyclicCall" Id="{7f65dd88-5f44-03a9-1bf1-4bc52bd4e05a}">
+      <Declaration><![CDATA[METHOD PUBLIC CyclicCall
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF currentCommand <> 0 AND_THEN currentCommand.Busy THEN
+	currentCommand.CyclicCall();
+	RETURN;
+END_IF
+
+IF replacementCommand <> 0 THEN
+	currentCommand := replacementCommand;
+	replacementCommand := 0;
+	currentCommand.Execute();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Done" Id="{689f4f74-1394-04aa-2676-3ca69855a7e5}">
+      <Declaration><![CDATA[PROPERTY Done : BOOL]]></Declaration>
+      <Get Name="Get" Id="{bf5925e0-ca91-0e8b-0cdf-0273c08f2d50}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF currentCommand = 0 THEN
+	RETURN;
+END_IF
+
+Done := currentCommand.Done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{7922bcba-0127-07cc-2d21-38f92b8c2a32}">
+      <Declaration><![CDATA[PROPERTY Error : BOOL]]></Declaration>
+      <Get Name="Get" Id="{1fbbb784-617b-0f62-154e-4d7877f3ad08}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF currentCommand = 0 THEN
+	RETURN;
+END_IF
+
+Error := currentCommand.Error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ErrorId" Id="{bdebaa9b-a127-0428-20bc-d521131f54d7}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ErrorId : UDINT]]></Declaration>
+      <Get Name="Get" Id="{1094319f-bd8a-0149-3f7e-a90164d4ca2c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF currentCommand = 0 THEN
+	RETURN;
+END_IF
+
+ErrorId := currentCommand.ErrorId;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="ExecuteCommand" Id="{d3ee0b89-bf04-0fd2-2e69-07d50235ab9c}">
+      <Declaration><![CDATA[METHOD ExecuteCommand
+VAR_INPUT
+	Command : I_AsyncCommand;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF currentCommand = 0 THEN
+	currentCommand := Command;
+	currentCommand.Execute();
+	RETURN;
+END_IF
+
+currentCommand.Abort();
+replacementCommand := Command;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

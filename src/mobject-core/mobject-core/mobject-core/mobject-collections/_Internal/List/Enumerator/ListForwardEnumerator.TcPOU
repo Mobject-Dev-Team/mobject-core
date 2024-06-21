@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="ListForwardEnumerator" Id="{e681fa00-b568-093f-3477-a7dbfe39ca22}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ListForwardEnumerator EXTENDS Disposable IMPLEMENTS I_ForwardEnumerator, I_EventHandler
+VAR
+	parent : I_List;
+	currentIndex : DINT := 0;
+	invalid : BOOL := FALSE;
+	moveNextCalled : BOOL := FALSE;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{5aa11f73-3fa0-0292-114e-87fbbf975a45}" />
+    <Folder Name="Destructor" Id="{924286fa-29b5-062a-3e29-4486dbd51233}" />
+    <Method Name="FB_exit" Id="{3fce74bb-85d3-07b9-15f1-a1a92bbd717c}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+IF parent = 0 THEN
+	RETURN;
+END_IF
+
+parent.OffEvent('OnChanged',THIS^);
+parent.OffEvent('OnDisposed',THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{c15c2387-2432-0794-3cdb-0ba0b00b2d52}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_List;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Parent.OnEvent('OnChanged',THIS^);
+Parent.OnEvent('OnDisposed',THIS^);
+this^.parent := Parent;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="HandleEvent" Id="{40df59c7-1aa6-0f97-1bb5-34f8c6e99c35}">
+      <Declaration><![CDATA[METHOD PUBLIC HandleEvent
+VAR_INPUT
+	Event : I_Event;
+END_VAR
+VAR
+	changedEvent : I_CollectionChangedEvent;
+	disposedEvent : I_CollectionDisposedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF __QUERYINTERFACE(Event, changedEvent) THEN
+	invalid := TRUE;
+	currentIndex := 0;
+ELSIF __QUERYINTERFACE(Event, disposedEvent) THEN
+	parent := 0;
+	Dispose();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="IsValid" Id="{99fbedb0-c81b-069d-22ec-e986a9ef788d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsValid : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{e8898876-630f-02cf-079d-8655fbcdb056}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsValid := (NOT invalid AND parent <> 0);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="MoveNext" Id="{850230e0-b155-0121-3b25-923e450ed572}">
+      <Declaration><![CDATA[METHOD MoveNext : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF invalid THEN
+    RETURN;
+END_IF
+
+IF parent = 0 THEN
+    RETURN;
+END_IF
+
+IF parent.Count = 0 THEN
+    RETURN;
+END_IF
+
+IF NOT moveNextCalled THEN
+	MoveNext := moveNextCalled := TRUE;
+	RETURN;
+END_IF
+
+IF currentIndex < parent.Count - 1 THEN
+    currentIndex := currentIndex + 1;
+    MoveNext := TRUE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reset" Id="{3feb3a83-9a71-01a2-3a6c-485b26bfddbb}">
+      <Declaration><![CDATA[METHOD Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[moveNextCalled := FALSE;
+currentIndex := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGet" Id="{6bd10e22-81c5-0e2e-3acb-c64a159645ab}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGet : BOOL
+VAR_INPUT
+	Destination : ANY;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF invalid THEN
+	RETURN;
+END_IF
+
+IF parent = 0 THEN
+	RETURN;
+END_IF
+
+IF NOT moveNextCalled THEN
+	RETURN;
+END_IF
+
+TryGet := parent.TryGetByIndex(currentIndex, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetTo" Id="{5033f2d3-ceda-0b9b-0d1d-7820c592c48b}">
+      <Declaration><![CDATA[METHOD TryGetTo : BOOL
+VAR_INPUT
+	DestinationAddress : PVOID;
+	DestinationSize : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF invalid THEN
+	RETURN;
+END_IF
+
+IF parent = 0 THEN
+	RETURN;
+END_IF
+
+IF NOT moveNextCalled THEN
+	RETURN;
+END_IF
+
+TryGetTo := parent.TryGetToByIndex(currentIndex, DestinationAddress, DestinationSize);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_LinkedList" Id="{d65e86a0-7f4e-0ed4-1930-5fe7a71e95e5}">
+    <Declaration><![CDATA[INTERFACE I_LinkedList EXTENDS I_Collection]]></Declaration>
+    <Method Name="AddAfter" Id="{2028058f-b514-0af4-1fdd-424b77a21c18}">
+      <Declaration><![CDATA[METHOD PUBLIC AddAfter
+VAR_INPUT
+	After : I_LinkedListNode;
+	Value : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddBefore" Id="{9c9bf288-4163-0c0b-326f-035f998eae45}">
+      <Declaration><![CDATA[METHOD PUBLIC AddBefore
+VAR_INPUT
+	Before : I_LinkedListNode;
+	Value : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddFirst" Id="{25e79b75-6a7b-0219-288f-38a1a515e787}">
+      <Declaration><![CDATA[METHOD PUBLIC AddFirst
+VAR_INPUT
+	Value : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddLast" Id="{4df6d425-8ae4-02d0-3964-645bf75862da}">
+      <Declaration><![CDATA[METHOD PUBLIC AddLast
+VAR_INPUT
+	Value : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="Find" Id="{381e820c-6a05-06a4-102d-782a6a95b13b}">
+      <Declaration><![CDATA[METHOD PUBLIC Find : I_LinkedListNode
+VAR_INPUT
+	Value : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="FindLast" Id="{0e27364e-c0cf-0134-034f-240b1bbe1576}">
+      <Declaration><![CDATA[METHOD PUBLIC FindLast : I_LinkedListNode
+VAR_INPUT
+	Value : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Property Name="First" Id="{5deee7e8-e5f5-0d85-1f9c-97a893e0c28b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC First : I_LinkedListNode]]></Declaration>
+      <Get Name="Get" Id="{9fc5699c-b7e0-0f5f-1d8b-0f8588b8cb25}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Last" Id="{ee747e9f-3bbc-0f95-07e8-e10aeafa5136}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Last : I_LinkedListNode]]></Declaration>
+      <Get Name="Get" Id="{b31b1324-2a9e-0d90-2b07-eaeca584e432}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="Remove" Id="{81314fae-ae70-0bae-3069-787c7e6bfbfb}">
+      <Declaration><![CDATA[METHOD PUBLIC Remove
+VAR_INPUT
+	Value : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="RemoveFirst" Id="{3410b0c2-1774-0bdd-3e35-da68cf9f3bd8}">
+      <Declaration><![CDATA[METHOD PUBLIC RemoveFirst]]></Declaration>
+    </Method>
+    <Method Name="RemoveLast" Id="{ac44fde4-f603-0b74-1b5c-fa17e3478296}">
+      <Declaration><![CDATA[METHOD PUBLIC RemoveLast
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

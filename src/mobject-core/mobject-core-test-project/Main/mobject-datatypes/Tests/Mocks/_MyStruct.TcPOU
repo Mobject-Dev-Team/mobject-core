@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="_MyStruct" Id="{c95335ad-c5c5-4ca4-9b81-670617e863ba}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK _MyStruct EXTENDS StructuredDatatypeBase
+VAR
+	localData : MyStruct;
+	activeData : REFERENCE TO MyStruct REF= localData;
+	_myBit : _BIT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{eaaac4e9-8a4a-4550-83d9-082c7c28fb26}" />
+    <Folder Name="Protected" Id="{49958b28-32ac-4d79-9360-30bbd7bb0fe8}" />
+    <Property Name="Address" Id="{ad48cdfe-cdef-465c-b5f0-8f67d138a17f}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Address : PVOID]]></Declaration>
+      <Get Name="Get" Id="{df9eaff3-1cb4-4c2b-b948-d98c5c81130d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Address := ADR(activeData);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="ClearReference" Id="{083d7841-7ead-4963-8bb6-6730125c51c9}">
+      <Declaration><![CDATA[METHOD PUBLIC ClearReference
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[activeData REF= localData;
+SetMemberReference();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Clone" Id="{c9244f1d-803c-483d-9d81-ccd6e1612835}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Datatype
+VAR
+    pClone : POINTER TO _MyStruct;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pClone := __NEW(_MyStruct());
+pClone^.Value := Value;
+Clone := pClone^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{e810e1b0-d92c-4f38-95ae-3f0480fbf27d}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SetMemberReference();
+AddMember('MyBit',_myBit);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Identifier" Id="{25ebb523-d078-4916-ba0a-ee8e880f70c4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Identifier : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{90a80ab6-6cdb-4a13-a2d5-6ee207079295}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Identifier := 'MyStruct';]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="MakeReferenceTo" Id="{fc4d1ba3-334d-4f71-aaf5-3c3d0ddc3ddf}">
+      <Declaration><![CDATA[METHOD PUBLIC MakeReferenceTo
+VAR_INPUT
+	ReferenceTarget : REFERENCE TO MyStruct;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[activeData REF= ReferenceTarget;
+SetMemberReference();]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MyBit" Id="{c69fdd62-05e2-464d-bd70-a88f3181d120}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MyBit : Reference to _BIT]]></Declaration>
+      <Get Name="Get" Id="{ff3cb494-b5d4-46fb-98a9-83a13076991b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MyBit REF= _myBit;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="SetMemberReference" Id="{b2d29e80-536a-46f0-b53a-ea8e76601be6}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED SetMemberReference
+VAR_STAT
+	// this variable is used for BITADR as this function failes if used on a local variable.
+	structure : MyStruct;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_myBit.MakeReferenceTo(THIS^, GetByteOffset(localData, localData.MyBit), BITADR(structure.MyBit));]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Size" Id="{74d051e4-7162-4209-9df9-958ebf74e194}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Size : UDINT]]></Declaration>
+      <Get Name="Get" Id="{b159b6d0-e49b-48d4-a9bf-cee0f3fbf4a3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Size := SIZEOF(activeData);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="TryMakeReferenceTo" Id="{87b54037-7b95-4e7e-89a5-f85475e6850e}">
+      <Declaration><![CDATA[METHOD TryMakeReferenceTo : BOOL
+VAR_INPUT
+	Target : I_Datatype;
+END_VAR
+VAR
+	targetAsStruct : I_StructuredDatatype;
+	pTargetData : POINTER TO MyStruct;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT Target.TryResolveAsStructuredDatatype(targetAsStruct) THEN
+	RETURN;
+END_IF
+
+IF NOT (targetAsStruct.Identifier = Identifier) THEN
+	RETURN;
+END_IF
+
+pTargetData := Target.Address;
+activeData REF= pTargetData^;
+SetMemberReference();
+TryMakeReferenceTo := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Value" Id="{78169baa-8f82-4435-9209-e699506fed47}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO MyStruct]]></Declaration>
+      <Get Name="Get" Id="{7e7d3f34-1164-4ad4-b630-fc4c7717e0ce}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Value REF= activeData;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

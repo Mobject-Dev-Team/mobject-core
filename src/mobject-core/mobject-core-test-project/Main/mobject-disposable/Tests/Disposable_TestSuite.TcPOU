@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Disposable_TestSuite" Id="{5e30d77d-5ab7-4a68-9932-9d53fc3729bd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC Disposable_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[DisposedFromDisposeMethod();
+DisposedByManuallyDeleting();]]></ST>
+    </Implementation>
+    <Method Name="DisposedByManuallyDeleting" Id="{53f28239-f13a-41de-aa9f-47d3ff4c2a4d}">
+      <Declaration><![CDATA[METHOD PUBLIC DisposedByManuallyDeleting
+VAR
+	mockDispose : POINTER TO MockDisposable;
+	disposed : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('DisposedByManuallyDeleting');
+
+// @TEST-FIXTURE
+mockDispose := __NEW(MockDisposable(DisposedFlag:=disposed));
+
+// @TEST-RUN
+__DELETE(mockDispose);
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := disposed,
+	Message := 'FB_exit was not correctly triggered in the MockDisposable'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposedFromDisposeMethod" Id="{f6d78085-e7eb-482f-b15d-638e7798de7e}">
+      <Declaration><![CDATA[METHOD PUBLIC DisposedFromDisposeMethod
+VAR
+	mockDispose : POINTER TO MockDisposable;
+	disposed : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('DisposedFromDisposeMethod');
+
+// @TEST-FIXTURE
+mockDispose := __NEW(MockDisposable(DisposedFlag:=disposed));
+
+// @TEST-RUN
+mockDispose^.Dispose();
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := disposed,
+	Message := 'FB_exit was not correctly triggered in the MockDisposable'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

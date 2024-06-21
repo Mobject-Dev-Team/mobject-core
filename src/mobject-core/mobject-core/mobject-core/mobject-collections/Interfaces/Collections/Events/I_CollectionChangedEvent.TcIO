@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_CollectionChangedEvent" Id="{4d9aaefe-74aa-0c75-3e3c-563b94981f7b}">
+    <Declaration><![CDATA[INTERFACE I_CollectionChangedEvent EXTENDS I_Event]]></Declaration>
+    <Property Name="Target" Id="{c58e6b87-594b-093a-34b0-80bd61141f42}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Collection]]></Declaration>
+      <Get Name="Get" Id="{2ddcbc65-b8f7-005b-227a-6551b371da0d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

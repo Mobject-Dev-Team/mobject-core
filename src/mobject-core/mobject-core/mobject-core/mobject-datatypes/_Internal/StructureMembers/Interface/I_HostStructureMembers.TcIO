@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_HostStructureMembers" Id="{b619b8ab-031f-0bf8-1d3e-d3d064db4508}">
+    <Declaration><![CDATA[INTERFACE I_HostStructureMembers EXTENDS __SYSTEM.IQueryInterface
+]]></Declaration>
+    <Property Name="Members" Id="{c5e81104-ef06-454c-80cf-dc98734595cd}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Members : I_StructureMembers]]></Declaration>
+      <Get Name="Get" Id="{f4b25703-1c06-4277-9e64-a25639db9fbf}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

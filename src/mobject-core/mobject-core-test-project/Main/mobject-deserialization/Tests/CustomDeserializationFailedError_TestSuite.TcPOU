@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="CustomDeserializationFailedError_TestSuite" Id="{bb510e9f-3d23-0cde-2b7a-72f8d2c0708d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK CustomDeserializationFailedError_TestSuite EXTENDS TcUnit.FB_TestSuite]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestAccept();
+TestErrorType();
+TestIsSameAsWithSameErrors();
+TestIsSameAsWithDifferentErrors();
+TestMessage();
+TestSerializeWith();]]></ST>
+    </Implementation>
+    <Method Name="TestAccept" Id="{f972bbc6-f566-0223-386d-7e9aab2d1934}">
+      <Declaration><![CDATA[METHOD PUBLIC TestAccept
+VAR
+	error : CustomDeserializationFailedError(Message := 'TestMessage');
+	visitor : MockErrorVisitor(ExpectedError := error);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestAccept');
+
+error.Accept(visitor);
+
+AssertTrue(
+	Condition := visitor.VisitedCorrectError,
+	Message := 'Did not invoke VisitError on the visitor'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestErrorType" Id="{bfe85a47-4441-045e-3fa1-f3ea77d281d1}">
+      <Declaration><![CDATA[METHOD PUBLIC TestErrorType
+VAR
+	error : CustomDeserializationFailedError(Message := 'TestMessage');
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestErrorType');
+
+AssertEquals_String(
+	Actual := error.ErrorType,
+	Expected := 'CUSTOM_DESERIALIZATION_ERROR',
+	Message := 'Did not return the expected ErrorType'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIsSameAsWithDifferentErrors" Id="{26e8b22f-447a-098a-0414-8c83c0eb6d2b}">
+      <Declaration><![CDATA[METHOD PUBLIC TestIsSameAsWithDifferentErrors
+VAR
+	error1 : CustomDeserializationFailedError(Message := 'TestMessage');
+	error2 : MockError(MockErrorType:='ERROR_TYPE_B',MockMessage:='TestMessage');
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsSameAsWithDifferentErrors');
+
+AssertFalse(
+	Condition := error1.IsSameAs(error2),
+	Message := 'Did not correctly identify errors as being different type'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIsSameAsWithSameErrors" Id="{245c9c53-81b4-0614-260a-7384f616a4ff}">
+      <Declaration><![CDATA[METHOD PUBLIC TestIsSameAsWithSameErrors
+VAR
+	error1 : CustomDeserializationFailedError(Message := 'TestMessage');
+	error2 : MockError(MockErrorType:='CUSTOM_DESERIALIZATION_ERROR',MockMessage:='Deserialization Failed, TestMessage');
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsSameAsWithSameErrors');
+
+AssertTrue(
+	Condition := error1.IsSameAs(error2),
+	Message := 'Did not correctly identify errors as being the same type'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMessage" Id="{427b00c7-80c9-000e-0456-25e6a3c0cea0}">
+      <Declaration><![CDATA[METHOD PUBLIC TestMessage
+VAR
+	error : CustomDeserializationFailedError(Message := 'TestMessage');
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestMessage');
+
+AssertEquals_String(
+	Actual := error.Message,
+	Expected := 'Deserialization Failed, TestMessage',
+	Message := 'Did not return the expected Message'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSerializeWith" Id="{f1e422e4-184d-07c5-085e-de7fb13b9868}">
+      <Declaration><![CDATA[METHOD PUBLIC TestSerializeWith
+VAR
+	error : CustomDeserializationFailedError(Message := 'TestMessage');
+	serializer : MockJsonSerializer;
+	result : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestSerializeWith');
+
+error.SerializeWith(serializer);
+serializer.TryGetSerializedData(ADR(result), SIZEOF(result));
+
+AssertEquals_String(
+	Actual := result,
+	Expected := '{"errorType":"CUSTOM_DESERIALIZATION_ERROR","message":"Deserialization Failed, TestMessage"}',
+	Message := 'Did not serialize correctly'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

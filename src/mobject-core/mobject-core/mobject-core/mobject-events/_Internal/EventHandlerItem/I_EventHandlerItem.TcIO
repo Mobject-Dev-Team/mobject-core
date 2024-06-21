@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_EventHandlerItem" Id="{943820f2-6d02-43f4-a224-eda85ce6c166}">
+    <Declaration><![CDATA[INTERFACE I_EventHandlerItem EXTENDS I_Disposable
+]]></Declaration>
+    <Method Name="Emit" Id="{d47a8275-0b77-488c-b526-2a215b45aa18}">
+      <Declaration><![CDATA[METHOD PUBLIC Emit
+VAR_INPUT
+	EventName : T_MaxString;
+	Event : I_Event;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="EqualTo" Id="{1e507b2d-2942-4a96-9a80-d7fb383970fc}">
+      <Declaration><![CDATA[METHOD PUBLIC EqualTo : BOOL
+VAR_INPUT
+	Name : T_MaxString;
+	Handler : I_EventHandler;
+END_VAR]]></Declaration>
+    </Method>
+    <Property Name="Next" Id="{f5301b65-90eb-4f3e-be99-c549aec9e832}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Next : I_EventHandlerItem]]></Declaration>
+      <Get Name="Get" Id="{027001e4-6c4f-42c3-b1e5-087bb744cc00}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{3262ecdb-ae07-4100-970b-4d9860bea05f}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="Previous" Id="{9796fcda-cc4f-4756-aab0-ff05fc1b2173}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Previous : I_EventHandlerItem]]></Declaration>
+      <Get Name="Get" Id="{4a6f9eeb-51b6-4a64-88c4-3a3a67de0e8b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{b6ceee62-4951-4759-89fd-f2405609e1a4}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>

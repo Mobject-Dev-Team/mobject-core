@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="AsyncCommand" Id="{c973928e-4f5b-09d1-33f2-08f2e9394838}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK AsyncCommand EXTENDS Disposable IMPLEMENTS I_AsyncCommand
+VAR
+	stateMachine : AsyncCommandStateMachine;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Protected" Id="{5a39a5d2-86a8-08f5-2eea-c36e6bea10ac}" />
+    <Method Name="Abort" Id="{7fe7ef70-8f92-07c8-094c-3e23fcd2f4b9}">
+      <Declaration><![CDATA[METHOD PUBLIC Abort
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[stateMachine.Abort();]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Busy" Id="{41fde25d-7c78-0f8a-2bd6-3c43629fa217}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Busy : BOOL]]></Declaration>
+      <Get Name="Get" Id="{50fe8db0-7c48-03a5-182b-c8bbcc843bb1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF stateMachine.IsAborted THEN
+	RETURN;
+END_IF
+
+IF stateMachine.IsCompleted THEN
+	RETURN;
+END_IF
+
+IF stateMachine.IsErrored THEN
+	RETURN;
+END_IF
+
+IF stateMachine.IsIdle THEN
+	RETURN;
+END_IF
+
+Busy := TRUE;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="CyclicCall" Id="{b75deb0d-00cc-0f69-05ee-aa8fb62f7338}">
+      <Declaration><![CDATA[METHOD PUBLIC CyclicCall
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF stateMachine.IsIdle THEN
+	OnIdle();
+END_IF
+
+IF stateMachine.IsInitializing THEN
+	OnInitializing(stateMachine);
+END_IF
+
+IF stateMachine.IsExecuting THEN
+	OnExecuting(stateMachine);
+END_IF
+
+IF stateMachine.IsCompleting THEN
+	OnCompleting(stateMachine);
+END_IF
+
+IF stateMachine.IsCompleted THEN
+	OnCompleted();
+END_IF
+
+IF stateMachine.IsAborting THEN
+	OnAborting(stateMachine);
+END_IF
+
+IF stateMachine.IsAborted THEN
+	OnAborted();
+END_IF
+
+IF stateMachine.IsErrored THEN
+	OnErrored();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Done" Id="{eacbe765-c810-0ffb-3782-548f55814d64}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Done : BOOL]]></Declaration>
+      <Get Name="Get" Id="{37abf15d-b55d-0ce9-2e13-d50267a4f386}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := stateMachine.IsCompleted;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{4bf62e89-ef02-06e5-150d-17a283011e29}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Error : BOOL]]></Declaration>
+      <Get Name="Get" Id="{1490cc77-4707-0ec6-35ed-b61401746957}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := stateMachine.IsErrored;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ErrorId" Id="{f4d11268-ec93-09a1-2668-04b067b61f26}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ErrorId : UDINT]]></Declaration>
+      <Get Name="Get" Id="{98bcd037-239a-0660-2fd5-51fda5bc435f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ErrorId := stateMachine.ErrorId;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{41fa219d-23fb-0366-23d6-d24f61053bbb}">
+      <Declaration><![CDATA[METHOD PUBLIC Execute
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[stateMachine.Execute();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnAborted" Id="{7e68c239-789d-0d5c-3c67-7db5ca91e882}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnAborted
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnAborting" Id="{08f4d610-9eda-0ffa-3e97-7ba8443c1df6}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnAborting
+VAR_INPUT
+	StateControl : I_AsyncCommandStateControl;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// default behaviour is to go to next state
+// you can override this method to implement your own completing control code.
+// just call StateControl.Next() when your code is completed.  
+
+StateControl.Next();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnCompleted" Id="{2c849ec3-590e-0eb7-1144-6f869779967e}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnCompleted : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnCompleting" Id="{0e9ca6ef-79ca-0dcf-0bf9-aef3ab213f65}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnCompleting
+VAR_INPUT
+	StateControl : I_AsyncCommandStateControl;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// default behaviour is to go to next state
+// you can override this method to implement your own completing control code.
+// just call StateControl.Next() when your code is completed.  
+
+StateControl.Next();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnErrored" Id="{365e301c-f2d5-0e95-2f79-fded5f71ab0f}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnErrored
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnExecuting" Id="{6f50fb5b-8cb8-050c-3e6b-c5c35e1efb27}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnExecuting
+VAR_INPUT
+	StateControl : I_AsyncCommandStateControl;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// default behaviour is to go to next state
+// you can override this method to implement your own executing control code.
+// just call StateControl.Next() when your code is completed.  
+
+StateControl.Next();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnIdle" Id="{be7236a6-a37a-0c29-2b0a-0ba8ff453f72}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnIdle
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnInitializing" Id="{491ef17d-1faf-01e9-0b5b-861a5c3ce3bc}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnInitializing
+VAR_INPUT
+	StateControl : I_AsyncCommandStateControl;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// default behaviour is to go to next state
+// you can override this method to implement your own initializing control code.
+// just call StateControl.Next() when your code is completed.  
+
+StateControl.Next();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

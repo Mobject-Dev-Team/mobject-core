@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="AliasDatatypeAddedEvent" Id="{451a3ea1-7720-0619-0ec0-706f7dfcaae2}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK AliasDatatypeAddedEvent EXTENDS Disposable IMPLEMENTS I_AliasDatatypeAddedEvent
+VAR
+	_target : I_AliasDatatype;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{317f6278-4a13-088d-1323-409cab9ac564}" />
+    <Method Name="FB_init" Id="{59c764d9-7941-0033-0ffc-f45acd7d9e24}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Target : I_AliasDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[This^._target := Target;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Target" Id="{0467fab9-db87-08fc-17fa-c29fea0aaf24}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_AliasDatatype]]></Declaration>
+      <Get Name="Get" Id="{b78cada4-ce57-0420-339d-1c28b593e944}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Target := _target;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

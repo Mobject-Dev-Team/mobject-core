@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="JsonPathSyntaxParser" Id="{a546a66e-594e-4ffd-82b5-a77193d39d20}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK JsonPathSyntaxParser
+VAR
+	currentlyParsingType : (NOTHING, DOT_NOTATION_PROPERTY, BRACKET_NOTATION_PROPERTY_OR_ARRAY, BRACKET_NOTATION_PROPERTY_ELEMENT, BRACKET_NOTATION_ARRAY_ELEMENT);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Parse" Id="{160324eb-b5ad-48c1-b050-65fd7e7c474a}">
+      <Declaration><![CDATA[METHOD PUBLIC Parse
+VAR_INPUT
+	Path : REFERENCE TO STRING;
+	JsonPathVisitor : I_JsonPathVisitor;
+END_VAR
+VAR
+	currentCharacterPositionInPath : UDINT;
+	currentElementStart : UDINT;
+	currentElementEnd : UDINT;
+	currentElementLength : UDINT;
+	elementText : T_MAXSTRING;
+	endOfRepeat : BOOL;
+END_VAR
+VAR CONSTANT
+	PERIOD : BYTE := 16#2E; // .
+	DOLLAR_SIGN : BYTE := 16#24; // $
+	SINGLE_QUOTE : BYTE := 16#27; // '
+	LEFT_SQUARE_BRACKET : BYTE := 16#5B; // [
+	RIGHT_SQUARE_BRACKET : BYTE := 16#5D; // ]
+	NULL : BYTE := 0; // null
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[JsonPathVisitor.StartOfParse();
+
+IF Path[0] = NULL THEN
+	JsonPathVisitor.EndOfParse();
+	RETURN;
+END_IF
+
+currentCharacterPositionInPath := 0;
+currentlyParsingType := NOTHING;
+
+REPEAT 
+	
+	IF Path[currentCharacterPositionInPath] = NULL THEN
+		 endOfRepeat := TRUE;
+	END_IF
+		
+	CASE currentlyParsingType OF
+		
+		NOTHING: 
+		
+			// at this point we are not currently "parsing" a known type from the string, therfore the next character should 
+			// decide what type is next. 
+		
+			IF Path[currentCharacterPositionInPath] = DOLLAR_SIGN THEN
+				
+				// i.e. the following string $.myValue would indicate that we are here.
+				//                           ^                                         
+				// as such, we do not need to take any action.  We already create a root element at the start, so this is an 
+				// optional character which they do not need to supply. 				
+				
+			ELSIF Path[currentCharacterPositionInPath] = PERIOD THEN
+				
+				// i.e. the following string $.myValue would indicate that we are here.
+				//                            ^                                        
+				// as such, we do not need to take any action.  
+				
+			ELSIF Path[currentCharacterPositionInPath] = LEFT_SQUARE_BRACKET THEN
+				
+				// i.e. the following string $.myValue[1].['myProperty'] would indicate that we could be at the start of one of two types
+				//                                    ^   ^                                      
+				// as such, we mark that we could be either a property or array and continue				
+				currentlyParsingType := BRACKET_NOTATION_PROPERTY_OR_ARRAY;				
+				
+			ELSIF Path[currentCharacterPositionInPath] = RIGHT_SQUARE_BRACKET THEN
+				
+				// This would indicate a failed parse as this should not happen.
+				JsonPathVisitor.InvalidSyntaxFound(RIGHT_SQUARE_BRACKET, currentCharacterPositionInPath);
+				
+			ELSIF Path[currentCharacterPositionInPath] = SINGLE_QUOTE THEN
+				
+				// This would indicate a failed parse as this should not happen.
+				JsonPathVisitor.InvalidSyntaxFound(SINGLE_QUOTE, currentCharacterPositionInPath);
+				
+			ELSE
+				
+				// i.e. the following string $.myValue[1].['myProperty'] would indicate that we could be at the start of a property
+				//                             ^                      
+				currentlyParsingType := DOT_NOTATION_PROPERTY;
+				currentElementStart := currentCharacterPositionInPath;	
+		
+			END_IF
+			
+		DOT_NOTATION_PROPERTY:
+		
+			IF Path[currentCharacterPositionInPath] = PERIOD OR Path[currentCharacterPositionInPath] = LEFT_SQUARE_BRACKET OR Path[currentCharacterPositionInPath] = NULL THEN
+				
+				currentElementEnd := currentCharacterPositionInPath - 1;
+				
+				currentElementLength := 1 + currentElementEnd - currentElementStart;
+				memset(ADR(elementText),0,SIZEOF(elementText));
+				memcpy(ADR(elementText),ADR(Path[currentElementStart]),currentElementLength);
+		
+				JsonPathVisitor.PropertyFound(elementText);
+				
+				currentlyParsingType := NOTHING;
+				CONTINUE;
+				
+			END_IF
+			
+		BRACKET_NOTATION_PROPERTY_OR_ARRAY:
+		
+			IF Path[currentCharacterPositionInPath] = SINGLE_QUOTE THEN
+				currentlyParsingType := BRACKET_NOTATION_PROPERTY_ELEMENT;
+				currentElementStart := currentCharacterPositionInPath + 1;			
+			ELSE
+				currentlyParsingType := BRACKET_NOTATION_ARRAY_ELEMENT;
+				currentElementStart := currentCharacterPositionInPath;			
+			END_IF
+			
+		BRACKET_NOTATION_PROPERTY_ELEMENT:
+		
+			IF Path[currentCharacterPositionInPath] = SINGLE_QUOTE THEN
+				
+				currentElementEnd := currentCharacterPositionInPath - 1;
+
+				currentElementLength := 1 + currentElementEnd - currentElementStart;
+				memset(ADR(elementText),0,SIZEOF(elementText));
+				memcpy(ADR(elementText),ADR(Path[currentElementStart]),currentElementLength);
+				
+				JsonPathVisitor.PropertyFound(elementText);
+			
+				currentlyParsingType := NOTHING;
+						
+			END_IF
+			
+		BRACKET_NOTATION_ARRAY_ELEMENT:
+		
+			IF Path[currentCharacterPositionInPath] = RIGHT_SQUARE_BRACKET THEN
+				
+				currentElementEnd := currentCharacterPositionInPath - 1;
+				
+				currentElementLength := 1 + currentElementEnd - currentElementStart;
+				memset(ADR(elementText),0,SIZEOF(elementText));
+				memcpy(ADR(elementText),ADR(Path[currentElementStart]),currentElementLength);
+				
+				JsonPathVisitor.ArrayIndexFound(STRING_TO_UDINT(elementText));		
+				currentlyParsingType := NOTHING;
+						
+			END_IF
+			
+
+	END_CASE
+	
+	currentCharacterPositionInPath := currentCharacterPositionInPath + 1;
+	
+UNTIL endOfRepeat 
+END_REPEAT
+
+JsonPathVisitor.EndOfParse();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

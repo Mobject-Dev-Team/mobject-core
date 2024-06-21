@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_BOOL_TO_BYTE" Id="{d4e08cc2-0d8f-471d-ab77-165a23a10e81}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_BOOL_TO_BYTE : BOOL
+VAR_INPUT
+	in : BOOL;
+	out : REFERENCE TO BYTE;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := BOOL_TO_BYTE(in);
+TryConvert_BOOL_TO_BYTE := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

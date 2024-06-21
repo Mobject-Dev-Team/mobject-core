@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_INT_TO_TOD" Id="{3edac880-6b2a-4775-a5bc-5d15d5c1382e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_INT_TO_TOD : BOOL
+VAR_INPUT
+	in : INT;
+	out : REFERENCE TO TOD;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in < DatatypeLimits.MIN_VALUE_OF_INT_WHICH_CAN_BE_HELD_IN_A_TOD THEN
+	RETURN;
+END_IF
+
+out := INT_TO_TOD(in);
+TryConvert_INT_TO_TOD := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

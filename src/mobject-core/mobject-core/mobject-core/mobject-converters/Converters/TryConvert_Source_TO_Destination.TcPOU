@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_Source_TO_Destination" Id="{2f10b328-ec0e-48d0-9540-520b9fb3552e}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+FUNCTION TryConvert_Source_TO_Destination : BOOL
+VAR_INPUT
+	in : ANY;
+	out : ANY;
+END_VAR
+VAR
+	_BOOL : BOOL;
+	_BYTE : BYTE;
+	_WORD : WORD;
+	_DWORD : DWORD;
+	_LWORD : LWORD;
+	_SINT : SINT;
+	_INT : INT;
+	_DINT : DINT;
+	_LINT : LINT;
+	_USINT : USINT;
+	_UINT : UINT;
+	_UDINT : UDINT;
+	_ULINT : ULINT;
+	_REAL : REAL;
+	_LREAL : LREAL;
+	_TIME : TIME;
+	_TOD : TOD;
+	_DATE : DATE;
+	_DT : DT;
+	_STRING : STRING;
+	convertResult : BOOL := FALSE;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE in.TypeClass OF
+
+	__SYSTEM.TYPE_CLASS.TYPE_BOOL :
+		memcpy(ADR(_BOOL),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_BOOL_To_Destination(_BOOL, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_BYTE :
+		memcpy(ADR(_BYTE),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_BYTE_To_Destination(_BYTE, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_WORD :
+		memcpy(ADR(_WORD),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_WORD_To_Destination(_WORD, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_DWORD :
+		memcpy(ADR(_DWORD),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_DWORD_To_Destination(_DWORD, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_LWORD :
+		memcpy(ADR(_LWORD),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_LWORD_To_Destination(_LWORD, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_SINT :
+		memcpy(ADR(_SINT),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_SINT_To_Destination(_SINT, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_INT :
+		memcpy(ADR(_INT),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_INT_To_Destination(_INT, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_DINT :
+		memcpy(ADR(_DINT),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_DINT_To_Destination(_DINT, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_LINT :
+		memcpy(ADR(_LINT),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_LINT_To_Destination(_LINT, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_USINT :
+		memcpy(ADR(_USINT),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_USINT_To_Destination(_USINT, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_UINT :
+		memcpy(ADR(_UINT),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_UINT_To_Destination(_UINT, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_UDINT :
+		memcpy(ADR(_UDINT),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_UDINT_To_Destination(_UDINT, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_ULINT :
+		memcpy(ADR(_ULINT),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_ULINT_To_Destination(_ULINT, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_REAL :
+		memcpy(ADR(_REAL),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_REAL_To_Destination(_REAL, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_LREAL :
+		memcpy(ADR(_LREAL),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_LREAL_To_Destination(_LREAL, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_TIME :
+		memcpy(ADR(_TIME),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_TIME_To_Destination(_TIME, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_TIMEOFDAY :
+		memcpy(ADR(_TOD),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_TOD_To_Destination(_TOD, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_DATE :
+		memcpy(ADR(_DATE),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_DATE_To_Destination(_DATE, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_DATEANDTIME :
+		memcpy(ADR(_DT),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_DT_To_Destination(_DT, out);
+		
+	__SYSTEM.TYPE_CLASS.TYPE_STRING :
+		memcpy(ADR(_STRING),in.pValue,DINT_TO_UDINT(in.diSize));
+		convertResult := TryConvert_STRING_To_Destination(_STRING, out);
+		
+	END_CASE
+TryConvert_Source_TO_Destination  := convertResult;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_List" Id="{d6601d53-94d4-03b3-1aab-0707e1626126}">
+    <Declaration><![CDATA[INTERFACE I_List EXTENDS I_Collection
+]]></Declaration>
+    <Property Name="Capacity" Id="{39bc5e9d-056c-09ed-1ba1-ecd9e791f97b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Capacity : DINT]]></Declaration>
+      <Get Name="Get" Id="{fe39c5a5-a5e6-0a2f-3c76-8e4463e4434e}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="GetIndexOf" Id="{4e56ed3d-c193-01ea-2a33-c5f28c3bdad9}">
+      <Declaration><![CDATA[METHOD PUBLIC GetIndexOf : DINT
+VAR_INPUT
+	Item : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TrimExcess" Id="{488e04ba-04b7-09a6-17a1-cae1d366a73a}">
+      <Declaration><![CDATA[METHOD PUBLIC TrimExcess]]></Declaration>
+    </Method>
+    <Method Name="TryGetByIndex" Id="{67ef4d16-5001-020e-033a-6123f46c6368}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByIndex : BOOL
+VAR_INPUT
+	Index : DINT;
+	Destination : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetToByIndex" Id="{8ec7ba5c-fa0a-0e3f-00b5-2e9e9d3842f0}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetToByIndex : BOOL
+VAR_INPUT
+	Index : DINT;
+	DestinationAddress : PVOID;
+	DestinationSize : UDINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryInsert" Id="{f69daae6-a64c-0776-2f97-f6c5eefa8f11}">
+      <Declaration><![CDATA[METHOD TryInsert : BOOL
+VAR_INPUT
+	Index : DINT;
+	Item : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryRemoveAt" Id="{a89332ea-3c7f-07b5-349d-0381499ebcf2}">
+      <Declaration><![CDATA[METHOD TryRemoveAt : BOOL
+VAR_INPUT
+	Index : DINT;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

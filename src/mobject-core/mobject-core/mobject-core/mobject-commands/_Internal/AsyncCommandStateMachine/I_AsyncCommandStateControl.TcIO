@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_AsyncCommandStateControl" Id="{3b788fe5-63f3-0d48-2638-efc641ec0e6e}">
+    <Declaration><![CDATA[INTERFACE I_AsyncCommandStateControl
+]]></Declaration>
+    <Method Name="Error" Id="{94ebc6b2-792e-08ca-2569-ff339b293157}">
+      <Declaration><![CDATA[METHOD PUBLIC Error
+VAR_INPUT
+	ErrorId : UDINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Next" Id="{82767363-400f-0977-1931-109037641119}">
+      <Declaration><![CDATA[METHOD PUBLIC Next
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

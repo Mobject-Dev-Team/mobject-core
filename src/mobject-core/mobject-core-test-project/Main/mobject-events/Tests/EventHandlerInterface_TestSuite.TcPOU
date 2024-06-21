@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="EventHandlerInterface_TestSuite" Id="{d0f488bf-1e4a-014e-0821-627e5f0375fc}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC EventHandlerInterface_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CheckEmitWorksWithHandler();
+CheckExtendsFromQueryInterface();]]></ST>
+    </Implementation>
+    <Method Name="CheckEmitWorksWithHandler" Id="{90128b59-7fcb-025c-0132-9a8868acea09}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckEmitWorksWithHandler
+VAR
+	mockEvent : MockEvent;
+	mockHandler : MockEventHandler;
+	iEventHandler : I_EventHandler := mockHandler;
+	eventEmitter : EventEmitter;
+	eventReceived : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckEmitWorksWithHandler');
+
+eventEmitter.OnEvent('test', iEventHandler);
+
+eventEmitter.Emit('test',mockEvent);
+eventReceived := mockHandler.EqualsLastEvent(mockEvent);
+
+AssertTrue(
+	Condition := eventReceived,
+	Message := 'Event Emitter did not correctly emmit the event to the handler'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckExtendsFromQueryInterface" Id="{42a6a21a-ab14-015a-3a7d-047e2c864dcc}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckExtendsFromQueryInterface
+VAR
+	mockHandler : MockEventHandler;
+	iEventHandler : I_EventHandler := mockHandler;
+	iQueryInterface : __SYSTEM.IQueryInterface;
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckExtendsFromQueryInterface');
+
+result := __QUERYINTERFACE(iEventHandler,iQueryInterface);
+
+AssertTrue(
+	Condition := result,
+	Message := 'Interface did not extend __SYSTEM.IQueryInterface'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

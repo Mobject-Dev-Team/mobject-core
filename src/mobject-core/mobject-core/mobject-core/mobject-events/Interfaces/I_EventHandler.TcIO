@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_EventHandler" Id="{56464cbd-e008-4d1d-9019-8281d83ebd69}">
+    <Declaration><![CDATA[INTERFACE I_EventHandler EXTENDS __SYSTEM.IQueryInterface 
+]]></Declaration>
+    <Method Name="HandleEvent" Id="{d8fe40f0-d6fe-4487-bf1e-94b1ee695ebe}">
+      <Declaration><![CDATA[METHOD PUBLIC HandleEvent
+VAR_INPUT
+	Event : I_Event;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

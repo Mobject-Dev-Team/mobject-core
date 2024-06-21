@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MockError" Id="{c2177f70-8f13-0eb1-102c-6552a2af9d01}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK MockError EXTENDS Error
+VAR
+	_errorType : T_MAXSTRING;
+	_message : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{71cf4490-e8db-00ae-0536-0c9d17740294}" />
+    <Property Name="ErrorType" Id="{e56db26d-01d1-0258-012a-c75db614f40d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ErrorType : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{50b5b7ee-4159-0f61-2d77-ea8f7935df96}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ErrorType := _errorType;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{f2cc60ff-1a2f-0d09-197e-34a1a0c78d18}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	MockErrorType : T_MAXSTRING;
+	MockMessage : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_errorType := MockErrorType;
+_message := MockMessage;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Message" Id="{85f55a5a-d90f-0a0e-3e80-9876da7ad86c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Message : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{7970faf7-c728-0196-2302-3769bc1db3f7}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Message := _message;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

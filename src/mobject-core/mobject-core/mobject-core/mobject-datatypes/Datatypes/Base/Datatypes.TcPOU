@@ -1,0 +1,461 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Datatypes" Id="{f323aff5-eeae-0dfe-1f33-4a8d037ce0d5}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK Datatypes IMPLEMENTS I_Datatypes
+VAR
+	eventEmitter : EventEmitter;
+	primitives : Dictionary;
+	structures : Dictionary;
+	alias : Dictionary;
+	enums : Dictionary;
+	interfaces : Dictionary;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Private" Id="{abdc0a92-c795-01b8-31e9-470e8158d406}" />
+    <Folder Name="Protected" Id="{d43f363c-6b4a-0b24-2926-115f504e56cf}" />
+    <Method Name="Accept" Id="{2af7aa50-d1ba-0c17-2bb4-349f9a043225}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_DatatypeVisitor;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AcceptPrimative(Visitor);
+AcceptStructures(Visitor);
+AcceptAlias(Visitor);
+AcceptEnum(Visitor);
+AcceptInterface(Visitor);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AcceptAlias" Id="{5afc9150-ee17-0d88-1f86-0f486870409f}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE AcceptAlias
+VAR_INPUT
+	Visitor : I_DatatypeVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	datatype : I_AliasDatatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := alias.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(datatype) THEN
+		datatype.Accept(Visitor);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AcceptEnum" Id="{32f505d3-09bb-4de1-ac29-7bb1320ce4cf}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE AcceptEnum
+VAR_INPUT
+	Visitor : I_DatatypeVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	datatype : I_EnumDatatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := enums.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(datatype) THEN
+		datatype.Accept(Visitor);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AcceptInterface" Id="{aa16ce2d-aea8-4995-918c-e61396361eb3}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE AcceptInterface
+VAR_INPUT
+	Visitor : I_DatatypeVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	datatype : I_InterfaceDatatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := structures.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO	
+	IF enumerator.TryGet(datatype) THEN
+		datatype.Accept(Visitor);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AcceptPrimative" Id="{b6c509be-9224-0cb0-1f44-f0f2b3ebbaa9}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE AcceptPrimative
+VAR_INPUT
+	Visitor : I_DatatypeVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	datatype : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := primitives.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(datatype) THEN
+		datatype.Accept(Visitor);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AcceptStructures" Id="{079b7d42-6d5d-0eb8-1541-cf0820dd1a97}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE AcceptStructures
+VAR_INPUT
+	Visitor : I_DatatypeVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	datatype : I_StructuredDatatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := structures.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO	
+	IF enumerator.TryGet(datatype) THEN
+		datatype.Accept(Visitor);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnAliasDatatypeAddedEvent" Id="{95ee3051-4a16-0430-2b83-dbb61b463ecb}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnAliasDatatypeAddedEvent
+VAR_INPUT
+	Datatype : I_AliasDatatype;
+END_VAR
+VAR
+	pAliasDatatypeAddedEvent : POINTER TO AliasDatatypeAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pAliasDatatypeAddedEvent := __NEW(AliasDatatypeAddedEvent(Target := Datatype));
+eventEmitter.Emit('OnDatatypeAdded',pAliasDatatypeAddedEvent^);
+pAliasDatatypeAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnDatatypeAddedEvent" Id="{3798106b-02f0-02c4-3232-4192f3b9474d}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnDatatypeAddedEvent
+VAR_INPUT
+	Datatype : I_Datatype;
+END_VAR
+VAR
+	pDatatypeAddedEvent : POINTER TO DatatypeAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pDatatypeAddedEvent := __NEW(DatatypeAddedEvent(Target := Datatype));
+eventEmitter.Emit('OnDatatypeAdded',pDatatypeAddedEvent^);
+pDatatypeAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnEnumDatatypeAddedEvent" Id="{1835e537-9af0-0921-2080-813ba19e81d5}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnEnumDatatypeAddedEvent
+VAR_INPUT
+	Datatype : I_EnumDatatype;
+END_VAR
+VAR
+	pEnumDatatypeAddedEvent : POINTER TO EnumDatatypeAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pEnumDatatypeAddedEvent := __NEW(EnumDatatypeAddedEvent(Target := Datatype));
+eventEmitter.Emit('OnDatatypeAdded',pEnumDatatypeAddedEvent^);
+pEnumDatatypeAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnInterfaceDatatypeAddedEvent" Id="{89c533d3-f583-49f1-8df9-f8ad87943039}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnInterfaceDatatypeAddedEvent
+VAR_INPUT
+	Datatype : I_InterfaceDatatype;
+END_VAR
+VAR
+	pInterfaceDatatypeAddedEvent : POINTER TO InterfaceDatatypeAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pInterfaceDatatypeAddedEvent := __NEW(InterfaceDatatypeAddedEvent(Target := Datatype));
+eventEmitter.Emit('OnDatatypeAdded',pInterfaceDatatypeAddedEvent^);
+pInterfaceDatatypeAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnStructuredDatatypeAddedEvent" Id="{b7705d81-a45a-00db-06c9-2e600dfec395}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnStructuredDatatypeAddedEvent
+VAR_INPUT
+	Datatype : I_StructuredDatatype;
+END_VAR
+VAR
+	pStructuredDatatypeAddedEvent : POINTER TO StructuredDatatypeAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pStructuredDatatypeAddedEvent := __NEW(StructuredDatatypeAddedEvent(Target := Datatype));
+eventEmitter.Emit('OnDatatypeAdded',pStructuredDatatypeAddedEvent^);
+pStructuredDatatypeAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetAliasByIdentifier" Id="{862f4b02-5860-0eb8-3fd1-9dbaacedb754}">
+      <Declaration><![CDATA[METHOD PUBLIC GetAliasByIdentifier : BOOL
+VAR_INPUT
+	Identifier : T_MAXSTRING;
+	Destination : REFERENCE TO I_AliasDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetAliasByIdentifier := alias.TryGetValue(Identifier, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetEnumByIdentifier" Id="{258efd90-01cc-43fd-87bb-d44d5e852f4f}">
+      <Declaration><![CDATA[METHOD PUBLIC GetEnumByIdentifier : BOOL
+VAR_INPUT
+	Identifier : T_MAXSTRING;
+	Destination : REFERENCE TO I_EnumDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetEnumByIdentifier := enums.TryGetValue(Identifier, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetInterfaceByIdentifier" Id="{567a0ca3-9049-4f64-9b48-833e5fc55fb5}">
+      <Declaration><![CDATA[METHOD PUBLIC GetInterfaceByIdentifier : BOOL
+VAR_INPUT
+	Identifier : T_MAXSTRING;
+	Destination : REFERENCE TO I_InterfaceDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetInterfaceByIdentifier := interfaces.TryGetValue(Identifier, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetPrimitiveByTypeName" Id="{0f986226-225c-0824-1cbf-6e33878d8cf0}">
+      <Declaration><![CDATA[METHOD PUBLIC GetPrimitiveByTypeName : BOOL
+VAR_INPUT
+	TypeName : T_MAXSTRING;
+	Destination : REFERENCE TO I_AliasDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetPrimitiveByTypeName := primitives.TryGetValue(TypeName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetStructureByIdentifier" Id="{4761bb06-77e6-0865-12ea-0ce2d8b9a233}">
+      <Declaration><![CDATA[METHOD PUBLIC GetStructureByIdentifier : BOOL
+VAR_INPUT
+	Identifier : T_MAXSTRING;
+	Destination : REFERENCE TO I_StructuredDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetStructureByIdentifier := structures.TryGetValue(Identifier, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OffEvent" Id="{a40c7175-743c-086b-229c-bce22b65ed5f}">
+      <Declaration><![CDATA[METHOD PUBLIC OffEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OffEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnceEvent" Id="{05eb59d5-fe14-0c4f-2acd-e9978f29c45c}">
+      <Declaration><![CDATA[METHOD PUBLIC OnceEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnceEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnEvent" Id="{6cd0445c-24c1-0215-2dbb-24c3ac6e82d8}">
+      <Declaration><![CDATA[METHOD PUBLIC OnEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterDatatype" Id="{ec75f859-b06b-092e-0fe1-4e40618cf567}">
+      <Declaration><![CDATA[METHOD RegisterDatatype
+VAR_INPUT
+	Datatype : I_Datatype;
+END_VAR
+VAR
+	datatypeAsStructure : I_StructuredDatatype;
+	datatypeAsAlias : I_AliasDatatype;
+	datatypeAsEnum : I_EnumDatatype;
+	datatypeAsInterface : I_InterfaceDatatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Datatype.TryResolveAsStructuredDatatype(datatypeAsStructure) THEN
+	structures.AddOrUpdate(datatypeAsStructure.Identifier, datatypeAsStructure);
+	emitOnStructuredDatatypeAddedEvent(datatypeAsStructure);
+	RETURN;
+END_IF
+
+IF Datatype.TryResolveAsAliasDatatype(datatypeAsAlias) THEN
+	alias.AddOrUpdate(datatypeAsAlias.Identifier, datatypeAsAlias);
+	emitOnAliasDatatypeAddedEvent(datatypeAsAlias);
+	RETURN;
+END_IF
+
+IF Datatype.TryResolveAsEnumDatatype(datatypeAsEnum) THEN
+	enums.AddOrUpdate(datatypeAsEnum.Identifier, datatypeAsEnum);
+	emitOnEnumDatatypeAddedEvent(datatypeAsEnum);
+	RETURN;
+END_IF
+
+IF Datatype.TryResolveAsInterfaceDatatype(datatypeAsInterface) THEN
+	interfaces.AddOrUpdate(datatypeAsInterface.Identifier, datatypeAsInterface);
+	emitOnInterfaceDatatypeAddedEvent(datatypeAsInterface);
+	RETURN;
+END_IF
+
+// add arrays
+
+primitives.AddOrUpdate(Datatype.TypeName, Datatype);
+emitOnDatatypeAddedEvent(Datatype);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeAliasTypeWith" Id="{81361226-d0ec-03ef-10aa-1bf4d443c98a}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE SerializeAliasTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	datatype : I_AliasDatatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := alias.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(datatype) THEN
+		datatype.SerializeTypeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeEnumsTypeWith" Id="{d425e9ae-b72c-42d7-a2bd-988618fa10c3}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE SerializeEnumsTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	datatype : I_EnumDatatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := enums.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(datatype) THEN
+		datatype.SerializeTypeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeInterfaceTypeWith" Id="{67c731ca-e35d-46b8-af8a-223c50ab29a7}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE SerializeInterfaceTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	datatype : I_InterfaceDatatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := interfaces.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(datatype) THEN
+		datatype.SerializeTypeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializePrimitiveTypeWith" Id="{981dcfeb-daf8-01ff-1c98-689cc0a9b687}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE SerializePrimitiveTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	datatype : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := primitives.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(datatype) THEN
+		datatype.SerializeTypeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeStructuresTypeWith" Id="{094e8899-7e2a-0633-0e5d-601a11867b9d}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE SerializeStructuresTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	datatype : I_StructuredDatatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := structures.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(datatype) THEN
+		datatype.SerializeTypeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeTypeWith" Id="{995fc133-9a0b-07d9-373e-ba1682fbc9e1}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKey('datatypes');
+Serializer.StartArray();
+SerializePrimitiveTypeWith(Serializer);
+SerializeStructuresTypeWith(Serializer);
+SerializeAliasTypeWith(Serializer);
+SerializeEnumsTypeWith(Serializer);
+SerializeInterfaceTypeWith(Serializer);
+Serializer.EndArray();
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

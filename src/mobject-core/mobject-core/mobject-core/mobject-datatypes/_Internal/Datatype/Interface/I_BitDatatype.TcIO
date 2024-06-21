@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_BitDatatype" Id="{8c04bfe6-4da3-454f-afa5-baa039ba8426}">
+    <Declaration><![CDATA[INTERFACE I_BitDatatype EXTENDS I_Datatype
+]]></Declaration>
+    <Property Name="BitOffset" Id="{c9a13c67-bb40-4448-b1c1-a7e30b25cb15}">
+      <Declaration><![CDATA[PROPERTY PUBLIC BitOffset : DWORD]]></Declaration>
+      <Get Name="Get" Id="{23b85915-6e4c-42db-81cd-511f160495af}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="ByteOffset" Id="{ff223db3-5826-461b-a3db-707689d8dca6}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ByteOffset : PVOID]]></Declaration>
+      <Get Name="Get" Id="{f08b02d3-7919-4d6c-abd7-2e77cd24b14d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Parent" Id="{f881b41b-cf50-4cb9-a284-7d82f5dac2c5}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_StructuredDatatype]]></Declaration>
+      <Get Name="Get" Id="{f78ac2fc-a52e-49c6-b35a-6c5f29609d35}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Value" Id="{beb6bb62-66ad-4697-971f-b79501b78e8a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Value : BOOL]]></Declaration>
+      <Get Name="Get" Id="{867967df-e54b-4426-8232-a0e48db14786}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{f5566079-f3f0-490f-b26b-290a824bf3c9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>

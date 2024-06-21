@@ -1,0 +1,1050 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TOD_TO_TestSuite" Id="{11acb14c-919f-41e7-8b5f-d91fbcfc7ff0}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC TOD_TO_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Check_TOD_TO_BOOL_Max();
+Check_TOD_TO_BOOL_Min();
+Check_TOD_TO_BYTE_Max();
+Check_TOD_TO_BYTE_Min();
+Check_TOD_TO_BYTE_TooHigh();
+Check_TOD_TO_WORD_Max();
+Check_TOD_TO_WORD_Min();
+Check_TOD_TO_WORD_TooHigh();
+Check_TOD_TO_DWORD_Max();
+Check_TOD_TO_DWORD_Min();
+Check_TOD_TO_LWORD_Max();
+Check_TOD_TO_LWORD_Min();
+Check_TOD_TO_SINT_Max();
+Check_TOD_TO_SINT_Min();
+Check_TOD_TO_SINT_TooHigh();
+Check_TOD_TO_INT_Max();
+Check_TOD_TO_INT_Min();
+Check_TOD_TO_INT_TooHigh();
+Check_TOD_TO_DINT_Max();
+Check_TOD_TO_DINT_Min();
+Check_TOD_TO_LINT_Max();
+Check_TOD_TO_LINT_Min();
+Check_TOD_TO_USINT_Max();
+Check_TOD_TO_USINT_Min();
+Check_TOD_TO_USINT_TooHigh();
+Check_TOD_TO_UINT_Max();
+Check_TOD_TO_UINT_Min();
+Check_TOD_TO_UINT_TooHigh();
+Check_TOD_TO_UDINT_Max();
+Check_TOD_TO_UDINT_Min();
+Check_TOD_TO_ULINT_Max();
+Check_TOD_TO_ULINT_Min();
+Check_TOD_TO_REAL_Max();
+Check_TOD_TO_REAL_Min();
+Check_TOD_TO_LREAL_Max();
+Check_TOD_TO_LREAL_Min();
+Check_TOD_TO_TIME_Max();
+Check_TOD_TO_TIME_Min();
+Check_TOD_TO_TOD_Max();
+Check_TOD_TO_TOD_Min();
+Check_TOD_TO_DATE_Max();
+Check_TOD_TO_DATE_Min();
+Check_TOD_TO_DT_Max();
+Check_TOD_TO_DT_Min();
+Check_TOD_TO_STRING_Max();
+Check_TOD_TO_STRING_Min();]]></ST>
+    </Implementation>
+    <Method Name="Check_TOD_TO_BOOL_Max" Id="{fbe1fcc2-23c8-47c4-9cbc-0bdfd3505c17}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_BOOL_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_BOOL_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_BOOL_Min" Id="{9d0176fb-a1a4-40b2-91ce-34e5d4796250}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_BOOL_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_BOOL_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_BYTE_Max" Id="{fd9a3149-dabe-4fb0-94b1-6a68e391322e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_BYTE_Max
+VAR
+	value : TOD := DatatypeLimits.MAX_VALUE_OF_TOD_WHICH_CAN_BE_HELD_IN_A_BYTE;
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_BYTE_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_BYTE_Min" Id="{583a843c-015f-4e2e-8972-320b01e2ac6e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_BYTE_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_BYTE_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_BYTE_TooHigh" Id="{ad3c8ea6-01f3-4744-911e-5708afee6962}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_BYTE_TooHigh
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : BYTE;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_BYTE_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TOD to BYTE conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_DATE_Max" Id="{601dc971-21f1-4282-8b9a-71945ecce64b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_DATE_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_DATE_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_DATE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_DATE_Min" Id="{615e7bc3-3530-410d-992d-e55f5fd3fdad}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_DATE_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_DATE_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_DATE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_DINT_Max" Id="{81eb516e-023a-4b5a-8de0-6becdf328ab9}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_DINT_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_DINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_DINT_Min" Id="{6fe9a186-b384-4987-8223-19e4f5810a28}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_DINT_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_DINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_DT_Max" Id="{f435e5db-1a14-4c9e-8dc3-19f3a905e1c3}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_DT_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_DT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_DT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_DT_Min" Id="{24b578e9-f243-4d87-88a0-98b81d6e5224}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_DT_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_DT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_DT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_DWORD_Max" Id="{6bbbd379-9197-4bf4-8fde-9abb544fa5dd}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_DWORD_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_DWORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_DWORD_Min" Id="{3f6788e0-57a5-419e-9715-e1753cd60b63}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_DWORD_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_DWORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_INT_Max" Id="{5c1ed2cc-1633-4b3f-b792-00ae9290079e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_INT_Max
+VAR
+	value : TOD := DatatypeLimits.MAX_VALUE_OF_TOD_WHICH_CAN_BE_HELD_IN_A_INT;
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_INT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_INT_Min" Id="{bf9e34c2-3ce9-4f92-aefc-d13829b555c1}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_INT_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_INT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_INT_TooHigh" Id="{396b1334-5ee1-4758-83fa-505910e8e68e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_INT_TooHigh
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : INT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_INT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TOD to INT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_LINT_Max" Id="{e92babb8-b650-4fa2-b5fd-6bd66e645e55}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_LINT_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_LINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_LINT_Min" Id="{1eb1f2f6-830a-4ebe-b7ce-bba6dfc8b77f}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_LINT_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_LINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_LREAL_Max" Id="{0a798e58-72ec-40a2-98ac-a27fc3256cab}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_LREAL_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_LREAL_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_LREAL_Min" Id="{21b3a153-51b9-48ec-9c6e-9ada0a2012df}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_LREAL_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_LREAL_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_LWORD_Max" Id="{20370855-c4f0-4510-b4ab-32d86b29f346}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_LWORD_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_LWORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_LWORD_Min" Id="{c9eaa6bb-f674-49e1-99c3-4549f28dfa7b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_LWORD_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_LWORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_REAL_Max" Id="{14d67097-4519-449b-91f3-b79fc661afff}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_REAL_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_REAL_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_REAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_REAL_Min" Id="{3107da71-c021-4c51-9d54-8ad8134d8cea}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_REAL_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_REAL_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_REAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_SINT_Max" Id="{530e6826-d112-44da-94d9-58093e0d1c13}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_SINT_Max
+VAR
+	value : TOD := DatatypeLimits.MAX_VALUE_OF_TOD_WHICH_CAN_BE_HELD_IN_A_SINT;
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_SINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_SINT_Min" Id="{75ba4ccf-6520-48db-9117-4ef2d47d15e0}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_SINT_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_SINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_SINT_TooHigh" Id="{94ef73d1-2464-4aeb-a895-9504a314bfef}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_SINT_TooHigh
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : SINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_SINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TOD to SINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_STRING_Max" Id="{b69570da-6298-42e1-9aa1-9b5252bfc2e2}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_STRING_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_STRING_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_STRING(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_STRING_Min" Id="{93abf5e2-c685-4583-98d1-69a5f8950359}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_STRING_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_STRING_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_STRING(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_TIME_Max" Id="{2469e461-446e-47ae-8ef7-9ba3dbbe2fbd}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_TIME_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_TIME_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_TIME(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_TIME_Min" Id="{69c4b1d5-6489-415d-8056-80f6ece3db63}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_TIME_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_TIME_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_TIME(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_TOD_Max" Id="{f6dcdcce-0daa-4d6a-a2be-724dd5bc4eff}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_TOD_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_TOD_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_TOD_Min" Id="{2dc2405a-66b3-44da-b9dc-56b3ac3af4a2}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_TOD_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_TOD_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_UDINT_Max" Id="{607cd3e4-3c2a-43d4-8259-88b31a4d8b27}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_UDINT_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_UDINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_UDINT_Min" Id="{1df77dad-00c7-4965-b972-2df78908a9a2}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_UDINT_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_UDINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_UINT_Max" Id="{bf3335eb-086d-4013-80d4-bb4f9be30a57}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_UINT_Max
+VAR
+	value : TOD := DatatypeLimits.MAX_VALUE_OF_TOD_WHICH_CAN_BE_HELD_IN_A_UINT;
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_UINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_UINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_UINT_Min" Id="{721e5912-e0c3-451a-98ed-7ad7bbf5c4ff}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_UINT_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_UINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_UINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_UINT_TooHigh" Id="{211f63d1-c7f8-47c0-a1f7-64503bd427e1}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_UINT_TooHigh
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : UINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_UINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TOD to UINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_ULINT_Max" Id="{33e1a3da-08c6-4dcf-8ee7-6529adaacdfa}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_ULINT_Max
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_ULINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_ULINT_Min" Id="{7a5e379e-1096-4caa-8ebd-262b0f0379a6}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_ULINT_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_ULINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_USINT_Max" Id="{011da1e0-cd6a-4913-8aa2-4751cd459c2f}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_USINT_Max
+VAR
+	value : TOD := DatatypeLimits.MAX_VALUE_OF_TOD_WHICH_CAN_BE_HELD_IN_A_USINT;
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_USINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_USINT_Min" Id="{cec6d050-1c0a-42a8-a6b9-24247041977e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_USINT_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_USINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_USINT_TooHigh" Id="{c7c10a1f-4398-41f0-a846-555d309fa512}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_USINT_TooHigh
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : USINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_USINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TOD to USINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_WORD_Max" Id="{7ea9525c-ef1e-4be4-8153-6377e61c156c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_WORD_Max
+VAR
+	value : TOD := DatatypeLimits.MAX_VALUE_OF_TOD_WHICH_CAN_BE_HELD_IN_A_WORD;
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_WORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_WORD_Min" Id="{0da8cacf-fa70-443d-8492-87bf8c9819d8}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_WORD_Min
+VAR
+	value : TOD := DatatypeLimits.TOD_MIN_VALUE;
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_WORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+equal := actual = TOD_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert TOD to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report TOD to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_TOD_TO_WORD_TooHigh" Id="{3a311485-c3b3-4b30-b65e-0f3315216dea}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_TOD_TO_WORD_TooHigh
+VAR
+	value : TOD := DatatypeLimits.TOD_MAX_VALUE;
+	actual : WORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_TOD_TO_WORD_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_TOD_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report TOD to WORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

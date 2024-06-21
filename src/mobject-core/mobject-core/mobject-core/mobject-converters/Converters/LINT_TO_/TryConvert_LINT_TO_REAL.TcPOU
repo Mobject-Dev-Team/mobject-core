@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_LINT_TO_REAL" Id="{d63d5410-bea9-4241-9b8f-30f5004a2821}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_LINT_TO_REAL : BOOL
+VAR_INPUT
+	in : LINT;
+	out : REFERENCE TO REAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[out := LINT_TO_REAL(in);
+TryConvert_LINT_TO_REAL := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

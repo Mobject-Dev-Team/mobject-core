@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Stack" Id="{6ad9168e-246c-004a-32ad-9cc47a5a0071}">
+    <Declaration><![CDATA[INTERFACE I_Stack EXTENDS I_Collection]]></Declaration>
+    <Method Name="Push" Id="{9dc2321b-4e2a-09e0-0d95-ec2b761ee355}">
+      <Declaration><![CDATA[METHOD PUBLIC Push
+VAR_INPUT
+	Item : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryPeek" Id="{154e391e-42f1-036f-3b8f-c60fc7af52e1}">
+      <Declaration><![CDATA[METHOD PUBLIC TryPeek : BOOL;
+VAR_INPUT
+	Destination : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryPop" Id="{2b34cbd3-331f-0c59-1719-792231377118}">
+      <Declaration><![CDATA[METHOD PUBLIC TryPop : BOOL;
+VAR_INPUT
+	Destination : ANY;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

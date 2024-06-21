@@ -1,0 +1,750 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="OrderedDictionary_TestSuite" Id="{471d5714-31e5-0bb5-3f2b-a20fc64d7c0c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK OrderedDictionary_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CheckAddOrUpdateCorrectlyAddsNewKey();
+CheckAddOrUpdateCorrectlyUpdatesExistingKey();
+CheckClear();
+CheckContainsKeyIsFalse();
+CheckContainsKeyIsTrue();
+CheckCount();
+CheckEnumeratorIsInvalidAfterChange();
+CheckGetEnumerator();
+CheckGetKeysReturnsACollection();
+CheckGetKeysReturnsACollectionOfValidKeys();
+CheckOffEvent();
+CheckOnceEvent();
+CheckOnChangedEvent();
+CheckOnDisposedEvent();
+CheckRemoveExisting();
+CheckRemoveNonExisting();
+CheckTryAddCorrectlyAddsNewKey();
+CheckTryAddCorrectlyIgnoresUpdateWhenDuplicateFound();
+CheckTryAddCorrectlyReturnsFalseWhenDuplicateFound();
+CheckTryAddCorrectlyReturnsTrueWhenAddNewKey();
+CheckTryGetValueTo();
+CheckTryGetValue();
+CheckWorksWithArrays();
+CheckWorksWithIntegers();
+CheckWorksWithStrings();
+CheckIsEmptyWhenEmpty();
+CheckIsEmptyWhenFull();]]></ST>
+    </Implementation>
+    <Method Name="CheckAddOrUpdateCorrectlyAddsNewKey" Id="{e7df862f-87b2-0581-10fe-b4d1944a6c8c}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckAddOrUpdateCorrectlyAddsNewKey
+VAR
+	in : INT := 123;
+	out : INT;
+	expected : INT := 123;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckAddOrUpdateCorrectlyAddsNewKey');
+
+dictionary.AddOrUpdate('a',in);
+dictionary.TryGetValue('a',out);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckAddOrUpdateCorrectlyUpdatesExistingKey" Id="{c763341f-48b9-0347-328e-cbb2cbe2f117}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckAddOrUpdateCorrectlyUpdatesExistingKey
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	out : INT;
+	expected : INT := 456;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckAddOrUpdateCorrectlyUpdatesExistingKey');
+
+dictionary.AddOrUpdate('a',in1);
+dictionary.AddOrUpdate('a',in2);
+dictionary.TryGetValue('a',out);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckClear" Id="{872a81c0-2148-02fd-086b-1de181a70ba9}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckClear
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	out : INT;
+	expected : INT := 456;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckClear');
+
+dictionary.TryAdd('a',in1);
+dictionary.Clear();
+dictionary.TryAdd('a',in2); // if the dictionary was not empty then this would fail.
+dictionary.TryGetValue('a',out);
+
+// @TEST-ASSSERT
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckContainsKeyIsFalse" Id="{f098f930-1d8e-0e56-2a81-88d39619f52c}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckContainsKeyIsFalse
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	result : BOOL;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckContainsKeyIsFalse');
+
+dictionary.TryAdd('a',in1);
+dictionary.TryAdd('b',in2);
+dictionary.TryAdd('c',in3);
+
+result := dictionary.ContainsKey('d');
+
+AssertFalse(
+	Condition := result,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckContainsKeyIsTrue" Id="{ece3b744-2438-0558-172c-2f699d71360a}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckContainsKeyIsTrue
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	result : BOOL;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckContainsKeyIsTrue');
+
+dictionary.TryAdd('a',in1);
+dictionary.TryAdd('b',in2);
+dictionary.TryAdd('c',in3);
+
+result := dictionary.ContainsKey('b');
+
+AssertTrue(
+	Condition := result,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckCount" Id="{43b0fd3b-f31f-0e48-0a6b-fb9d7bad8740}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckCount
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	out : DINT;
+	expected : DINT := 3;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckCount');
+
+dictionary.TryAdd('a',in1);
+dictionary.TryAdd('b',in2);
+dictionary.TryAdd('c',in3);
+out := dictionary.Count;
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckEnumeratorIsInvalidAfterChange" Id="{e6b93d72-7fcf-0e0c-0ee3-f7167a41a368}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckEnumeratorIsInvalidAfterChange
+VAR
+	in : INT := 123;
+	result : BOOL;
+	dictionary : OrderedDictionary;
+	enumerator : I_ForwardEnumerator;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckEnumeratorIsInvalidAfterChange');
+
+enumerator := dictionary.GetEnumerator();
+dictionary.TryAdd('a',in);
+
+result := enumerator.IsValid;
+enumerator.Dispose();
+
+AssertFalse(
+	Condition := result,
+	Message := 'Method returned true'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckGetEnumerator" Id="{62f6c40e-3ac1-0fff-1d13-0b7e472a31f6}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckGetEnumerator
+VAR
+	enumerator : I_ForwardEnumerator;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckGetEnumerator');
+
+enumerator := dictionary.GetEnumerator();
+
+AssertTrue(
+	Condition := (enumerator <> 0),
+	Message := 'Did not return an enumerator'
+);
+
+enumerator.Dispose();
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckGetKeysReturnsACollection" Id="{477a14a6-9569-069c-08af-b2b6ca02e73b}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckGetKeysReturnsACollection
+VAR
+	result : BOOL;
+	dictionary : OrderedDictionary;
+	collection : I_Collection;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckGetKeysReturnsACollection');
+
+collection := dictionary.GetKeys();
+
+result := collection <> 0;
+
+IF result THEN
+	collection.Dispose();
+END_IF
+
+AssertTrue(
+	Condition := result,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckGetKeysReturnsACollectionOfValidKeys" Id="{31bd9d18-0454-0e8a-2a97-9186e3d78048}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckGetKeysReturnsACollectionOfValidKeys
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	out : ARRAY [0..2] OF T_MAXSTRING;
+	expected : ARRAY [0..2] OF T_MAXSTRING;
+	result,resulta,resultb,resultc : BOOL;
+	dictionary : OrderedDictionary;
+	collection : I_Collection;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckGetKeysReturnsACollectionOfValidKeys');
+
+// clear the out and expected variables as strings may contain left over data
+memset(ADR(out),0,SIZEOF(out));
+memset(ADR(expected),0,SIZEOF(expected));
+
+// now create the "expected"
+expected[0] := 'a';
+expected[1] := 'b';
+expected[2] := 'c';
+
+// now setup the test
+dictionary.TryAdd('a',in1);
+dictionary.TryAdd('b',in2);
+dictionary.TryAdd('c',in3);
+
+collection := dictionary.GetKeys();
+collection.TryCopyTo(out);
+collection.Dispose();
+
+// create the test result
+resulta := expected[0] = out[0];
+resultb := expected[1] = out[1];
+resultc := expected[2] = out[2];
+result := resulta AND resultb AND resultc;
+
+AssertTrue(
+	Condition := result,
+	Message := 'Did not return an enumerator'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckIsEmptyWhenEmpty" Id="{10384f7e-ecb7-0c87-3ed1-90da65a339e8}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckIsEmptyWhenEmpty
+VAR
+	result : BOOL;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckIsEmptyWhenEmpty');
+
+// @TEST-RUN
+result := dictionary.IsEmpty;
+
+// @TEST-ASSSERT
+AssertTrue(
+	Condition := result,
+	Message := 'Incorrect state of IsEmpty'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckIsEmptyWhenFull" Id="{b2eae6f9-9fc9-0c8b-2352-5289813d2c76}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckIsEmptyWhenFull
+VAR
+	in : INT := 123;
+	result : BOOL;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckIsEmptyWhenFull');
+
+// @TEST-FIXTURE
+dictionary.AddOrUpdate('a',in);
+
+// @TEST-RUN
+result := dictionary.IsEmpty;
+
+// @TEST-ASSSERT
+AssertFalse(
+	Condition := result,
+	Message := 'Incorrect state of IsEmpty'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckOffEvent" Id="{3faa8d0f-84ed-031b-2c29-7d50ac0718f7}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckOffEvent
+VAR
+	value : INT := 123;
+	dictionary : OrderedDictionary;
+	handler : KeyValueCollectionChangedEventHandler(ExpectedOriginator := dictionary);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckOffEvent');
+
+dictionary.OnEvent('OnChanged',handler);
+dictionary.OffEvent('OnChanged',handler);
+
+dictionary.TryAdd('a',value);
+
+AssertFalse(
+	Condition := handler.EventReceived,
+	Message := 'OnceEvent emitted the OnChanged event more than once'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckOnceEvent" Id="{d072df62-80ed-0fba-06ad-087c847b097c}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckOnceEvent
+VAR
+	value : INT := 123;
+	dictionary : OrderedDictionary;
+	handler : KeyValueCollectionChangedEventHandler(ExpectedOriginator := dictionary);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckOnceEvent');
+
+dictionary.OnceEvent('OnChanged',handler);
+dictionary.TryAdd('a',value);
+handler.Reset();
+
+dictionary.TryAdd('a',value);
+
+AssertFalse(
+	Condition := handler.EventReceived,
+	Message := 'OnceEvent emitted the OnChanged event more than once'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckOnChangedEvent" Id="{501b2a0b-8c19-01df-3615-a1a6ebeb4c8b}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckOnChangedEvent
+VAR
+	value : INT := 123;
+	dictionary : OrderedDictionary;
+	handler : KeyValueCollectionChangedEventHandler(ExpectedOriginator := dictionary);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckOnChangedEvent');
+
+dictionary.OnEvent('OnChanged', handler);
+dictionary.TryAdd('a',value);
+
+AssertTrue(
+	Condition := handler.EventReceived,
+	Message := 'Did not emit the OnChanged event'
+);
+
+AssertTrue(
+	Condition := handler.FromExpectedOriginator,
+	Message := 'Did not include itself in the OnChanged event'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckOnDisposedEvent" Id="{911503af-0752-0405-1f3e-89b4d37e0add}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckOnDisposedEvent
+VAR
+	value : INT := 123;
+	pDictionary : POINTER TO OrderedDictionary;
+	handler : KeyValueCollectionDisposedEventHandler(ExpectedOriginator := 0);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckOnDisposedEvent');
+
+pDictionary := __NEW(OrderedDictionary);
+handler.SetExpectedOriginator(pDictionary^);
+pDictionary^.OnEvent('OnDisposed', handler);
+
+pDictionary^.Dispose();
+
+AssertTrue(
+	Condition := handler.EventReceived,
+	Message := 'Did not emit the OnDisposed event'
+);
+
+AssertTrue(
+	Condition := handler.FromExpectedOriginator,
+	Message := 'Did not include itself in the OnDisposed event'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckRemoveExisting" Id="{da65a480-7e00-02c7-236c-3caedab3d17f}">
+      <Declaration><![CDATA[METHOD PRIVATE CheckRemoveExisting
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	result : BOOL;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckRemoveExisting');
+
+dictionary.TryAdd('a',in1);
+dictionary.TryAdd('b',in2);
+dictionary.TryAdd('c',in3);
+
+dictionary.Remove('c');
+
+result := dictionary.ContainsKey('c');
+
+AssertFalse(
+	Condition := result,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckRemoveNonExisting" Id="{325a5ee1-25a7-0738-252a-ee54b7b538fc}">
+      <Declaration><![CDATA[METHOD PRIVATE CheckRemoveNonExisting
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	in3 : INT := 789;
+	out : DINT;
+	expected : DINT := 3;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckRemoveNonExisting');
+
+dictionary.TryAdd('a',in1);
+dictionary.TryAdd('b',in2);
+dictionary.TryAdd('c',in3);
+
+dictionary.Remove('d');
+
+out := dictionary.Count;
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryAddCorrectlyAddsNewKey" Id="{a2ace763-caf5-0686-044b-960801b0d884}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryAddCorrectlyAddsNewKey
+VAR
+	in : INT := 123;
+	out : INT;
+	expected : INT := 123;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryAddCorrectlyAddsNewKey');
+
+dictionary.TryAdd('a',in);
+dictionary.TryGetValue('a',out);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryAddCorrectlyIgnoresUpdateWhenDuplicateFound" Id="{8c8e9579-f831-061f-185f-ea25a0b5ac88}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryAddCorrectlyIgnoresUpdateWhenDuplicateFound
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	out : INT;
+	expected : INT := 123;
+	result : BOOL;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryAddCorrectlyIgnoresUpdateWhenDuplicateFound');
+
+dictionary.TryAdd('a',in1);
+dictionary.TryAdd('a',in2);
+dictionary.TryGetValue('a',out);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryAddCorrectlyReturnsFalseWhenDuplicateFound" Id="{4241be0d-dfeb-0707-2f29-db8f97e3b71e}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryAddCorrectlyReturnsFalseWhenDuplicateFound
+VAR
+	in1 : INT := 123;
+	in2 : INT := 456;
+	result : BOOL;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryAddCorrectlyReturnsFalseWhenDuplicateFound');
+
+dictionary.TryAdd('a',in1);
+result := dictionary.TryAdd('a',in2);
+
+AssertFalse(
+	Condition := result,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryAddCorrectlyReturnsTrueWhenAddNewKey" Id="{521e1a09-3e34-0421-00bb-4010da580060}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryAddCorrectlyReturnsTrueWhenAddNewKey
+VAR
+	in : INT := 123;
+	result : BOOL;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryAddCorrectlyReturnsTrueWhenAddNewKey');
+
+result := dictionary.TryAdd('a',in);
+
+AssertTrue(
+	Condition := result,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryGetValue" Id="{0c7ac1e9-7f41-0308-08f5-6262f6aa8813}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryGetValue
+VAR
+	in : INT := 123;
+	out : INT;
+	expected : INT := 123;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryGetValue');
+
+dictionary.AddOrUpdate('a',in);
+dictionary.TryGetValue('a',out);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckTryGetValueTo" Id="{f4d592c0-650b-0eed-388a-53961ae12176}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckTryGetValueTo
+VAR
+	in : INT := 123;
+	out : INT;
+	expected : INT := 123;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckTryGetValueTo');
+
+dictionary.AddOrUpdate('a',in);
+dictionary.TryGetValueTo('a',ADR(out),SIZEOF(out));
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckWorksWithArrays" Id="{076bce71-d00c-0718-0b2e-85a290e49e46}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckWorksWithArrays
+VAR
+	in : ARRAY [0..1] OF REAL := [0.1,2.3];
+	out : ARRAY [0..1] OF REAL;
+	expected : ARRAY [0..1] OF REAL := [0.1,2.3];
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckWorksWithArrays');
+
+dictionary.TryAdd('a',in);
+dictionary.TryGetValue('a',out);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckWorksWithIntegers" Id="{c2308046-836c-08ba-2f5e-a60817e136db}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckWorksWithIntegers
+VAR
+	in : INT := 123;
+	out : INT;
+	expected : INT := 123;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckWorksWithIntegers');
+
+dictionary.TryAdd('a',in);
+dictionary.TryGetValue('a',out);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckWorksWithStrings" Id="{f63931aa-f3c1-0be7-2236-b2ee8bba6b6e}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckWorksWithStrings
+VAR
+	in : STRING := 'test';
+	out : STRING;
+	expected : STRING := 'test';
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckWorksWithStrings');
+
+dictionary.TryAdd('a',in);
+dictionary.TryGetValue('a',out);
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_JsonPathVisitor" Id="{5bb0fadb-f9d1-4c52-98c4-9faa59835c7e}">
+    <Declaration><![CDATA[INTERFACE I_JsonPathVisitor EXTENDS __System.IQueryInterface]]></Declaration>
+    <Method Name="ArrayIndexFound" Id="{144d8380-bf20-40af-9ce5-ddff105985ca}">
+      <Declaration><![CDATA[METHOD ArrayIndexFound
+VAR_INPUT
+	Index : UDINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="EndOfParse" Id="{4a7c8a96-780e-469f-b2a0-a9bd267fed8d}">
+      <Declaration><![CDATA[METHOD EndOfParse
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="InvalidSyntaxFound" Id="{5a2cfe6d-953a-42a4-9f94-d2e5ff6080d9}">
+      <Declaration><![CDATA[METHOD InvalidSyntaxFound
+VAR_INPUT
+	Character : BYTE;
+	Position : UDINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="PropertyFound" Id="{ce2a74e6-cc82-4350-9b2b-9fc36f58b794}">
+      <Declaration><![CDATA[METHOD PropertyFound
+VAR_INPUT
+	Name : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="StartOfParse" Id="{726dbcb5-ff56-407c-983a-26e47fefb834}">
+      <Declaration><![CDATA[METHOD StartOfParse
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

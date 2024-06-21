@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_INT_TO_BYTE" Id="{90fcb1a3-737a-4637-aed7-b1420933d01c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_INT_TO_BYTE : BOOL
+VAR_INPUT
+	in : INT;
+	out : REFERENCE TO BYTE;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_INT_WHICH_CAN_BE_HELD_IN_A_BYTE THEN
+	RETURN;
+END_IF
+
+IF in < DatatypeLimits.MIN_VALUE_OF_INT_WHICH_CAN_BE_HELD_IN_A_BYTE THEN
+	RETURN;
+END_IF
+
+out := INT_TO_BYTE(in);
+TryConvert_INT_TO_BYTE := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

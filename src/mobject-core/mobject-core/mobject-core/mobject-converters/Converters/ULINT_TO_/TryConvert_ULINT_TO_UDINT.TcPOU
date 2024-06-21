@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_ULINT_TO_UDINT" Id="{a7aaff76-d079-47a0-a391-726940de699c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_ULINT_TO_UDINT : BOOL
+VAR_INPUT
+	in : ULINT;
+	out : REFERENCE TO UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_ULINT_WHICH_CAN_BE_HELD_IN_A_UDINT THEN
+	RETURN;
+END_IF
+
+out := ULINT_TO_UDINT(in);
+TryConvert_ULINT_TO_UDINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

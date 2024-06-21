@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Error" Id="{7c55cd79-4747-018f-312f-869bc7e0f09a}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ABSTRACT Error EXTENDS Disposable IMPLEMENTS I_Error
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Protected" Id="{c13f1263-be0b-02bd-016c-016a337233da}" />
+    <Method Name="Accept" Id="{fef303be-3cc4-0248-280b-0a344804d08c}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ErrorVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitError(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="ErrorType" Id="{5854729a-7d9b-01f6-22a5-51325658dc5f}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ABSTRACT ErrorType : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{ace55bdd-3310-0f83-038f-b9582177b9b5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="IsSameAs" Id="{f504f489-f2c1-035a-208c-cda66e566b41}">
+      <Declaration><![CDATA[METHOD PUBLIC IsSameAs : BOOL
+VAR_INPUT
+	Error : I_Error;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Error = 0 THEN
+	RETURN;
+END_IF
+
+IF Error.ErrorType <> THIS^.ErrorType THEN
+	RETURN;
+END_IF
+
+IsSameAs := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Message" Id="{abe30e40-2d6e-03b7-2b21-bb7337aadbd9}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ABSTRACT Message : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{95155e29-8281-0bd0-1dd2-bab04737c95b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="OnSerialize" Id="{cb0b2354-a014-04ff-3bcf-6e98b9d20f11}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnSerialize
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{598303df-8e61-0b5a-2cea-15656226d0b2}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('errorType',ErrorType);
+Serializer.AddKeyString('message',Message);
+OnSerialize(Serializer);
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

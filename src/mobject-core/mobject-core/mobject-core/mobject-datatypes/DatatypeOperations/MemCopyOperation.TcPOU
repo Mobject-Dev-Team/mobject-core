@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MemCopyOperation" Id="{d60c85c1-3d61-4a34-a33b-abe73933c717}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK MemCopyOperation EXTENDS Disposable IMPLEMENTS I_DatatypeOperation
+VAR
+	source : I_Datatype;
+	destination : I_Datatype;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{a3eb1266-a464-491a-b351-73330b649c3a}" />
+    <Method Name="Execute" Id="{7094a26b-64c8-41eb-be3c-69bd6370db8e}">
+      <Declaration><![CDATA[METHOD Execute
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[memcpy(destination.Address, source.Address, source.Size);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{a05f3cc7-e86c-4d37-a21c-556782a2fdfe}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Source : I_Datatype;
+	Destination : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.source := Source;
+This^.destination := Destination;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

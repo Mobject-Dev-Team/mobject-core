@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_UDINT_TO_SINT" Id="{6fd9bab8-ff74-4db7-8846-45724667045c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_UDINT_TO_SINT : BOOL
+VAR_INPUT
+	in : UDINT;
+	out : REFERENCE TO SINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in > DatatypeLimits.MAX_VALUE_OF_UDINT_WHICH_CAN_BE_HELD_IN_A_SINT THEN
+	RETURN;
+END_IF
+
+out := UDINT_TO_SINT(in);
+TryConvert_UDINT_TO_SINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

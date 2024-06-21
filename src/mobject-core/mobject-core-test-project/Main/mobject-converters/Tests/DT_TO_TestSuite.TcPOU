@@ -1,0 +1,1110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="DT_TO_TestSuite" Id="{885ed8bc-faf0-4b58-af93-3414d7b4a92f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC DT_TO_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Check_DT_TO_BOOL_Max();
+Check_DT_TO_BOOL_Min();
+Check_DT_TO_BYTE_Max();
+Check_DT_TO_BYTE_Min();
+Check_DT_TO_BYTE_TooHigh();
+Check_DT_TO_WORD_Max();
+Check_DT_TO_WORD_Min();
+Check_DT_TO_WORD_TooHigh();
+Check_DT_TO_DWORD_Max();
+Check_DT_TO_DWORD_Min();
+Check_DT_TO_LWORD_Max();
+Check_DT_TO_LWORD_Min();
+Check_DT_TO_SINT_Max();
+Check_DT_TO_SINT_Min();
+Check_DT_TO_SINT_TooHigh();
+Check_DT_TO_INT_Max();
+Check_DT_TO_INT_Min();
+Check_DT_TO_INT_TooHigh();
+Check_DT_TO_DINT_Max();
+Check_DT_TO_DINT_Min();
+Check_DT_TO_DINT_TooHigh();
+Check_DT_TO_LINT_Max();
+Check_DT_TO_LINT_Min();
+Check_DT_TO_USINT_Max();
+Check_DT_TO_USINT_Min();
+Check_DT_TO_USINT_TooHigh();
+Check_DT_TO_UINT_Max();
+Check_DT_TO_UINT_Min();
+Check_DT_TO_UINT_TooHigh();
+Check_DT_TO_UDINT_Max();
+Check_DT_TO_UDINT_Min();
+Check_DT_TO_ULINT_Max();
+Check_DT_TO_ULINT_Min();
+Check_DT_TO_REAL_Max();
+Check_DT_TO_REAL_Min();
+Check_DT_TO_LREAL_Max();
+Check_DT_TO_LREAL_Min();
+Check_DT_TO_TIME_Max();
+Check_DT_TO_TIME_Min();
+Check_DT_TO_TIME_TooHigh();
+Check_DT_TO_TOD_Max();
+Check_DT_TO_TOD_Min();
+Check_DT_TO_TOD_TooHigh();
+Check_DT_TO_DATE_Max();
+Check_DT_TO_DATE_Min();
+Check_DT_TO_DT_Max();
+Check_DT_TO_DT_Min();
+Check_DT_TO_STRING_Max();
+Check_DT_TO_STRING_Min();]]></ST>
+    </Implementation>
+    <Method Name="Check_DT_TO_BOOL_Max" Id="{6cfda93d-3d73-4fff-827e-cf245e733b5c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_BOOL_Max
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_BOOL_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_BOOL_Min" Id="{68a77bbf-749f-4b60-9dd5-c55487318c68}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_BOOL_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : BOOL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_BOOL_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_BOOL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to BOOL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to BOOL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_BYTE_Max" Id="{9b59920c-97dd-41dd-8d8f-f8cd651eeaeb}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_BYTE_Max
+VAR
+	value : DT := DatatypeLimits.MAX_VALUE_OF_DT_WHICH_CAN_BE_HELD_IN_A_BYTE;
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_BYTE_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_BYTE_Min" Id="{31dfb736-ae32-4764-8bbf-1ce0009f3af8}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_BYTE_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : BYTE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_BYTE_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_BYTE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to BYTE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to BYTE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_BYTE_TooHigh" Id="{b60ac8fe-ea5e-4204-88c4-65a4e7bf9c7c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_BYTE_TooHigh
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : BYTE;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_BYTE_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DT to BYTE conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_DATE_Max" Id="{dc49eb07-e77c-48fe-b420-eb26e30e5785}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_DATE_Max
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_DATE_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_DATE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_DATE_Min" Id="{154b8dd1-41e8-4855-a9b3-8ff6932b0e46}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_DATE_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : DATE;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_DATE_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_DATE(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to DATE correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to DATE conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_DINT_Max" Id="{fb7bd2f5-7685-4900-ac31-dfe9825ff25b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_DINT_Max
+VAR
+	value : DT := DatatypeLimits.MAX_VALUE_OF_DT_WHICH_CAN_BE_HELD_IN_A_DINT;
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_DINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_DINT_Min" Id="{9c5f79e4-c2a8-4be3-a858-e6f2fe8a03dc}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_DINT_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : DINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_DINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_DINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to DINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to DINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_DINT_TooHigh" Id="{8f0a5a67-ab61-4da6-8b35-f3898a9e2e92}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_DINT_TooHigh
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : DINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_DINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DT to DINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_DT_Max" Id="{72bc97b4-a47c-47a6-bb6e-ad08c390f670}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_DT_Max
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_DT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_DT_Min" Id="{7b88e06b-d7a0-4773-ab2b-45049b6027ef}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_DT_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : DT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_DT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = value;
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to DT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to DT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_DWORD_Max" Id="{f1a85d05-f580-4baf-855f-d59a33bf249b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_DWORD_Max
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_DWORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_DWORD_Min" Id="{4f4b3de7-64d5-43d9-bf0b-b5e79649cc49}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_DWORD_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : DWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_DWORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_DWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to DWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to DWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_INT_Max" Id="{ff17f788-3e4a-48c8-bed2-fafba2d9ca74}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_INT_Max
+VAR
+	value : DT := DatatypeLimits.MAX_VALUE_OF_DT_WHICH_CAN_BE_HELD_IN_A_INT;
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_INT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_INT_Min" Id="{1d4d1c79-d117-4383-995c-7591ac532759}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_INT_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : INT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_INT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_INT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to INT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to INT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_INT_TooHigh" Id="{c36e6d63-4046-49f7-9604-50e15246109d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_INT_TooHigh
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : INT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_INT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DT to INT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_LINT_Max" Id="{3d0ee863-1127-4b10-9ac0-8bdbfb6eaa19}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_LINT_Max
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_LINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_LINT_Min" Id="{e39c5f3a-206e-45db-97d9-27f6600bf2e4}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_LINT_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : LINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_LINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_LINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to LINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to LINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_LREAL_Max" Id="{e8254add-232f-4346-9c17-886e6f76eb66}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_LREAL_Max
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_LREAL_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_LREAL_Min" Id="{5f231ece-6a91-4e0b-b85c-2e82df452848}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_LREAL_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : LREAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_LREAL_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_LREAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to LREAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to LREAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_LWORD_Max" Id="{2bd6e2e3-cb11-434a-b6bf-af1817a8c1fc}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_LWORD_Max
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_LWORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_LWORD_Min" Id="{3bcc2862-8484-4c0d-929e-6b331733e209}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_LWORD_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : LWORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_LWORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_LWORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to LWORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to LWORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_REAL_Max" Id="{472ea924-844b-490f-adb1-df35533e0dd2}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_REAL_Max
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_REAL_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_REAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_REAL_Min" Id="{122301da-9d25-47ab-9191-227b93dbbd3c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_REAL_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : REAL;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_REAL_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_REAL(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to REAL correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to REAL conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_SINT_Max" Id="{f2e63ac0-1c4a-471d-bca9-421786a0476b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_SINT_Max
+VAR
+	value : DT := DatatypeLimits.MAX_VALUE_OF_DT_WHICH_CAN_BE_HELD_IN_A_SINT;
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_SINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_SINT_Min" Id="{ce16d828-09c8-4934-927d-b36bc6acd39b}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_SINT_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : SINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_SINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_SINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to SINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to SINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_SINT_TooHigh" Id="{4691e1c3-9b91-4cdb-b4ac-e359b36453de}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_SINT_TooHigh
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : SINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_SINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DT to SINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_STRING_Max" Id="{eb9959ca-c5fe-4a67-b0be-c114bc38c077}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_STRING_Max
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_STRING_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_STRING(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_STRING_Min" Id="{2bc9907c-7170-431b-841a-aa02ee470e31}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_STRING_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : STRING;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_STRING_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_STRING(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to STRING correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to STRING conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_TIME_Max" Id="{f3ef7c80-b427-4c34-9b64-ea54671aac11}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_TIME_Max
+VAR
+	value : DT := DatatypeLimits.MAX_VALUE_OF_DT_WHICH_CAN_BE_HELD_IN_A_TIME;
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_TIME_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_TIME(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_TIME_Min" Id="{a1a61cd1-bbf7-4566-93f1-6f1f2c00a2e0}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_TIME_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : TIME;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_TIME_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_TIME(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to TIME correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to TIME conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_TIME_TooHigh" Id="{720efb75-77c3-4a40-8e54-8a14ceb5b537}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_TIME_TooHigh
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : TIME;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_TIME_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DT to TIME conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_TOD_Max" Id="{059df6e6-054e-4c44-9181-276b92205088}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_TOD_Max
+VAR
+	value : DT := DatatypeLimits.MAX_VALUE_OF_DT_WHICH_CAN_BE_HELD_IN_A_TOD;
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_TOD_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_TOD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_TOD_Min" Id="{392c825b-6ddb-4482-a90c-885b0d4f23a0}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_TOD_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : TOD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_TOD_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_TOD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to TOD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to TOD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_TOD_TooHigh" Id="{82a4615f-8540-46e9-83dd-5f1e1ee6817c}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_TOD_TooHigh
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : TOD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_TOD_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DT to TOD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_UDINT_Max" Id="{34ae0215-5bc9-4095-9880-cea7f7156456}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_UDINT_Max
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_UDINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_UDINT_Min" Id="{7ead6420-2e67-48eb-ae2e-d3ab0681a5c6}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_UDINT_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : UDINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_UDINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_UDINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to UDINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to UDINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_UINT_Max" Id="{ae0edaff-2426-4474-b2ce-3d420624dcec}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_UINT_Max
+VAR
+	value : DT := DatatypeLimits.MAX_VALUE_OF_DT_WHICH_CAN_BE_HELD_IN_A_UINT;
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_UINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_UINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_UINT_Min" Id="{55158059-a363-40ff-8e13-5fbeaefeebe9}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_UINT_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : UINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_UINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_UINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to UINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to UINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_UINT_TooHigh" Id="{e3533f2c-e258-48b8-a4bd-d34b0a4cac95}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_UINT_TooHigh
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : UINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_UINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DT to UINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_ULINT_Max" Id="{ea85d64c-5ca1-4fd3-96ca-b54232081d6e}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_ULINT_Max
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_ULINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_ULINT_Min" Id="{370bf043-1d2b-4ef0-b1f6-45b1b3a1a11d}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_ULINT_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : ULINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_ULINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_ULINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to ULINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to ULINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_USINT_Max" Id="{76e33c34-12b6-41f8-ac50-8fb567c94396}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_USINT_Max
+VAR
+	value : DT := DatatypeLimits.MAX_VALUE_OF_DT_WHICH_CAN_BE_HELD_IN_A_USINT;
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_USINT_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_USINT_Min" Id="{f0480dff-d6fd-42d2-bc9d-e7a112b8e2bf}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_USINT_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : USINT;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_USINT_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_USINT(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to USINT correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to USINT conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_USINT_TooHigh" Id="{700ddef7-3a10-4794-a4ea-5e7306bb2dbb}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_USINT_TooHigh
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : USINT;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_USINT_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DT to USINT conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_WORD_Max" Id="{d36648ae-8485-4f48-a8a9-4d576dc21223}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_WORD_Max
+VAR
+	value : DT := DatatypeLimits.MAX_VALUE_OF_DT_WHICH_CAN_BE_HELD_IN_A_WORD;
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_WORD_Max');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_WORD_Min" Id="{93db4e3d-36fd-4b46-b6bf-b2f70e0491d3}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_WORD_Min
+VAR
+	value : DT := DatatypeLimits.DT_MIN_VALUE;
+	actual : WORD;
+	converted : BOOL;
+	equal : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_WORD_Min');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+equal := actual = DT_TO_WORD(value);
+
+// @TEST-ASSERT
+AssertTrue(Condition := equal, Message := 'Did not convert DT to WORD correctly');
+AssertTrue(Condition := converted, Message := 'Did not report DT to WORD conversion was successful');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Check_DT_TO_WORD_TooHigh" Id="{218cb50f-4a01-4e41-8fe9-641afdbaa628}">
+      <Declaration><![CDATA[METHOD PUBLIC Check_DT_TO_WORD_TooHigh
+VAR
+	value : DT := DatatypeLimits.DT_MAX_VALUE;
+	actual : WORD;
+	converted : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Check_DT_TO_WORD_TooHigh');
+
+// @TEST-RUN
+converted := TryConvert_DT_TO_Destination(value, actual);
+
+// @TEST-ASSERT
+AssertFalse(Condition := converted, Message := 'Did not report DT to WORD conversion was prevented');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

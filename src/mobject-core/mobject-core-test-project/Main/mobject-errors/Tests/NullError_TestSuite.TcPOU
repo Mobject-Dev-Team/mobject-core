@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NullError_TestSuite" Id="{b1cc6e12-fdb1-4945-b863-3dcc1e456d61}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK NullError_TestSuite EXTENDS TcUnit.FB_TestSuite]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestErrorType();
+TestMessage();]]></ST>
+    </Implementation>
+    <Method Name="TestErrorType" Id="{ce53f6c0-86dd-4bff-9bc5-d7a9429a3eac}">
+      <Declaration><![CDATA[METHOD PUBLIC TestErrorType
+VAR
+	error : NullError;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestErrorType');
+
+AssertEquals_String(
+	Actual := error.ErrorType,
+	Expected := '',
+	Message := 'Did not return the expected ErrorType'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMessage" Id="{7726e46b-57d9-4b17-ba41-e98819a67da6}">
+      <Declaration><![CDATA[METHOD PUBLIC TestMessage
+VAR
+	error : NullError;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestMessage');
+
+AssertEquals_String(
+	Actual := error.Message,
+	Expected := '',
+	Message := 'Did not return the expected Message'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

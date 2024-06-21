@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_StructureMembers" Id="{725904a6-8cf8-48b8-a6ca-3bfc37513b86}">
+    <Declaration><![CDATA[INTERFACE I_StructureMembers
+]]></Declaration>
+    <Method Name="Accept" Id="{9fbe2c54-4e72-4a46-9ac6-f053d2bfd090}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_DatatypeVisitor;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="GetMemberEnumerator" Id="{c78504c1-5fa4-4ffc-9d04-5cb07e1c5e21}">
+      <Declaration><![CDATA[METHOD PUBLIC GetMemberEnumerator : I_KeyValueForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetMemberByName" Id="{acaf4a37-304c-475a-a555-d6589588d23e}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetMemberByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

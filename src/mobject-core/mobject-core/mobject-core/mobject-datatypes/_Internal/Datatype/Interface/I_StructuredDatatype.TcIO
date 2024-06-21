@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_StructuredDatatype" Id="{fdedd84d-a505-0599-27c3-5171a6f5527b}">
+    <Declaration><![CDATA[INTERFACE I_StructuredDatatype EXTENDS I_UserDefinedDatatype, I_HostStructureMembers]]></Declaration>
+  </Itf>
+</TcPlcObject>

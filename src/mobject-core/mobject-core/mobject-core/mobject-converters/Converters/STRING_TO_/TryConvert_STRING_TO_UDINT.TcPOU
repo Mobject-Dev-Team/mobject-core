@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TryConvert_STRING_TO_UDINT" Id="{556c2e4b-355b-4986-a684-5f3540249fd8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION TryConvert_STRING_TO_UDINT : BOOL
+VAR_INPUT
+	in : STRING;
+	out : REFERENCE TO UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF in <> UDINT_TO_STRING(STRING_TO_UDINT(in)) THEN
+	RETURN;
+END_IF
+
+out := STRING_TO_UDINT(in);
+TryConvert_STRING_TO_UDINT := TRUE;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="PrimitiveDatatypePack" Id="{41aa96c4-4e58-0595-14c8-fb1325f46fff}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK PrimitiveDatatypePack IMPLEMENTS I_DatatypePack
+VAR
+	// _bit not included as this can only be part of a structure
+	_bool : _BOOL(FALSE);
+	_byte : _BYTE(0);
+	_dint : _DINT(0);
+	_dt : _DT(DT#1970-1-1-0:0:0);
+	_dword : _DWORD(0);
+	_int : _INT(0);
+	_lint : _LINT(0);
+	_lreal : _LREAL(0);
+	_lword : _LWORD(0);
+	_real : _REAL(0);
+	_sint : _SINT(0);
+	_time_of_day : _TIME_OF_DAY(TOD#0:0:0);
+	_tod : _TOD(TOD#0:0:0);
+	_udint : _UDINT(0);
+	_uint : _UINT(0);
+	_ulint : _ULINT(0);
+	_usint : _USINT(0);
+	_word : _WORD(0);
+    _string : _STRING('');
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="RegisterWith" Id="{5bfb729e-cc5d-077c-086c-02393210cdae}">
+      <Declaration><![CDATA[METHOD RegisterWith
+VAR_INPUT
+	Datatypes : I_Datatypes;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Datatypes.RegisterDatatype(_bool);
+Datatypes.RegisterDatatype(_byte);
+Datatypes.RegisterDatatype(_dint);
+Datatypes.RegisterDatatype(_dt);
+Datatypes.RegisterDatatype(_dword);
+Datatypes.RegisterDatatype(_int);
+Datatypes.RegisterDatatype(_lint);
+Datatypes.RegisterDatatype(_lreal);
+Datatypes.RegisterDatatype(_lword);
+Datatypes.RegisterDatatype(_real);
+Datatypes.RegisterDatatype(_sint);
+Datatypes.RegisterDatatype(_time_of_day);
+Datatypes.RegisterDatatype(_tod);
+Datatypes.RegisterDatatype(_udint);
+Datatypes.RegisterDatatype(_uint);
+Datatypes.RegisterDatatype(_ulint);
+Datatypes.RegisterDatatype(_usint);
+Datatypes.RegisterDatatype(_word);
+Datatypes.RegisterDatatype(_string);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

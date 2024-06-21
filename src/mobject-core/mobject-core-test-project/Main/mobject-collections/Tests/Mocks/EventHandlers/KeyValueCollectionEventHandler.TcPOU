@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="KeyValueCollectionEventHandler" Id="{14929a83-5297-0a9f-24b2-86e182571594}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ABSTRACT KeyValueCollectionEventHandler EXTENDS CollectionEventHandlerBase
+VAR
+	expectedOriginator : I_KeyValueCollection;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{998ef92f-c53d-05c2-03eb-a1d8a9982a37}" />
+    <Method Name="FB_init" Id="{48178feb-cd78-0afd-069b-944a79850ae6}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	ExpectedOriginator : I_KeyValueCollection;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SetExpectedOriginator(ExpectedOriginator);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetExpectedOriginator" Id="{6f89679e-679b-08c4-1b0a-15e8da0e11fd}">
+      <Declaration><![CDATA[METHOD PUBLIC SetExpectedOriginator
+VAR_INPUT
+	ExpectedOriginator : I_KeyValueCollection;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.expectedOriginator := ExpectedOriginator;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
