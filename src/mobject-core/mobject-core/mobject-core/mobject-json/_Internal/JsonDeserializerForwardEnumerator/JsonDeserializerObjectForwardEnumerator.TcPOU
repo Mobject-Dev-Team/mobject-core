@@ -13,7 +13,7 @@ VAR
 	nullNode : I_Deserializer;
 	moveNextCalled : BOOL := FALSE;
 	invalid : BOOL := FALSE; 
-	currentMemberPosition : SJsonValue;
+	nextMemberPosition : SJsonValue;
 	memberBeginPosition : SJsonValue;
 	memberEndPosition : SJsonValue;
 	currentDeserializer : I_Deserializer;
@@ -191,27 +191,27 @@ END_IF
 // Handle the initial move
 IF NOT moveNextCalled THEN
     moveNextCalled := TRUE;
-    currentMemberPosition := memberBeginPosition;
-    UpdateCurrentDeserializer(currentMemberPosition);
+    UpdateCurrentDeserializer(memberBeginPosition);
+	nextMemberPosition := jsonParser.NextMember(memberBeginPosition);
 	MoveNext := TRUE;
     RETURN;
 END_IF
 
 // Handle subsequent moves
-IF currentMemberPosition <> memberEndPosition THEN
-	currentMemberPosition := jsonParser.NextMember(currentMemberPosition);
-	UpdateCurrentDeserializer(currentMemberPosition);
-	MoveNext := (currentMemberPosition <> memberEndPosition);
+IF nextMemberPosition <> memberEndPosition THEN	
+	UpdateCurrentDeserializer(nextMemberPosition);
+	nextMemberPosition := jsonParser.NextMember(nextMemberPosition);
+	MoveNext := TRUE;
 END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="UpdateCurrentDeserializer" Id="{578737d1-9fc4-4e81-86ff-41aef5875fee}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED UpdateCurrentDeserializer
 VAR_INPUT
-	Root : SJsonValue;
+	UpdatedRoot : SJsonValue;
 END_VAR
 VAR
-	newRoot : SJsonValue;
+	rootOfValue : SJsonValue;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF currentDeserializer <> 0 THEN
@@ -223,14 +223,14 @@ IF invalid THEN
 	RETURN;
 END_IF
 
-newRoot := jsonParser.GetMemberValue(Root);
-currentKey := jsonParser.GetMemberName(currentMemberPosition);
+rootOfValue := jsonParser.GetMemberValue(UpdatedRoot);
+currentKey := jsonParser.GetMemberName(UpdatedRoot);
 
-IF newRoot = 0 THEN
+IF rootOfValue = 0 THEN
 	RETURN;
 END_IF
 
-currentDeserializer := CreateDeserializer(newRoot);]]></ST>
+currentDeserializer := CreateDeserializer(rootOfValue);]]></ST>
       </Implementation>
     </Method>
   </POU>

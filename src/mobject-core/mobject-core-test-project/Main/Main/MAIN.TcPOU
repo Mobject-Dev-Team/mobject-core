@@ -7,13 +7,14 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[// unit tests
-MobjectDisposableUnitTests();
-MobjectEventsUnitTests();
 MobjectCollectionsUnitTests();
-MobjectDeserializationUnitTests();
-MobjectErrorsUnitTests();
-MobjectDatatypesUnitTests();
 MobjectConvertersUnitTests();
+MobjectDatatypesUnitTests();
+MobjectDeserializationUnitTests();
+MobjectDisposableUnitTests();
+MobjectErrorsUnitTests();
+MobjectEventsUnitTests();
+MobjectJsonUnitTests();
 
 // examples
 MobjectCollectionsExample();

@@ -13,7 +13,7 @@ VAR
 	nullNode : I_Deserializer;
 	moveNextCalled : BOOL := FALSE;
 	invalid : BOOL := FALSE; 
-	currentArrayPosition : SJsonValue;
+	nextArrayPosition : SJsonValue;
 	arrayBeginPosition : SJsonValue;
 	arrayEndPosition : SJsonValue;
 	currentDeserializer : I_Deserializer;
@@ -190,21 +190,20 @@ END_IF
 // Handle the initial move
 IF NOT moveNextCalled THEN
     moveNextCalled := TRUE;
-    currentArrayPosition := arrayBeginPosition;
-    UpdateCurrentDeserializer(currentArrayPosition);
+    UpdateCurrentDeserializer(arrayBeginPosition);
+	nextArrayPosition := jsonParser.NextArray(arrayBeginPosition);
+	_index := _index + 1;
 	MoveNext := TRUE;
-	_index := index + 1;
     RETURN;
 END_IF
 
 // Handle subsequent moves
-IF currentArrayPosition <> arrayEndPosition THEN
-	currentArrayPosition := jsonParser.NextArray(currentArrayPosition);
-	UpdateCurrentDeserializer(currentArrayPosition);
-	MoveNext := (currentArrayPosition <> arrayEndPosition);
-	_index := index + 1;
-END_IF
-]]></ST>
+IF nextArrayPosition <> arrayEndPosition THEN
+	UpdateCurrentDeserializer(nextArrayPosition);
+	nextArrayPosition := jsonParser.NextArray(nextArrayPosition);
+	_index := _index + 1;
+	MoveNext := TRUE;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="UpdateCurrentDeserializer" Id="{9a78b27c-3abd-4cd1-868f-3b690732f310}" FolderPath="Protected\">

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.0-beta
+
+- Bug fix. mobject-json, JsonDeserializerObjectForwardEnumerator and JsonDeserializerArrayForwardEnumerator would exceed the end of their respective members and arrays which could lead to a memory exception under certain conditions.
+
 ## v0.1.0-beta
 
 - Initial commit, with the following libs included.
