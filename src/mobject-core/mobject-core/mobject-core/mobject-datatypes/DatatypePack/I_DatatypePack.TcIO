@@ -3,8 +3,8 @@
   <Itf Name="I_DatatypePack" Id="{494942d1-e598-081b-32e2-4b26f595758c}">
     <Declaration><![CDATA[INTERFACE I_DatatypePack
 ]]></Declaration>
-    <Method Name="RegisterWith" Id="{008c9af1-6678-02e0-2f3d-79bc95210dc2}">
-      <Declaration><![CDATA[METHOD RegisterWith
+    <Method Name="RegisterWithDatatypes" Id="{008c9af1-6678-02e0-2f3d-79bc95210dc2}">
+      <Declaration><![CDATA[METHOD RegisterWithDatatypes
 VAR_INPUT
 	Datatypes : I_Datatypes;
 END_VAR
