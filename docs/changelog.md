@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.0-beta
+
+- Changed I_DatatypePack.RegisterWith, to I_DatatypePack.RegisterWithDatatypes
+
 ## v0.2.0-beta
 
 - Bug fix. mobject-json, JsonDeserializerObjectForwardEnumerator and JsonDeserializerArrayForwardEnumerator would exceed the end of their respective members and arrays which could lead to a memory exception under certain conditions.

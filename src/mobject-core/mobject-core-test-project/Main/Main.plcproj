@@ -419,7 +419,7 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="mobject-core,0.2.0,mobject">
+    <LibraryReference Include="mobject-core,0.3.0,mobject">
       <Namespace>mobject_core</Namespace>
     </LibraryReference>
   </ItemGroup>

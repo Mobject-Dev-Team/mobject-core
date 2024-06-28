@@ -31,8 +31,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="RegisterWith" Id="{5bfb729e-cc5d-077c-086c-02393210cdae}">
-      <Declaration><![CDATA[METHOD RegisterWith
+    <Method Name="RegisterWithDatatypes" Id="{5bfb729e-cc5d-077c-086c-02393210cdae}">
+      <Declaration><![CDATA[METHOD RegisterWithDatatypes
 VAR_INPUT
 	Datatypes : I_Datatypes;
 END_VAR
