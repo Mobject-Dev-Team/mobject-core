@@ -126,13 +126,23 @@ Balance := Node;]]></ST>
       <Declaration><![CDATA[METHOD PUBLIC Clear
 VAR_INPUT
 END_VAR
-]]></Declaration>
+VAR
+	currentNode : I_OrderedDictionaryTreeNode;
+	nextNode : I_OrderedDictionaryTreeNode;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF rootNode = 0 THEN
+        <ST><![CDATA[IF head = 0 THEN
 	RETURN;
 END_IF
 
-THIS^.RecursiveClear(rootNode);
+currentNode := head;
+
+WHILE currentNode <> 0 DO
+	nextNode := currentNode.Next;
+	currentNode.Dispose();
+	currentNode := nextNode;
+END_WHILE
+
 head := 0;
 tail := 0;
 rootNode := 0;
@@ -354,36 +364,6 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="RecursiveClear" Id="{4c9fa090-e6a9-0409-0793-1d27feab7968}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE RecursiveClear
-VAR_INPUT
-	Node : I_OrderedDictionaryTreeNode;
-END_VAR
-VAR
-	thisNodeKey : T_MAXSTRING;
-	leftNodeKey : T_MAXSTRING;
-	rightNodeKey : T_MAXSTRING;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF (Node = 0) THEN
-	RETURN;
-END_IF
-
-thisNodeKey := Node.key;
-
-IF (Node.Left <> 0) THEN
-	leftNodeKey := Node.Left.key;
-END_IF
-
-IF (Node.Right <> 0) THEN
-	rightNodeKey := Node.Right.key;
-END_IF
-
-RecursiveClear(Node.Left);
-RecursiveClear(Node.Right);
-Node.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="RecursiveCountNodes" Id="{198b0f8e-1e8a-01c8-2f79-41e5fa0988f7}" FolderPath="Private\">

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="MobjectDatatypesUnitTests" Id="{b716a62d-e363-0cde-3529-ab22dc768e65}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MobjectDatatypesUnitTests
 VAR
@@ -31,7 +31,6 @@ VAR
 	
 	aliasDatatype_TestSuite : AliasDatatype_TestSuite;
 	datatype_TestSuite : Datatype_TestSuite;
-	numericDatatype_TestSuite : NumericDatatype_TestSuite;
 	structuredDatatype_TestSuite : StructuredDatatype_TestSuite;
 	enumDatatype_TestSuite : EnumDatatype_TestSuite;
 END_VAR

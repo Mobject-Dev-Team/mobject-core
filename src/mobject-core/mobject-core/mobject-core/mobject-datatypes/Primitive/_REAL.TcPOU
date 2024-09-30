@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="_REAL" Id="{af81a63e-8d6e-4e13-82c4-cea7a6a90fcc}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -59,6 +59,17 @@ END_VAR
         <ST><![CDATA[localData := InitialValue;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="IsEven" Id="{f3c95207-e52d-0b33-2b8c-6a386092c932}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsEven : BOOL]]></Declaration>
+      <Get Name="Get" Id="{bc8920a8-316b-05aa-2f51-9b7748d798e8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsEven := FALSE;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="IsFloat" Id="{998b1d60-f10c-42fb-b209-cf23d7265113}">
       <Declaration><![CDATA[PROPERTY PUBLIC IsFloat : BOOL]]></Declaration>
       <Get Name="Get" Id="{be19ae7d-1782-4f2a-8715-2bfe73b1c92e}">
@@ -67,6 +78,17 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[IsFloat := TRUE;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="IsOdd" Id="{5637e9ea-f0b6-0afe-0d94-d5b5f8d6839c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsOdd : BOOL]]></Declaration>
+      <Get Name="Get" Id="{2ea49729-5bdd-0763-18c2-5ef05ee16ce7}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsOdd := FALSE;]]></ST>
         </Implementation>
       </Get>
     </Property>

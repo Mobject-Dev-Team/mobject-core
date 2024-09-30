@@ -19,7 +19,7 @@
     <Company>mobject</Company>
     <Released>false</Released>
     <Title>mobject-core</Title>
-    <ProjectVersion>0.3.0</ProjectVersion>
+    <ProjectVersion>0.4.0</ProjectVersion>
     <DefaultNamespace>mobject-core</DefaultNamespace>
     <Author>mobject dev team</Author>
     <Placeholder>mobject-core</Placeholder>
@@ -60,7 +60,6 @@
     <Folder Include="mobject-collections\_Internal\LinkedList\Enumerator" />
     <Folder Include="mobject-collections\_Internal\LinkedList\Node" />
     <Folder Include="mobject-collections\_Internal\List" />
-    <Folder Include="mobject-collections\_Internal\List\Enumerator" />
     <Folder Include="mobject-collections\_Internal\List\Node" />
     <Folder Include="mobject-collections\_Internal\OrderedDictionary" />
     <Folder Include="mobject-collections\_Internal\OrderedDictionary\Enumerator" />
@@ -97,7 +96,6 @@
     <Folder Include="mobject-datatypes\DatatypeOperations" />
     <Folder Include="mobject-datatypes\DatatypeOperations\Collection" />
     <Folder Include="mobject-datatypes\DatatypeOperations\Interface" />
-    <Folder Include="mobject-datatypes\DatatypePack" />
     <Folder Include="mobject-datatypes\Datatypes" />
     <Folder Include="mobject-datatypes\Datatypes\Base" />
     <Folder Include="mobject-datatypes\Datatypes\Events" />
@@ -250,9 +248,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-collections\_Internal\LinkedList\Node\LinkedListNode.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="mobject-collections\_Internal\List\Enumerator\ListForwardEnumerator.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-collections\_Internal\List\Node\ListNode.TcPOU">
@@ -1567,9 +1562,6 @@
     <Compile Include="mobject-datatypes\DatatypeOperations\WriteBoolToBitOperation.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="mobject-datatypes\DatatypePack\I_DatatypePack.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="mobject-datatypes\Datatypes\Base\Datatypes.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -1595,9 +1587,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Functions\GetByteOffset.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="mobject-datatypes\PrimitiveDatatypePack.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Primitive\_BIT.TcPOU">
@@ -1900,6 +1889,32 @@
     <PlaceholderReference Include="Tc2_System">
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
+      <Parameters>
+        <Parameter ListName="PARAM" xmlns="">
+          <Key>TABLE_UPPER_BOUND</Key>
+          <Value>15</Value>
+        </Parameter>
+        <Parameter ListName="PARAM" xmlns="">
+          <Key>STRING_LENGTH_EXP</Key>
+          <Value>255</Value>
+        </Parameter>
+        <Parameter ListName="PARAM" xmlns="">
+          <Key>STRING_LENGTH_ADDRESS</Key>
+          <Value>20</Value>
+        </Parameter>
+        <Parameter ListName="PARAM" xmlns="">
+          <Key>STRING_LENGTH_COMMENT</Key>
+          <Value>255</Value>
+        </Parameter>
+        <Parameter ListName="PARAM" xmlns="">
+          <Key>STRING_LENGTH_OUTSTRING</Key>
+          <Value>255</Value>
+        </Parameter>
+        <Parameter ListName="PARAM" xmlns="">
+          <Key>TABLE_SHOW_VALID_ITEMS</Key>
+          <Value>FALSE</Value>
+        </Parameter>
+      </Parameters>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_DynamicMemory">
       <DefaultResolution>Tc3_DynamicMemory, * (Beckhoff Automation GmbH)</DefaultResolution>
