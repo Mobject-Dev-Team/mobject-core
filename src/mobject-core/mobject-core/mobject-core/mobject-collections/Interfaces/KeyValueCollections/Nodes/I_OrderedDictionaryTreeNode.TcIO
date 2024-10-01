@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <Itf Name="I_OrderedDictionaryTreeNode" Id="{d5d62f45-96b7-07d3-109a-d6cbeaa79661}">
     <Declaration><![CDATA[INTERFACE I_OrderedDictionaryTreeNode EXTENDS I_CollectionNode
 ]]></Declaration>
-    <Method Name="Clone" Id="{e057c1a8-7f0b-0cea-3266-8298564083f2}">
-      <Declaration><![CDATA[METHOD PUBLIC Clone
+    <Method Name="DeepCopy" Id="{e057c1a8-7f0b-0cea-3266-8298564083f2}">
+      <Declaration><![CDATA[METHOD PUBLIC DeepCopy
 VAR_INPUT
 	Node : I_OrderedDictionaryTreeNode;
 END_VAR

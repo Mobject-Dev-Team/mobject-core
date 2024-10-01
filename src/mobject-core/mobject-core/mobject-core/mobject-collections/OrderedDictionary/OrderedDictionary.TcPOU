@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="OrderedDictionary" Id="{3a0f6e79-8c73-094c-24f5-56716778979f}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -71,17 +71,25 @@ END_REPEAT;]]></ST>
 VAR_INPUT
 	Node : I_OrderedDictionaryTreeNode;
 END_VAR
+VAR
+	originalTailNode : I_OrderedDictionaryTreeNode;
+END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF head = 0 THEN
 	head := Node;
 	tail := Node;
+	Node.Previous := 0;
+	Node.Next := 0;
 	RETURN;
 END_IF
 
-Node.Previous := tail;
-Node.Previous.Next := Node;
-tail := Node;]]></ST>
+originalTailNode := tail;
+tail := Node;
+
+originalTailNode.Next := node;
+tail.Previous := originalTailNode;
+tail.Next := 0;]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddOrUpdate" Id="{88e9530d-854f-0a2c-0b74-1ac1c3168456}">
@@ -183,23 +191,19 @@ Count := NodeCount;]]></ST>
     <Method Name="EmitChangedEvent" Id="{9c9204fa-78f0-0852-0fac-f4b73ba8e128}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE EmitChangedEvent
 VAR
-	pDictionaryChangedEvent : POINTER TO KeyValueCollectionChangedEvent;
+	dictionaryChangedEvent : KeyValueCollectionChangedEvent(Target := THIS^);
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pDictionaryChangedEvent := __NEW(KeyValueCollectionChangedEvent(Target := THIS^));
-eventEmitter.Emit('OnChanged', pDictionaryChangedEvent^);
-pDictionaryChangedEvent^.Dispose();]]></ST>
+        <ST><![CDATA[eventEmitter.Emit('OnChanged', dictionaryChangedEvent);]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitDisposedEvent" Id="{6bb0754d-ede2-09e4-32b0-3953fdf92cee}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE EmitDisposedEvent
 VAR
-	pDictionaryDisposedEvent : POINTER TO KeyValueCollectionDisposedEvent;
+	dictionaryDisposedEvent : KeyValueCollectionDisposedEvent(Target := THIS^);
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pDictionaryDisposedEvent := __NEW(KeyValueCollectionDisposedEvent(Target := THIS^));
-eventEmitter.Emit('OnDisposed', pDictionaryDisposedEvent^);
-pDictionaryDisposedEvent^.Dispose();]]></ST>
+        <ST><![CDATA[eventEmitter.Emit('OnDisposed', dictionaryDisposedEvent);]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_exit" Id="{bce606e7-00a7-0e8f-0878-40e0854eecf4}" FolderPath="Destructor\">
@@ -419,8 +423,8 @@ ELSE
         RETURN;
     ELSE
         minValueNode := FindMinimum(Node.Right);
-        Node.Clone(minValueNode);
-		ReplaceClonedNodeInOrder(Node, minValueNode);
+        Node.DeepCopy(minValueNode);
+		ReplaceCopiedNodeInOrder(Node, minValueNode);
         Node.Right := THIS^.RecursiveDelete(minValueNode.Key, Node.Right);	
     END_IF
 END_IF
@@ -505,29 +509,52 @@ EmitChangedEvent();]]></ST>
 VAR_INPUT
 	Node : I_OrderedDictionaryTreeNode;
 END_VAR
+VAR
+	nodeBefore : I_OrderedDictionaryTreeNode; 
+	nodeAfter : I_OrderedDictionaryTreeNode;
+END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Node = head AND Node.Next = 0 THEN
+        <ST><![CDATA[// if the node is the head and has no further nodes following it, then it must
+// be the only node in the collection.  As such, set head, tail as 0.
+IF Node = head AND Node.Next = 0 THEN
 	head := 0;
-	tail := 0; 
+	tail := 0;
+	Node.Previous := 0;
+	Node.Next := 0;
 	RETURN;
 END_IF
 
+// if the node is the tail and has no further nodes before it, then it must
+// be the only node in the collection (this condition should never actually happen).
+// As such, set head, tail as 0.
 IF Node = tail AND Node.Previous = 0 THEN
 	head := 0;
 	tail := 0; 
+	Node.Previous := 0;
+	Node.Next := 0;
 	RETURN;
 END_IF
 
+// if the node is at the start of more than one node, then
+// make the next in line the head, and remove it's knowlege of
+// the node being removed.
 IF Node = head THEN
 	Node.Next.Previous := 0;
 	head := Node.Next;
+	Node.Previous := 0;
+	Node.Next := 0;
 	RETURN;
 END_IF
 
+// if the node is at the end of more than one node, then
+// make the previous in line the tail, and remove it's knowlege of
+// the node being removed.
 IF Node = tail THEN
 	Node.Previous.Next := 0;
 	tail := Node.Previous;
+	Node.Previous := 0;
+	Node.Next := 0;
 	RETURN;
 END_IF
 
@@ -535,32 +562,42 @@ END_IF
 // but will have had the previous and next removed. Therefore only true deletes
 // will have these set.
 IF Node.Previous <> 0 AND Node.Next <> 0 THEN
-	Node.Previous.Next := Node.Next;
-	Node.Next.Previous := Node.Previous;
+	nodeBefore := Node.Previous;
+	nodeAfter := Node.Next;	
+	nodeBefore.Next := nodeAfter;
+	nodeAfter.Previous := nodeBefore;
+	Node.Next := 0;
+	Node.Previous := 0;
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ReplaceClonedNodeInOrder" Id="{b96cda98-5c9a-0a02-2961-3fef18a1ade7}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE ReplaceClonedNodeInOrder
+    <Method Name="ReplaceCopiedNodeInOrder" Id="{b96cda98-5c9a-0a02-2961-3fef18a1ade7}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE ReplaceCopiedNodeInOrder
 VAR_INPUT
 	NodeCloned : I_OrderedDictionaryTreeNode;
 	NodeToBeRemoved : I_OrderedDictionaryTreeNode;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NodeToBeRemoved = head THEN
+        <ST><![CDATA[// if the node being removed was the head, then make the new clone as the head. 
+IF NodeToBeRemoved = head THEN
 	head := NodeCloned;
 END_IF
 
+// if the node being removed was the tail, then make the new clone as the tail.
 IF NodeToBeRemoved = tail THEN
 	tail := NodeCloned;
 END_IF
 
+// if the node has a previous link, then that previous node will need to know that this
+// clone node is now its correct next
 IF NodeCloned.Previous <> 0 THEN
 	NodeCloned.Previous.Next := NodeCloned;
 END_IF
 NodeToBeRemoved.Previous := 0;
 
+// if the node has a next link, then that next node will need to know that this
+// clone node is now its correct previous
 IF NodeCloned.Next <> 0 THEN
 	NodeCloned.Next.Previous := NodeCloned;
 END_IF
