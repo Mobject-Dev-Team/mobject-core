@@ -1,0 +1,449 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="_GUID_TestSuite" Id="{86362315-ac44-405b-8f45-fc31e0929c95}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK _GUID_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestAddress();
+TestClearReference();
+TestClone();
+TestTypeNameReturnsExpected();
+TestIdentifierReturnsExpected();
+TestMakeReferenceToFollowsReference();
+TestMakeReferenceToUpdatesReference();
+TestSize();
+TestValueReturnsExpectedAfterChange();
+TestSerializeTypeWith();
+TestSerializeWith();
+TestTryDeserializeFrom();
+TestTryMakeReferenceToFollowsReference();
+TestTryMakeReferenceToUpdatesReference();
+]]></ST>
+    </Implementation>
+    <Method Name="TestAddress" Id="{86985230-4a84-4372-9c1b-1828ca1a1abf}">
+      <Declaration><![CDATA[METHOD PUBLIC TestAddress
+VAR
+    _type : _GUID;
+    notExpected : PVOID := 0;
+    actual : PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestAddress');
+
+actual := _type.Address;
+
+AssertFalse(
+    Condition := (notExpected = actual),
+    Message := 'Type did not return a valid address.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestClearReference" Id="{4a2c2bb8-518c-401a-9886-a6b8a709ce54}">
+      <Declaration><![CDATA[METHOD PUBLIC TestClearReference
+VAR
+    _type : _GUID;
+	target : GUID;
+    expected : GUID;
+    actual : GUID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestClearReference');
+
+_type.MakeReferenceTo(target);
+_type.ClearReference();
+target.Data1 := 123;
+
+actual := _type.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not follow target change'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestClone" Id="{b4e87097-83ba-457e-aa60-707118b418af}">
+      <Declaration><![CDATA[METHOD PUBLIC TestClone
+VAR
+    _type : _GUID;
+	clone : I_Datatype;
+	isValidClone : BOOL;
+	compareResult : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestClone');
+
+clone := _type.Clone();
+
+isValidClone := clone <> 0;
+
+IF isValidClone THEN
+	compareResult := memcmp(_type.Address, clone.Address, clone.Size);
+END_IF
+
+AssertTrue(
+	Condition := isValidClone,
+	Message := 'Clone did not produce a clone'
+);
+
+AssertEquals_DINT(
+	Expected := 0,
+    Actual := compareResult,
+    Message := 'Clone did not return a valid clone.'
+);
+
+clone.Dispose();
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIdentifierReturnsExpected" Id="{4daa1399-43aa-4261-a559-2dead81f0382}">
+      <Declaration><![CDATA[METHOD PUBLIC TestIdentifierReturnsExpected
+VAR
+    _type : _GUID;
+    expected : STRING := 'GUID';
+    actual : STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIdentifierReturnsExpected');
+
+actual := _type.Identifier;
+
+AssertEquals_STRING(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Type did not return correct iec type.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMakeReferenceToFollowsReference" Id="{c7b6e98d-2fc5-4605-92bb-ce3c2ada8d10}">
+      <Declaration><![CDATA[METHOD PUBLIC TestMakeReferenceToFollowsReference
+VAR
+    _type : _GUID;
+	target : GUID;
+    expected : GUID := (Data1 := 1, Data2 := 2, Data3 := 3, Data4 := [4,5,6,7,8,9,10,11]);
+    actual : GUID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestMakeReferenceToFollowsReference');
+
+_type.MakeReferenceTo(target);
+target.Data1 := 1;
+target.Data2 := 2;
+target.Data3 := 3;
+target.Data4[0] := 4;
+target.Data4[1] := 5;
+target.Data4[2] := 6;
+target.Data4[3] := 7;
+target.Data4[4] := 8;
+target.Data4[5] := 9;
+target.Data4[6] := 10;
+target.Data4[7] := 11;
+
+actual := _type.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not follow target change'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMakeReferenceToUpdatesReference" Id="{a786d1c2-44b8-406e-a8c6-9ad715f46449}">
+      <Declaration><![CDATA[METHOD PUBLIC TestMakeReferenceToUpdatesReference
+VAR
+    _type : _GUID;
+	target : GUID;
+    expected : GUID := (Data1 := 1, Data2 := 2, Data3 := 3, Data4 := [4,5,6,7,8,9,10,11]);
+    actual : GUID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestMakeReferenceToUpdatesReference');
+
+_type.MakeReferenceTo(target);
+_type.Data1.Value := 1;
+_type.Data2.Value := 2;
+_type.Data3.Value := 3;
+_type.Data4.Value[0] := 4;
+_type.Data4.Value[1] := 5;
+_type.Data4.Value[2] := 6;
+_type.Data4.Value[3] := 7;
+_type.Data4.Value[4] := 8;
+_type.Data4.Value[5] := 9;
+_type.Data4.Value[6] := 10;
+_type.Data4.Value[7] := 11;
+
+actual := target;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not update target'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSerializeTypeWith" Id="{c5edefda-361b-41fd-a468-9f690abe26eb}">
+      <Declaration><![CDATA[METHOD PUBLIC TestSerializeTypeWith
+VAR
+    _type : _GUID;
+    serializer : JsonSerializer;
+    expected : STRING(1000) := '{"typeName":"STRUCT","identifier":"GUID","members":{"Data1":{"typeName":"DWORD","minValue":0,"maxValue":4294967295,"isSigned":false,"isFloat":false},"Data2":{"typeName":"WORD","minValue":0,"maxValue":65535,"isSigned":false,"isFloat":false},"Data3":{"typeName":"WORD","minValue":0,"maxValue":65535,"isSigned":false,"isFloat":false},"Data4":{"typeName":"ARRAY","identifier":"ARRAY [0..7] OF BYTE","baseType":{"typeName":"BYTE","minValue":0,"maxValue":255,"isSigned":false,"isFloat":false}}}}';
+    actual : STRING(1000);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestSerializeTypeWith');
+
+serializer.Reset();
+_type.SerializeTypeWith(serializer);
+serializer.TryGetSerializedData(ADR(actual), SIZEOF(actual));
+
+AssertEquals_STRING(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Serialization of type did not return correct string.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSerializeWith" Id="{a40538cb-e1dc-44bc-b6c1-64f7c38da9a5}">
+      <Declaration><![CDATA[METHOD PUBLIC TestSerializeWith
+VAR
+    _type : _GUID;
+    serializer : JsonSerializer;
+    expected : STRING(500) := '{"Data1":1,"Data2":2,"Data3":3,"Data4":[4,5,6,7,8,9,10,11]}';
+    actual : STRING(500);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestSerializeWith');
+
+_type.Data1.Value := 1;
+_type.Data2.Value := 2;
+_type.Data3.Value := 3;
+_type.Data4.Value[0] := 4;
+_type.Data4.Value[1] := 5;
+_type.Data4.Value[2] := 6;
+_type.Data4.Value[3] := 7;
+_type.Data4.Value[4] := 8;
+_type.Data4.Value[5] := 9;
+_type.Data4.Value[6] := 10;
+_type.Data4.Value[7] := 11;
+
+serializer.Reset();
+_type.SerializeWith(serializer);
+serializer.TryGetSerializedData(ADR(actual), SIZEOF(actual));
+
+AssertEquals_STRING(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Serialization of type data did not return correct string.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSize" Id="{92be914d-d326-40b7-a4dc-28000a5fc185}">
+      <Declaration><![CDATA[METHOD PUBLIC TestSize
+VAR
+    _type : _GUID;
+    expected : UDINT := SIZEOF(GUID);
+    actual : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestSize');
+
+actual := _type.Size;
+
+AssertEquals_UDINT(
+    Expected := Expected,
+    Actual := actual,
+    Message := 'Type did not return the correct size.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryDeserializeFrom" Id="{15d2c978-497e-4da4-9a9d-57ba3fbb0976}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryDeserializeFrom
+VAR
+    deserializer : JsonDeserializer;
+    feedback : DeserializerFeedback;
+    json : STRING(500) := '{"Data1":1,"Data2":2,"Data3":3,"Data4":[4,5,6,7,8,9,10,11]}';
+    _type : _GUID;
+    expected : GUID := (Data1 := 1, Data2 := 2, Data3 := 3, Data4 := [4,5,6,7,8,9,10,11]);
+    actual : GUID;
+ END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryDeserializeFrom');
+
+deserializer.Reset();
+deserializer.TryLoad(json);
+_type.TryDeserializeFrom(Deserializer, Feedback);
+
+actual := _type.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Type did not deserialize correctly.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryMakeReferenceToFollowsReference" Id="{7f301344-cd5a-4826-acdd-c0542c64c679}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryMakeReferenceToFollowsReference
+VAR
+    _type : _GUID;
+	target : _GUID;
+    expected : GUID := (Data1 := 1, Data2 := 2, Data3 := 3, Data4 := [4,5,6,7,8,9,10,11]);
+    actual : GUID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryMakeReferenceToFollowsReference');
+
+_type.TryMakeReferenceTo(target);
+target.Data1.Value := 1;
+target.Data2.Value := 2;
+target.Data3.Value := 3;
+target.Data4.Value[0] := 4;
+target.Data4.Value[1] := 5;
+target.Data4.Value[2] := 6;
+target.Data4.Value[3] := 7;
+target.Data4.Value[4] := 8;
+target.Data4.Value[5] := 9;
+target.Data4.Value[6] := 10;
+target.Data4.Value[7] := 11;
+
+actual := _type.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not follow target change'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryMakeReferenceToUpdatesReference" Id="{c5278185-cce2-4359-8e70-1bec7e4b03e1}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryMakeReferenceToUpdatesReference
+VAR
+    _type : _GUID;
+	target : _GUID;
+    expected : GUID := (Data1 := 1, Data2 := 2, Data3 := 3, Data4 := [4,5,6,7,8,9,10,11]);
+    actual : GUID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryMakeReferenceToUpdatesReference');
+
+_type.TryMakeReferenceTo(target);
+_type.Data1.Value := 1;
+_type.Data2.Value := 2;
+_type.Data3.Value := 3;
+_type.Data4.Value[0] := 4;
+_type.Data4.Value[1] := 5;
+_type.Data4.Value[2] := 6;
+_type.Data4.Value[3] := 7;
+_type.Data4.Value[4] := 8;
+_type.Data4.Value[5] := 9;
+_type.Data4.Value[6] := 10;
+_type.Data4.Value[7] := 11;
+
+actual := target.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not update target'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTypeNameReturnsExpected" Id="{47f31dcd-87eb-4239-8c77-bc213b6c86a3}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTypeNameReturnsExpected
+VAR
+    _type : _GUID;
+    expected : STRING := 'STRUCT';
+    actual : STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTypeNameReturnsExpected');
+
+actual := _type.TypeName;
+
+AssertEquals_STRING(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Type did not return correct iec type.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestValueReturnsExpectedAfterChange" Id="{e59946fc-3986-42b6-b65c-0ef4839546fe}">
+      <Declaration><![CDATA[METHOD PUBLIC TestValueReturnsExpectedAfterChange
+VAR
+    _type : _GUID;
+	value : GUID := (Data1 := 1, Data2 := 2, Data3 := 3, Data4 := [4,5,6,7,8,9,10,11]);
+    expected : GUID := (Data1 := 1, Data2 := 2, Data3 := 3, Data4 := [4,5,6,7,8,9,10,11]);
+    actual : GUID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestValueReturnsExpectedAfterChange');
+
+_type.Value := value;
+actual := _type.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Expected value not returned after change.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

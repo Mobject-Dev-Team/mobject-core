@@ -6,6 +6,7 @@
 - Moved datatype pack to mobject-graph as this was not common to mobject-datatypes
 - Added .IsOdd and .IsEven to numeric data type
 - Removed List due to compatibility issues with 4026.62. This will return once fixed.
+- Added support for Arrays
 
 ## v0.3.0-beta
 

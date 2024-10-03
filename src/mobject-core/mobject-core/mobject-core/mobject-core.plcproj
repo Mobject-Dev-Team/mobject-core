@@ -102,7 +102,9 @@
     <Folder Include="mobject-datatypes\Datatypes\Interface" />
     <Folder Include="mobject-datatypes\DatatypeVisitor" />
     <Folder Include="mobject-datatypes\Functions" />
+    <Folder Include="mobject-datatypes\Structures" />
     <Folder Include="mobject-datatypes\Primitive" />
+    <Folder Include="mobject-datatypes\Primitive\Arrays" />
     <Folder Include="mobject-datatypes\_Internal" />
     <Folder Include="mobject-datatypes\_Internal\Datatype" />
     <Folder Include="mobject-datatypes\_Internal\Datatype\Interface" />
@@ -1580,6 +1582,9 @@
     <Compile Include="mobject-datatypes\Datatypes\Events\I_StructuredDatatypeAddedEvent.TcIO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-datatypes\Datatypes\Events\I_ArrayDatatypeAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="mobject-datatypes\Datatypes\Interface\I_Datatypes.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -1587,6 +1592,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Functions\GetByteOffset.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Arrays\_Array0to10OfBool.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Arrays\_Array0To7OfByte.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Primitive\_BIT.TcPOU">
@@ -1649,6 +1660,9 @@
     <Compile Include="mobject-datatypes\Primitive\_WORD.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-datatypes\Structures\_GUID.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\AliasDatatypeBase.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -1682,6 +1696,9 @@
     <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_StructuredDatatype.TcIO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_ArrayDatatype.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_UserDefinedDatatype.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -1689,6 +1706,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\StructuredDatatypeBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\_Internal\Datatype\ArrayDatatypeBase.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\UserDefinedDatatypeBase.TcPOU">
@@ -1710,6 +1730,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\Events\StructuredDatatypeAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\_Internal\Events\ArrayDatatypeAddedEvent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\StructureMembers\Host\StructureMemberHost.TcPOU">

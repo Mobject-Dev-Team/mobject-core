@@ -177,6 +177,12 @@
     <Compile Include="mobject-datatypes\Tests\StructuredDatatype_TestSuite.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-datatypes\Tests\_Array0to10OfBool_TestSuite.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Tests\_Array0to7OfByte_TestSuite.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="mobject-datatypes\Tests\_BIT_UsingMockStructure_TestSuite.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -214,6 +220,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Tests\_STRING_TestSuite.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Tests\_GUID_TestSuite.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Tests\_TIME_OF_DAY_TestSuite.TcPOU">

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <Itf Name="I_Datatype" Id="{51a69d2e-c0c1-0516-1d53-b6243b074c1e}">
     <Declaration><![CDATA[INTERFACE I_Datatype extends I_Serializable, I_Deserializable, I_Disposable]]></Declaration>
     <Method Name="Accept" Id="{8aab0540-3d70-0faa-342b-c9c8c7ecf3f8}">
@@ -72,6 +72,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Method Name="TryResolveAsArrayDatatype" Id="{74006f09-9d91-0e4d-1ae0-25993365fb62}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsArrayDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ArrayDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
     <Method Name="TryResolveAsBitDatatype" Id="{9f36dfa4-8831-46bb-bdc9-fdf9ebc483d0}">
       <Declaration><![CDATA[METHOD PUBLIC TryResolveAsBitDatatype : BOOL
 VAR_INPUT
@@ -97,6 +104,13 @@ END_VAR
       <Declaration><![CDATA[METHOD PUBLIC TryResolveAsStructuredDatatype : BOOL
 VAR_INPUT
 	Destination : REFERENCE TO I_StructuredDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAsUserDefinedDatatype" Id="{0efa9daa-b710-062c-3175-5c105a49bacd}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsUserDefinedDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_UserDefinedDatatype;
 END_VAR
 ]]></Declaration>
     </Method>

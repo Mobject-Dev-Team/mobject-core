@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="DatatypeBase" Id="{f1308857-8bde-075c-0685-2da651a42b2c}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -144,6 +144,16 @@ END_VAR
         <ST><![CDATA[TryResolveAsAliasDatatype := FALSE;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="TryResolveAsArrayDatatype" Id="{30b577e4-a5a9-0090-390e-84b82bd73576}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsArrayDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ArrayDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAsArrayDatatype := FALSE;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryResolveAsBitDatatype" Id="{808046e5-2e02-482b-a556-e5322d066789}">
       <Declaration><![CDATA[METHOD PUBLIC TryResolveAsBitDatatype : BOOL
 VAR_INPUT
@@ -182,6 +192,16 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[TryResolveAsStructuredDatatype := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAsUserDefinedDatatype" Id="{ff7189b5-7f3d-0b97-2481-74b3c62fe664}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsUserDefinedDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_UserDefinedDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAsUserDefinedDatatype := FALSE;]]></ST>
       </Implementation>
     </Method>
     <Property Name="TypeName" Id="{01acfbde-fc19-0891-0625-93e10e4849b9}">

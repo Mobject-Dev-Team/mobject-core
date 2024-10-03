@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="UserDefinedDatatypeBase" Id="{fd645b0d-4a81-0ada-1363-d0e819ed505d}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -62,6 +62,17 @@ IF sourceAsUdt.Identifier <> Identifier THEN
 END_IF
 
 TryCopyFrom := SUPER^.TryCopyFrom(Source);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAsUserDefinedDatatype" Id="{17304df6-1666-0527-3373-79f0c5b364f7}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsUserDefinedDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_UserDefinedDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Destination := THIS^;
+TryResolveAsUserDefinedDatatype := TRUE;]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -29,6 +29,14 @@ VAR
     //_LDATE, LDATE_AND_TIME, _LDT, LTIME_OF_DAY & _LTOD require TC build >=4026.0
     _STRING_TestSuite : _STRING_TestSuite;
 	
+	// array testing
+	_Array0to10OfBool_TestSuite : _Array0to10OfBool_TestSuite;
+	_Array0to7OfByte_TestSuite : _Array0to7OfByte_TestSuite;
+	
+	// structures
+	_GUID_TestSuite : _GUID_TestSuite;
+	
+	// base type testing
 	aliasDatatype_TestSuite : AliasDatatype_TestSuite;
 	datatype_TestSuite : Datatype_TestSuite;
 	structuredDatatype_TestSuite : StructuredDatatype_TestSuite;

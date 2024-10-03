@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="ArrayDatatypeBase" Id="{991b8878-a517-02d7-2a23-e8a5c4d992bd}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ABSTRACT ArrayDatatypeBase EXTENDS UserDefinedDatatypeBase IMPLEMENTS I_ArrayDatatype
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Private" Id="{a0b3f2c8-538b-0d38-2337-b28ef79dc85d}" />
+    <Folder Name="Protected" Id="{63cbfb38-749c-0fb5-2a44-a437ca7a7a1f}" />
+    <Property Name="BaseDatatype" Id="{e7cc5988-3f2b-0d88-33df-f9d96da8e186}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ABSTRACT BaseDatatype : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{d831321b-2565-0f88-0f30-441c93e1dfda}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="CreateEnumError" Id="{939e184c-64cf-002a-3378-ba72004e5620}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateEnumError : I_Error
+VAR_INPUT
+	Enum : T_MAXSTRING;
+END_VAR
+VAR
+	pError : POINTER TO UnknownEnumerationError;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pError := __NEW(UnknownEnumerationError(EnumString := Enum));
+CreateEnumError := pError^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetElementAsDatatypeByIndex" Id="{72faebb8-2123-0fbb-3cbb-f1f40ed95eb1}">
+      <Declaration><![CDATA[METHOD PUBLIC ABSTRACT GetElementAsDatatypeByIndex : I_Datatype
+VAR_INPUT
+	Index : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Identifier" Id="{2fb82553-7435-463b-94b6-edc871a50638}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Identifier : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{3f40e6ca-bcce-4ae5-ab8f-039359f2d5b2}">
+        <Declaration><![CDATA[VAR
+	baseTypeAsUdt : I_UserDefinedDatatype;
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Identifier := Concat('ARRAY [', DINT_TO_STRING(LowerBound));
+Identifier := Concat(Identifier,'..');
+Identifier := Concat(Identifier, DINT_TO_STRING(UpperBound));
+Identifier := Concat(Identifier, '] OF ');
+
+IF BaseDatatype.TryResolveAsUserDefinedDatatype(baseTypeAsUdt) THEN
+	Identifier := Concat(Identifier, baseTypeAsUdt.Identifier);
+ELSE
+	Identifier := Concat(Identifier, BaseDatatype.TypeName);
+END_IF]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Length" Id="{c8df4437-652c-04b8-35c6-4856f897a24a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Length : UDINT]]></Declaration>
+      <Get Name="Get" Id="{a600413a-c09c-0e5c-1f92-3e6a4da4c8af}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Length := ABS(UpperBound - LowerBound) + 1;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="LowerBound" Id="{43a0e3e3-ac35-0ef5-2f1e-26f71eb718d0}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ABSTRACT LowerBound : DINT]]></Declaration>
+      <Get Name="Get" Id="{56ab5231-520a-0a94-1273-57edd813d82b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="OnSerializeArrayValues" Id="{9b19600a-3aab-0e34-2593-3ab26ca49a5c}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED ABSTRACT OnSerializeArrayValues
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnSerializeTypeWith" Id="{1912559b-ea52-07bd-3eb2-f36f75f918bc}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED OnSerializeTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.OnSerializeTypeWith(Serializer);
+SerializeBaseType(Serializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeBaseType" Id="{17ec54ac-5ca8-0857-3bd8-63d2ae8f5f0d}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE SerializeBaseType
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF BaseDatatype = 0 THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('baseType');
+BaseDatatype.SerializeTypeWith(Serializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{684d239f-36a7-0f60-36e3-867125d46b0d}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartArray();
+OnSerializeArrayValues(Serializer);
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeArrayValues" Id="{c71a1318-b78e-07d7-099f-0801c70cb09d}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED ABSTRACT TryDeserializeArrayValues : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{02cc8c70-2927-0c70-1010-8e0f185e7fac}">
+      <Declaration><![CDATA[METHOD TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryDeserializeFrom := TryDeserializeArrayValues(Deserializer, Feedback);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAsArrayDatatype" Id="{36f0ff38-3d27-0156-1669-e3996fafb148}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsArrayDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ArrayDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Destination := THIS^;
+TryResolveAsArrayDatatype := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="TypeName" Id="{51bf05b3-954f-0c7d-072e-7f4beab269b3}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TypeName : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{3101e7aa-7e80-06b0-0ff0-1ad591f00d35}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TypeName := 'ARRAY';]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="UpperBound" Id="{14db03ff-dba9-0e53-21e8-bc01b8e34fca}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ABSTRACT UpperBound : DINT]]></Declaration>
+      <Get Name="Get" Id="{9e0fc847-9fa4-01ae-0e26-6e4d01cd70c0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

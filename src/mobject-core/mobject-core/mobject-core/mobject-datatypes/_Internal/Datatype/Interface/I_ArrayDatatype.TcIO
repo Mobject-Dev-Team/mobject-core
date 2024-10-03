@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <Itf Name="I_ArrayDatatype" Id="{a8e57a5b-bfda-0173-132d-0647d5e8567e}">
+    <Declaration><![CDATA[INTERFACE I_ArrayDatatype EXTENDS I_UserDefinedDatatype]]></Declaration>
+    <Method Name="GetElementAsDatatypeByIndex" Id="{973559c5-0f11-0686-04fe-e501bbe80023}">
+      <Declaration><![CDATA[METHOD PUBLIC ABSTRACT GetElementAsDatatypeByIndex : I_Datatype
+VAR_INPUT
+	Index : DINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="LowerBound" Id="{c1062beb-c4a3-003a-39cf-c3c367a6b714}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ABSTRACT LowerBound : DINT]]></Declaration>
+      <Get Name="Get" Id="{78acf8a9-4ffe-0e40-2dc2-422f83f59daf}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="UpperBound" Id="{5ae63db9-c190-0d5f-0ab8-5e27de73fc4c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ABSTRACT UpperBound : DINT]]></Declaration>
+      <Get Name="Get" Id="{b47b1dac-3851-0071-0198-64b6048be994}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>
