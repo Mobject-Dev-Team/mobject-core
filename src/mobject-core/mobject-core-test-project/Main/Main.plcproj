@@ -222,9 +222,6 @@
     <Compile Include="mobject-datatypes\Tests\_STRING_TestSuite.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="mobject-datatypes\Tests\_GUID_TestSuite.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="mobject-datatypes\Tests\_TIME_OF_DAY_TestSuite.TcPOU">
       <SubType>Code</SubType>
     </Compile>

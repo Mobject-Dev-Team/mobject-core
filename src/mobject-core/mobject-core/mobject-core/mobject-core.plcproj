@@ -102,7 +102,6 @@
     <Folder Include="mobject-datatypes\Datatypes\Interface" />
     <Folder Include="mobject-datatypes\DatatypeVisitor" />
     <Folder Include="mobject-datatypes\Functions" />
-    <Folder Include="mobject-datatypes\Structures" />
     <Folder Include="mobject-datatypes\Primitive" />
     <Folder Include="mobject-datatypes\Primitive\Arrays" />
     <Folder Include="mobject-datatypes\_Internal" />
@@ -1658,9 +1657,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Primitive\_WORD.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="mobject-datatypes\Structures\_GUID.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\AliasDatatypeBase.TcPOU">

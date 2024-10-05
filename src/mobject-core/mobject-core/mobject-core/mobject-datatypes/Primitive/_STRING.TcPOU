@@ -58,6 +58,17 @@ END_VAR
         <ST><![CDATA[localData := InitialValue;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="Length" Id="{c9d56f4f-ee17-0449-02c1-e3a9d251ff1d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Length : INT]]></Declaration>
+      <Get Name="Get" Id="{f089580b-037b-0d16-35a3-1a45c67fac9c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Length := len(activeData);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="MakeReferenceTo" Id="{d7e0dade-16b0-4e16-b510-1af01074c622}">
       <Declaration><![CDATA[METHOD PUBLIC MakeReferenceTo
 VAR_INPUT

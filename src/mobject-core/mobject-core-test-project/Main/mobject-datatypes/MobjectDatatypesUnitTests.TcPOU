@@ -33,8 +33,6 @@ VAR
 	_Array0to10OfBool_TestSuite : _Array0to10OfBool_TestSuite;
 	_Array0to7OfByte_TestSuite : _Array0to7OfByte_TestSuite;
 	
-	// structures
-	_GUID_TestSuite : _GUID_TestSuite;
 	
 	// base type testing
 	aliasDatatype_TestSuite : AliasDatatype_TestSuite;
