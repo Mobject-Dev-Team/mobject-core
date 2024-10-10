@@ -93,6 +93,7 @@
     <Folder Include="mobject-converters\Converters\ULINT_TO_" />
     <Folder Include="mobject-converters\Converters\USINT_TO_" />
     <Folder Include="mobject-converters\Converters\WORD_TO_" />
+    <Folder Include="mobject-datatypes\Examples" />
     <Folder Include="mobject-datatypes\DatatypeOperations" />
     <Folder Include="mobject-datatypes\DatatypeOperations\Collection" />
     <Folder Include="mobject-datatypes\DatatypeOperations\Interface" />
@@ -101,9 +102,10 @@
     <Folder Include="mobject-datatypes\Datatypes\Events" />
     <Folder Include="mobject-datatypes\Datatypes\Interface" />
     <Folder Include="mobject-datatypes\DatatypeVisitor" />
+    <Folder Include="mobject-datatypes\Examples\2DimArray" />
+    <Folder Include="mobject-datatypes\Examples\1DimArray" />
     <Folder Include="mobject-datatypes\Functions" />
     <Folder Include="mobject-datatypes\Primitive" />
-    <Folder Include="mobject-datatypes\Primitive\Arrays" />
     <Folder Include="mobject-datatypes\_Internal" />
     <Folder Include="mobject-datatypes\_Internal\Datatype" />
     <Folder Include="mobject-datatypes\_Internal\Datatype\Interface" />
@@ -153,6 +155,7 @@
     <Folder Include="mobject-constants" />
     <Folder Include="mobject-converters" />
     <Folder Include="mobject-commands" />
+    <Folder Include="mobject-debug" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="mobject-collections\Dictionary\Dictionary.TcPOU">
@@ -1545,6 +1548,13 @@
     <Compile Include="mobject-converters\Converters\WORD_TO_\TryConvert_WORD_TO_WORD.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-datatypes\Examples\2DimArray\_Array0to1_0to10OfBool.TcPOU">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="mobject-datatypes\Examples\1DimArray\_Array0to10OfBool.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="mobject-datatypes\DatatypeOperations\Collection\DatatypeOperations.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -1591,12 +1601,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Functions\GetByteOffset.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="mobject-datatypes\Primitive\Arrays\_Array0to10OfBool.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="mobject-datatypes\Primitive\Arrays\_Array0To7OfByte.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Primitive\_BIT.TcPOU">
@@ -1646,6 +1650,10 @@
     </Compile>
     <Compile Include="mobject-datatypes\Primitive\_UDINT.TcPOU">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\_PVOID.TcPOU">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="mobject-datatypes\Primitive\_UINT.TcPOU">
       <SubType>Code</SubType>
@@ -1934,6 +1942,36 @@
           <Value>FALSE</Value>
         </Parameter>
       </Parameters>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Parameters>
+        <Parameter ListName="PARAMETERLIST" xmlns="">
+          <Key>NMAXLICENSES</Key>
+          <Value>50</Value>
+        </Parameter>
+        <Parameter ListName="PARAMETERLIST" xmlns="">
+          <Key>NMAXLICENSEDEVICES</Key>
+          <Value>16</Value>
+        </Parameter>
+        <Parameter ListName="PARAMETERLIST" xmlns="">
+          <Key>NMAXCPUCOUNT</Key>
+          <Value>64</Value>
+        </Parameter>
+        <Parameter ListName="PARAMETERLIST" xmlns="">
+          <Key>CMAXCHARACTERS</Key>
+          <Value>16#FFFFFFF0</Value>
+        </Parameter>
+        <Parameter ListName="PARAMETERLIST" xmlns="">
+          <Key>NMAXFILESONDONGLE</Key>
+          <Value>20</Value>
+        </Parameter>
+        <Parameter ListName="PARAMETERLIST" xmlns="">
+          <Key>CMAXCSVFIELDVALUESIZE</Key>
+          <Value>255</Value>
+        </Parameter>
+      </Parameters>
+      <Namespace>Tc2_Utilities</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_DynamicMemory">
       <DefaultResolution>Tc3_DynamicMemory, * (Beckhoff Automation GmbH)</DefaultResolution>

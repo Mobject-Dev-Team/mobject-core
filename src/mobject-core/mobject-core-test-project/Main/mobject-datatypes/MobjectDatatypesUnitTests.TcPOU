@@ -31,7 +31,6 @@ VAR
 	
 	// array testing
 	_Array0to10OfBool_TestSuite : _Array0to10OfBool_TestSuite;
-	_Array0to7OfByte_TestSuite : _Array0to7OfByte_TestSuite;
 	
 	
 	// base type testing

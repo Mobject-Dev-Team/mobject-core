@@ -76,20 +76,31 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF head = 0 THEN
+        <ST><![CDATA[//LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Called with', Node);
+
+IF head = 0 THEN
 	head := Node;
 	tail := Node;
 	Node.Previous := 0;
 	Node.Next := 0;
+//	LogMsg('OrderedDictionary', 'AddNodeToEnd: Return, head = 0');
+//	LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Head is', head);
+//	LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Tail is', tail);
 	RETURN;
 END_IF
 
+//LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Original Tail was', tail);
 originalTailNode := tail;
 tail := Node;
+//LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Tail is now', tail);
 
 originalTailNode.Next := node;
+//LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Original Tail next is', originalTailNode.Next);
 tail.Previous := originalTailNode;
-tail.Next := 0;]]></ST>
+tail.Next := 0;
+//LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Tail previous is now', tail.Previous);
+
+//LogMsg('OrderedDictionary', 'AddNodeToEnd: Return');]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddOrUpdate" Id="{88e9530d-854f-0a2c-0b74-1ac1c3168456}">
@@ -127,7 +138,11 @@ ELSIF (balanceFactor < -1) THEN
 	Node := LeftRotate(Node);
 END_IF
 
-Balance := Node;]]></ST>
+Balance := Node;
+
+//LogMsg('OrderedDictionary', ': Called');
+//LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', ': RootNode is now', rootNode);
+//LogMsg('OrderedDictionary', ': Return');]]></ST>
       </Implementation>
     </Method>
     <Method Name="Clear" Id="{82793c0a-3844-07f1-1bda-f81d6a2b9624}">
@@ -416,15 +431,15 @@ ELSE
         ELSE
             newNode := Node.Left;
         END_IF
-		RemoveNode(Node);
+		RemoveNodeFromLinkedList(Node);
         Node.Dispose();
         THIS^.updateHeight(newNode);
         RecursiveDelete := THIS^.Balance(newNode);
         RETURN;
     ELSE
-        minValueNode := FindMinimum(Node.Right);
-        Node.DeepCopy(minValueNode);
-		ReplaceCopiedNodeInOrder(Node, minValueNode);
+		RemoveNodeFromLinkedList(Node);
+		minValueNode := FindMinimum(Node.Right);
+		ReplaceNodeInLinkedList(minValueNode, Node);
         Node.Right := THIS^.RecursiveDelete(minValueNode.Key, Node.Right);	
     END_IF
 END_IF
@@ -504,8 +519,8 @@ END_VAR
 EmitChangedEvent();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RemoveNode" Id="{aec656f0-304e-075a-3a17-6c96ad48bd7e}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE RemoveNode
+    <Method Name="RemoveNodeFromLinkedList" Id="{aec656f0-304e-075a-3a17-6c96ad48bd7e}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE RemoveNodeFromLinkedList
 VAR_INPUT
 	Node : I_OrderedDictionaryTreeNode;
 END_VAR
@@ -517,20 +532,9 @@ END_VAR
       <Implementation>
         <ST><![CDATA[// if the node is the head and has no further nodes following it, then it must
 // be the only node in the collection.  As such, set head, tail as 0.
-IF Node = head AND Node.Next = 0 THEN
+IF Node = head AND Node = tail THEN
 	head := 0;
 	tail := 0;
-	Node.Previous := 0;
-	Node.Next := 0;
-	RETURN;
-END_IF
-
-// if the node is the tail and has no further nodes before it, then it must
-// be the only node in the collection (this condition should never actually happen).
-// As such, set head, tail as 0.
-IF Node = tail AND Node.Previous = 0 THEN
-	head := 0;
-	tail := 0; 
 	Node.Previous := 0;
 	Node.Next := 0;
 	RETURN;
@@ -571,37 +575,41 @@ IF Node.Previous <> 0 AND Node.Next <> 0 THEN
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ReplaceCopiedNodeInOrder" Id="{b96cda98-5c9a-0a02-2961-3fef18a1ade7}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE ReplaceCopiedNodeInOrder
+    <Method Name="ReplaceNodeInLinkedList" Id="{b96cda98-5c9a-0a02-2961-3fef18a1ade7}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE ReplaceNodeInLinkedList
 VAR_INPUT
-	NodeCloned : I_OrderedDictionaryTreeNode;
-	NodeToBeRemoved : I_OrderedDictionaryTreeNode;
+	OldNode : I_OrderedDictionaryTreeNode;
+	NewNode : I_OrderedDictionaryTreeNode;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// if the node being removed was the head, then make the new clone as the head. 
-IF NodeToBeRemoved = head THEN
-	head := NodeCloned;
-END_IF
-
-// if the node being removed was the tail, then make the new clone as the tail.
-IF NodeToBeRemoved = tail THEN
-	tail := NodeCloned;
-END_IF
+        <ST><![CDATA[// copy everything from the old node to the new node.
+NewNode.DeepCopy(OldNode);
 
 // if the node has a previous link, then that previous node will need to know that this
-// clone node is now its correct next
-IF NodeCloned.Previous <> 0 THEN
-	NodeCloned.Previous.Next := NodeCloned;
+// ToNode is now its correct next as it will still be pointing to the old node.
+IF OldNode.Previous <> 0 THEN
+	OldNode.Previous.Next := NewNode;
 END_IF
-NodeToBeRemoved.Previous := 0;
+OldNode.Previous := 0;
 
 // if the node has a next link, then that next node will need to know that this
-// clone node is now its correct previous
-IF NodeCloned.Next <> 0 THEN
-	NodeCloned.Next.Previous := NodeCloned;
+// ToNode is now its correct next as it will still be pointing to the old node.
+IF OldNode.Next <> 0 THEN
+	OldNode.Next.Previous := NewNode;
 END_IF
-NodeToBeRemoved.Next := 0;]]></ST>
+OldNode.Next := 0;
+
+// if the head pointer was pointing at the old node then replace with new node.
+if head = OldNode then
+	head := NewNode;
+END_IF
+
+// if the tail pointer was pointing at the old node then replace with new node.
+if tail = OldNode then
+	tail := NewNode;
+END_IF
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="RightRotate" Id="{6bd10827-5457-098c-079a-45832b6a258c}" FolderPath="Private\">

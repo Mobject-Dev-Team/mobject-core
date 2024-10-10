@@ -79,7 +79,7 @@ END_VAR
         <ST><![CDATA[SetElementReference();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="GetElementAsDatatypeByIndex" Id="{41ffc0e8-9238-0421-3b6a-dc9998eb7a7e}" FolderPath="Core\">
+    <Method Name="GetElementAsDatatypeByIndex" Id="{0e15c8a3-ac86-0453-1aa9-31ad52185d0a}" FolderPath="Core\">
       <Declaration><![CDATA[METHOD PUBLIC GetElementAsDatatypeByIndex : I_Datatype
 VAR_INPUT
 	Index : DINT;
@@ -99,9 +99,9 @@ END_VAR
         <ST><![CDATA[GetElementByIndex REF= elements[Index];]]></ST>
       </Implementation>
     </Method>
-    <Property Name="LowerBound" Id="{79755980-6006-0a75-385f-b78a66d752b2}" FolderPath="Core\">
+    <Property Name="LowerBound" Id="{7880edb5-fa2d-0dac-0553-1fefd03d44b2}" FolderPath="Core\">
       <Declaration><![CDATA[PROPERTY PUBLIC LowerBound : DINT]]></Declaration>
-      <Get Name="Get" Id="{88808002-82dd-0dc4-2793-fa59da4815f7}">
+      <Get Name="Get" Id="{9fe561bb-b566-0924-262b-578d820a79c5}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -208,9 +208,9 @@ SetElementReference();
 TryMakeReferenceTo := TRUE;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="UpperBound" Id="{3b4a144a-e48e-0b1e-3b5a-9b5b197061e1}" FolderPath="Core\">
+    <Property Name="UpperBound" Id="{8476f69f-54ec-044d-047e-159700f17da9}" FolderPath="Core\">
       <Declaration><![CDATA[PROPERTY PUBLIC UpperBound : DINT]]></Declaration>
-      <Get Name="Get" Id="{d284c9c4-de64-05f6-1bda-7ead9884afd4}">
+      <Get Name="Get" Id="{7a4d714b-75a5-0c31-2bae-933caa3b9300}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
