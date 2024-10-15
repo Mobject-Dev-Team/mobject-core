@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
-  <POU Name="ArrayDatatypeBase" Id="{991b8878-a517-02d7-2a23-e8a5c4d992bd}" SpecialFunc="None">
+  <POU Name="ArrayDatatypeBase_1D" Id="{991b8878-a517-02d7-2a23-e8a5c4d992bd}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK ABSTRACT ArrayDatatypeBase EXTENDS UserDefinedDatatypeBase IMPLEMENTS I_ArrayDatatype
+FUNCTION_BLOCK ABSTRACT ArrayDatatypeBase_1D EXTENDS UserDefinedDatatypeBase IMPLEMENTS I_ArrayDatatype_1D
 VAR
 END_VAR]]></Declaration>
     <Implementation>
@@ -23,40 +23,33 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="CreateEnumError" Id="{939e184c-64cf-002a-3378-ba72004e5620}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE CreateEnumError : I_Error
-VAR_INPUT
-	Enum : T_MAXSTRING;
-END_VAR
-VAR
-	pError : POINTER TO UnknownEnumerationError;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pError := __NEW(UnknownEnumerationError(EnumString := Enum));
-CreateEnumError := pError^;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="GetElementAsDatatypeByIndex" Id="{72faebb8-2123-0fbb-3cbb-f1f40ed95eb1}">
-      <Declaration><![CDATA[METHOD PUBLIC ABSTRACT GetElementAsDatatypeByIndex : I_Datatype
-VAR_INPUT
-	Index : DINT;
+    <Property Name="Dimention" Id="{799784aa-360e-020e-0d78-26bc6f329485}">
+      <Declaration><![CDATA[PROPERTY Dimention : UDINT]]></Declaration>
+      <Get Name="Get" Id="{74727b2e-4a13-0724-3e64-b9a21a3f9986}">
+        <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
+        <Implementation>
+          <ST><![CDATA[Dimention := 1;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="Identifier" Id="{2fb82553-7435-463b-94b6-edc871a50638}">
       <Declaration><![CDATA[PROPERTY PUBLIC Identifier : T_MAXSTRING]]></Declaration>
       <Get Name="Get" Id="{3f40e6ca-bcce-4ae5-ab8f-039359f2d5b2}">
         <Declaration><![CDATA[VAR
 	baseTypeAsUdt : I_UserDefinedDatatype;
+	lowerBound : DINT;
+	upperBound : DINT;
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[Identifier := Concat('ARRAY [', DINT_TO_STRING(LowerBound));
+          <ST><![CDATA[TryGetLowerBound(1, lowerBound);
+TryGetUpperBound(1, upperBound);
+
+Identifier := Concat('ARRAY [', DINT_TO_STRING(lowerBound));
 Identifier := Concat(Identifier,'..');
-Identifier := Concat(Identifier, DINT_TO_STRING(UpperBound));
+Identifier := Concat(Identifier, DINT_TO_STRING(upperBound));
 Identifier := Concat(Identifier, '] OF ');
 
 IF BaseDatatype.TryResolveAsUserDefinedDatatype(baseTypeAsUdt) THEN
@@ -71,21 +64,14 @@ END_IF]]></ST>
       <Declaration><![CDATA[PROPERTY PUBLIC Length : UDINT]]></Declaration>
       <Get Name="Get" Id="{a600413a-c09c-0e5c-1f92-3e6a4da4c8af}">
         <Declaration><![CDATA[VAR
+	lowerBound : DINT;
+	upperBound : DINT;
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[Length := ABS(UpperBound - LowerBound) + 1;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
-    <Property Name="LowerBound" Id="{43a0e3e3-ac35-0ef5-2f1e-26f71eb718d0}">
-      <Declaration><![CDATA[PROPERTY PUBLIC ABSTRACT LowerBound : DINT]]></Declaration>
-      <Get Name="Get" Id="{56ab5231-520a-0a94-1273-57edd813d82b}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
+          <ST><![CDATA[TryGetLowerBound(1, lowerBound);
+TryGetUpperBound(1, upperBound);
+Length := DINT_TO_UDINT(ABS(upperBound - lowerBound) + 1);]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -155,6 +141,69 @@ END_VAR
         <ST><![CDATA[TryDeserializeFrom := TryDeserializeArrayValues(Deserializer, Feedback);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="TryGetElementAsDatatypeByIndex" Id="{72faebb8-2123-0fbb-3cbb-f1f40ed95eb1}">
+      <Declaration><![CDATA[METHOD PUBLIC ABSTRACT TryGetElementAsDatatypeByIndex : BOOL
+VAR_INPUT
+	Index : DINT;
+	Destination : REFERENCE TO I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetLowerBound" Id="{38b1a3d6-2dac-0ca3-32e5-50b5463b422b}">
+      <Declaration><![CDATA[METHOD PUBLIC ABSTRACT TryGetLowerBound : BOOL
+VAR_INPUT
+	Dimention : UDINT;
+	Destination : REFERENCE TO DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetUpperBound" Id="{e2fa2c9f-20a5-0726-208b-61f7911bf99d}">
+      <Declaration><![CDATA[METHOD PUBLIC ABSTRACT TryGetUpperBound : BOOL
+VAR_INPUT
+	Dimention : UDINT;
+	Destination : REFERENCE TO DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs1DArrayDatatype" Id="{5dd922ee-79e6-0c9a-0e6b-27056823af4a}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs1DArrayDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ArrayDatatype_1D;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Destination := THIS^;
+TryResolveAs1DArrayDatatype := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs2DArrayDatatype" Id="{d0feb899-7b23-0e83-03c9-08c54f61fec7}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs2DArrayDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ArrayDatatype_2D;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs2DArrayDatatype := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs3DArrayDatatype" Id="{224deabd-d543-06f0-2439-f7ca355ff8e2}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs3DArrayDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ArrayDatatype_3D;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs3DArrayDatatype := FALSE;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryResolveAsArrayDatatype" Id="{36f0ff38-3d27-0156-1669-e3996fafb148}">
       <Declaration><![CDATA[METHOD PUBLIC TryResolveAsArrayDatatype : BOOL
 VAR_INPUT
@@ -174,17 +223,6 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[TypeName := 'ARRAY';]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
-    <Property Name="UpperBound" Id="{14db03ff-dba9-0e53-21e8-bc01b8e34fca}">
-      <Declaration><![CDATA[PROPERTY PUBLIC ABSTRACT UpperBound : DINT]]></Declaration>
-      <Get Name="Get" Id="{9e0fc847-9fa4-01ae-0e26-6e4d01cd70c0}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
         </Implementation>
       </Get>
     </Property>

@@ -156,6 +156,15 @@
     <Compile Include="mobject-datatypes\Tests\EnumDatatype_TestSuite.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-datatypes\Tests\Mocks\1DimArray\_Array0to10OfBool.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Tests\Mocks\2DimArray\_Array0to1_0to2OfBool.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Tests\Mocks\3DimArray\_Array0to1_0to2_0to3OfBool.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="mobject-datatypes\Tests\Mocks\DUT\MyStruct.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -177,7 +186,13 @@
     <Compile Include="mobject-datatypes\Tests\StructuredDatatype_TestSuite.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="mobject-datatypes\Tests\_Array0to10OfBool_TestSuite.TcPOU">
+    <Compile Include="mobject-datatypes\Tests\_ArrayDatatype_1D_TestSuite.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Tests\_ArrayDatatype_2D_TestSuite.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Tests\_ArrayDatatype_3D_TestSuite.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Tests\_BIT_UsingMockStructure_TestSuite.TcPOU">
@@ -262,6 +277,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-deserialization\Tests\MissingKeyDeserializationError_TestSuite.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-deserialization\Tests\InvalidArrayIndexDeserializationError_TestSuite.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-deserialization\Tests\Mocks\MockDisposableDeserializer.TcPOU">
@@ -357,6 +375,9 @@
     <Folder Include="mobject-converters\Tests" />
     <Folder Include="mobject-datatypes\Tests" />
     <Folder Include="mobject-datatypes\Tests\Mocks" />
+    <Folder Include="mobject-datatypes\Tests\Mocks\1DimArray" />
+    <Folder Include="mobject-datatypes\Tests\Mocks\2DimArray" />
+    <Folder Include="mobject-datatypes\Tests\Mocks\3DimArray" />
     <Folder Include="mobject-datatypes\Tests\Mocks\DUT" />
     <Folder Include="mobject-deserialization\Tests" />
     <Folder Include="mobject-deserialization\Tests\Mocks" />

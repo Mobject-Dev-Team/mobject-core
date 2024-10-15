@@ -30,8 +30,9 @@ VAR
     _STRING_TestSuite : _STRING_TestSuite;
 	
 	// array testing
-	_Array0to10OfBool_TestSuite : _Array0to10OfBool_TestSuite;
-	
+	_ArrayDatatype_1D_TestSuite : _ArrayDatatype_1D_TestSuite;
+	_ArrayDatatype_2D_TestSuite : _ArrayDatatype_2D_TestSuite;
+	_ArrayDatatype_3D_TestSuite : _ArrayDatatype_3D_TestSuite;
 	
 	// base type testing
 	aliasDatatype_TestSuite : AliasDatatype_TestSuite;

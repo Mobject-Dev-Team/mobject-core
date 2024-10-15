@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="MobjectDeserializationUnitTests" Id="{c70500cf-7d23-0663-1d50-284054be19c0}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MobjectDeserializationUnitTests
 VAR
@@ -10,6 +10,7 @@ VAR
 	incorrectKeyTypeDeserializationError_TestSuite : IncorrectKeyTypeDeserializationError_TestSuite;
 	deserializationErrorFactory_TestSuite : DeserializationErrorFactory_TestSuite;
 	customDeserializationFailedError_TestSuite : CustomDeserializationFailedError_TestSuite;
+	invalidArrayIndexDeserializationError_TestSuite : InvalidArrayIndexDeserializationError_TestSuite;
 END_VAR
 ]]></Declaration>
     <Implementation>

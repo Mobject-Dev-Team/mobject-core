@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="InvalidArrayIndexDeserializationError_TestSuite" Id="{f1c81b12-a2a1-0a3c-0f56-90f6dd4ed017}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK InvalidArrayIndexDeserializationError_TestSuite EXTENDS TcUnit.FB_TestSuite]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestAccept();
+TestErrorType();
+TestIsSameAsWithSameErrors();
+TestIsSameAsWithDifferentErrors();
+TestMessage();
+TestSerializeWith();]]></ST>
+    </Implementation>
+    <Method Name="TestAccept" Id="{a24c0f28-80ed-099c-3522-6a1a90ef6660}">
+      <Declaration><![CDATA[METHOD PUBLIC TestAccept
+VAR
+	error : InvalidArrayIndexDeserializationError(123);
+	visitor : MockErrorVisitor(ExpectedError := error);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestAccept');
+
+error.Accept(visitor);
+
+AssertTrue(
+	Condition := visitor.VisitedCorrectError,
+	Message := 'Did not invoke VisitError on the visitor'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestErrorType" Id="{74e78fc7-330f-01dc-3733-f1baff523ac3}">
+      <Declaration><![CDATA[METHOD PUBLIC TestErrorType
+VAR
+	error : InvalidArrayIndexDeserializationError(123);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestErrorType');
+
+AssertEquals_String(
+	Actual := error.ErrorType,
+	Expected := 'INVALID_ARRAY_INDEX_DESERIALIZATION_ERROR',
+	Message := 'Did not return the expected ErrorType'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIsSameAsWithDifferentErrors" Id="{5c4a0557-d134-010f-19df-98649c039703}">
+      <Declaration><![CDATA[METHOD PUBLIC TestIsSameAsWithDifferentErrors
+VAR
+	error1 : InvalidArrayIndexDeserializationError(123);
+	error2 : MockError(MockErrorType:='ERROR_TYPE_B',MockMessage:='123');
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsSameAsWithDifferentErrors');
+
+AssertFalse(
+	Condition := error1.IsSameAs(error2),
+	Message := 'Did not correctly identify errors as being different type'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIsSameAsWithSameErrors" Id="{6d2c3cdc-bd38-02d5-0b7e-b5a2d1c563b6}">
+      <Declaration><![CDATA[METHOD PUBLIC TestIsSameAsWithSameErrors
+VAR
+	error1 : InvalidArrayIndexDeserializationError(123);
+	error2 : MockError(MockErrorType:='INVALID_ARRAY_INDEX_DESERIALIZATION_ERROR',MockMessage:='Deserialization Failed, Array Index Out Of Bounds 123');
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsSameAsWithSameErrors');
+
+AssertTrue(
+	Condition := error1.IsSameAs(error2),
+	Message := 'Did not correctly identify errors as being the same type'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMessage" Id="{96619377-28c2-0850-02ac-6252f6cb0a4e}">
+      <Declaration><![CDATA[METHOD PUBLIC TestMessage
+VAR
+	error : InvalidArrayIndexDeserializationError(123);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestMessage');
+
+AssertEquals_String(
+	Actual := error.Message,
+	Expected := 'Deserialization Failed, Array Index Out Of Bounds 123',
+	Message := 'Did not return the expected Message'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSerializeWith" Id="{4820d438-83d4-0ed3-3667-12e95b88e31f}">
+      <Declaration><![CDATA[METHOD PUBLIC TestSerializeWith
+VAR
+	error : InvalidArrayIndexDeserializationError(123);
+	serializer : MockJsonSerializer;
+	result : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestSerializeWith');
+
+error.SerializeWith(serializer);
+serializer.TryGetSerializedData(ADR(result), SIZEOF(result));
+
+AssertEquals_String(
+	Actual := result,
+	Expected := '{"errorType":"INVALID_ARRAY_INDEX_DESERIALIZATION_ERROR","message":"Deserialization Failed, Array Index Out Of Bounds 123"}',
+	Message := 'Did not serialize correctly'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

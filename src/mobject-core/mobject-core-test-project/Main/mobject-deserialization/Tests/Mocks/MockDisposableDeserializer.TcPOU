@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="MockDisposableDeserializer" Id="{29021b24-a5d2-0fd8-170d-b48c0661525e}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK MockDisposableDeserializer IMPLEMENTS I_Deserializer
 VAR
@@ -180,6 +180,17 @@ END_VAR]]></Declaration>
       <Declaration><![CDATA[METHOD TryGetDword : BOOL
 VAR_INPUT
 	Destination : REFERENCE TO DWORD;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetElementByIndex" Id="{a4b50c69-2a08-02b1-2006-98530b6cc150}">
+      <Declaration><![CDATA[METHOD TryGetElementByIndex : BOOL
+VAR_INPUT
+	Index : UDINT;
+	Destination : REFERENCE TO I_Deserializer;
 	Feedback : I_DeserializerFeedback;
 END_VAR]]></Declaration>
       <Implementation>

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
-  <POU Name="_Array0to10OfBool_TestSuite" Id="{05ba40c9-cdd5-0f8e-1137-4e9b945dc077}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK _Array0to10OfBool_TestSuite EXTENDS TcUnit.FB_TestSuite
+  <POU Name="_ArrayDatatype_1D_TestSuite" Id="{05ba40c9-cdd5-0f8e-1137-4e9b945dc077}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK _ArrayDatatype_1D_TestSuite EXTENDS TcUnit.FB_TestSuite
 VAR
 END_VAR
 ]]></Declaration>
@@ -10,20 +10,23 @@ END_VAR
 TestBaseDatatype();
 TestClearReference();
 TestClone();
-TestGetElementByIndex();
 TestTypeNameReturnsExpected();
 TestIdentifierReturnsExpected();
 TestLength();
 TestLowerBound();
+TestLowerBoundWithInvalidDimention();
 TestMakeReferenceToFollowsReference();
 TestMakeReferenceToUpdatesReference();
 TestSize();
 TestSerializeTypeWith();
 TestSerializeWith();
 TestTryDeserializeFrom();
+TestTryGetElementAsDatatypeWithInvalidDimentionTooBig();
+TestTryGetElementAsDatatypeWithInvalidDimentionTooSmall();
 TestTryMakeReferenceToFollowsReference();
 TestTryMakeReferenceToUpdatesReference();
 TestUpperBound();
+TestUpperBoundWithInvalidDimention();
 TestValueReturnsExpectedAfterChange();
 ]]></ST>
     </Implementation>
@@ -137,31 +140,6 @@ TEST_FINISHED();
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TestGetElementByIndex" Id="{9b59ab1b-a862-0761-0817-d3ff4ff618b0}">
-      <Declaration><![CDATA[METHOD PUBLIC TestGetElementByIndex
-VAR
-	_type : _Array0to10OfBool;
-    expected : ARRAY [0..10] OF BOOL := [FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE];
-    actual : ARRAY [0..10] OF BOOL;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[TEST('TestGetElementByIndex');
-
-_type.GetElementByIndex(5).Value := TRUE;
-
-actual := _type.Value;
-
-AssertEquals(
-    Expected := expected,
-    Actual := actual,
-    Message := 'Value did not update target'
-);
-
-TEST_FINISHED();
-]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="TestIdentifierReturnsExpected" Id="{f4097b4c-437a-0d86-345f-93f4bd5ce951}">
       <Declaration><![CDATA[METHOD PUBLIC TestIdentifierReturnsExpected
 VAR
@@ -214,17 +192,45 @@ VAR
     _type : _Array0to10OfBool;
     expected : DINT := 0;
     actual : DINT;
+	ok : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('TestLowerBound');
 
-actual := _type.LowerBound;
+ok := _type.TryGetLowerBound(1, actual);
+
+AssertTrue(
+    Condition := ok,
+    Message := 'Type did not indicate that lower bound was possible to retreive.'
+);
 
 AssertEquals_DINT(
     Expected := Expected,
     Actual := actual,
     Message := 'Type did not return the correct array lower bound.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestLowerBoundWithInvalidDimention" Id="{16963c3b-5f44-0fa7-288c-f8a228b1f754}">
+      <Declaration><![CDATA[METHOD PUBLIC TestLowerBoundWithInvalidDimention
+VAR
+    _type : _Array0to10OfBool;
+    actual : DINT;
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestLowerBoundWithInvalidDimention');
+
+result := _type.TryGetLowerBound(2, actual);
+
+AssertFalse(
+    Condition := result,
+    Message := 'Type did not indicate that the dimention was invalid'
 );
 
 TEST_FINISHED();
@@ -408,6 +414,50 @@ TEST_FINISHED();
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="TestTryGetElementAsDatatypeWithInvalidDimentionTooBig" Id="{dc922a1b-10bd-0659-36c7-807adc1c550f}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryGetElementAsDatatypeWithInvalidDimentionTooBig
+VAR
+    _type : _Array0to10OfBool;
+    actual : I_Datatype;
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryGetElementAsDatatypeWithInvalidDimentionTooBig');
+
+result := _type.TryGetElementAsDatatypeByIndex(11, actual);
+
+AssertFalse(
+    Condition := result,
+    Message := 'Type did not indicate that the dimention was invalid'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryGetElementAsDatatypeWithInvalidDimentionTooSmall" Id="{32354311-7c64-09f7-24fd-bd57e767192a}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryGetElementAsDatatypeWithInvalidDimentionTooSmall
+VAR
+    _type : _Array0to10OfBool;
+    actual : I_Datatype;
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryGetElementAsDatatypeWithInvalidDimentionTooSmall');
+
+result := _type.TryGetElementAsDatatypeByIndex(-1, actual);
+
+AssertFalse(
+    Condition := result,
+    Message := 'Type did not indicate that the dimention was invalid'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TestTryMakeReferenceToFollowsReference" Id="{d862a3e0-0629-0dcf-253f-06d7e8e656a2}">
       <Declaration><![CDATA[METHOD PUBLIC TestTryMakeReferenceToFollowsReference
 VAR
@@ -501,17 +551,45 @@ VAR
     _type : _Array0to10OfBool;
     expected : DINT := 10;
     actual : DINT;
+	ok : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('TestUpperBound');
 
-actual := _type.UpperBound;
+ok := _type.TryGetUpperBound(1, actual);
+
+AssertTrue(
+    Condition := ok,
+    Message := 'Type did not indicate that upper bound was possible to retreive.'
+);
 
 AssertEquals_DINT(
     Expected := Expected,
     Actual := actual,
     Message := 'Type did not return the correct array upper bound.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestUpperBoundWithInvalidDimention" Id="{8fa71dba-432b-055f-17d9-576f608a7ac0}">
+      <Declaration><![CDATA[METHOD PUBLIC TestUpperBoundWithInvalidDimention
+VAR
+    _type : _Array0to10OfBool;
+    actual : DINT;
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestUpperBoundWithInvalidDimention');
+
+result := _type.TryGetUpperBound(2, actual);
+
+AssertFalse(
+    Condition := result,
+    Message := 'Type did not indicate that the dimention was invalid'
 );
 
 TEST_FINISHED();

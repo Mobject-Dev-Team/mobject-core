@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <Itf Name="I_ArrayDatatype_2D" Id="{45e50fe4-4fd7-047a-0e00-622e98d27408}">
+    <Declaration><![CDATA[INTERFACE I_ArrayDatatype_2D EXTENDS I_ArrayDatatype]]></Declaration>
+    <Method Name="TryGetElementAsDatatypeByIndex" Id="{c4c34bb1-c48f-00a5-2950-d43a7880b3d5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetElementAsDatatypeByIndex : BOOL
+VAR_INPUT
+	Index1 : DINT;
+	Index2 : DINT;
+	Destination : REFERENCE TO I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>
