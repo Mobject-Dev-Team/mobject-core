@@ -6,7 +6,8 @@
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK ABSTRACT AliasDatatypeBase EXTENDS UserDefinedDatatypeBase IMPLEMENTS I_AliasDatatype
 VAR
-	_baseDatatype : I_Datatype;
+	_baseDatatype : I_Datatype; // this value is the single level down
+	_rootDatatype : I_Datatype; // this value is the very root of the alias (i.e. if there are stacked alias)
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -18,9 +19,27 @@ END_VAR
 VAR_INPUT
 	BaseType : I_Datatype;
 END_VAR
-]]></Declaration>
+VAR
+	current : I_AliasDatatype;
+	root : I_AliasDatatype;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_baseDatatype := BaseType;]]></ST>
+        <ST><![CDATA[IF BaseType = 0 THEN
+	RETURN;
+END_IF
+
+_baseDatatype := BaseType;
+
+// find root datatype
+current := THIS^;
+WHILE (TRUE) DO
+	IF current.BaseDatatype.TryResolveAsAliasDatatype(root) THEN
+		current := root;
+		CONTINUE;
+	END_IF
+	EXIT;
+END_WHILE
+_rootDatatype := current.BaseDatatype;]]></ST>
       </Implementation>
     </Method>
     <Property Name="BaseDatatype" Id="{34002056-d771-048e-2dbb-e738f41b9379}">
@@ -45,6 +64,17 @@ Serializer.AddKey('baseDatatype');
 _baseDatatype.SerializeTypeWith(Serializer);]]></ST>
       </Implementation>
     </Method>
+    <Property Name="RootDatatype" Id="{5daf7fde-382b-091c-2b1a-0472083e4613}">
+      <Declaration><![CDATA[PROPERTY PUBLIC RootDatatype : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{e8905f4d-2aa1-0f12-0600-df6a7ba7d064}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RootDatatype := _rootDatatype;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SerializeWith" Id="{6182b564-094c-0830-0faf-6a2ab85fdfd7}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT
