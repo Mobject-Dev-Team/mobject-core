@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.0-beta
+
+tba
+
 ## v0.4.0-beta
 
 - Optimized OrderedDictionary clear

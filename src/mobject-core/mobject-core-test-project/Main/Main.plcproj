@@ -465,6 +465,7 @@
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_DynamicMemory">
       <DefaultResolution>Tc3_DynamicMemory, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_DynamicMemory</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_JsonXml">
       <DefaultResolution>Tc3_JsonXml, * (Beckhoff Automation GmbH)</DefaultResolution>
@@ -518,7 +519,7 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="mobject-core,0.4.0,mobject">
+    <LibraryReference Include="mobject-core,0.5.0,mobject">
       <Namespace>mobject_core</Namespace>
     </LibraryReference>
   </ItemGroup>
