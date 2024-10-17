@@ -49,6 +49,23 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
+    <Method Name="IsEquivalentTo" Id="{39c6a39b-56ad-0b99-1aad-236c741449de}">
+      <Declaration><![CDATA[METHOD PUBLIC IsEquivalentTo : BOOL
+VAR_INPUT
+	Datatype : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Datatype.Root.TypeName <> TypeName THEN
+	RETURN;
+END_IF
+
+IF Datatype.Root.Size <> Size THEN
+	RETURN;
+END_IF
+
+IsEquivalentTo := TRUE;]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="IsUserDefined" Id="{8c5b0b06-69cc-4b20-ad40-040443b3a8a5}">
       <Declaration><![CDATA[PROPERTY PUBLIC IsUserDefined : BOOL]]></Declaration>
       <Get Name="Get" Id="{be3b14b1-28de-4597-929b-49bb88cea57b}">
@@ -69,6 +86,17 @@ END_VAR]]></Declaration>
         <ST><![CDATA[Serializer.AddKeyString('typeName',TypeName);]]></ST>
       </Implementation>
     </Method>
+    <Property Name="Root" Id="{1d78012d-f69a-0984-1e8e-ebe529316f6c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Root : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{da8ebba3-5b9f-04e5-1431-bacc2945a7e9}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Root := this^;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SerializeTypeWith" Id="{f3547df7-fbc8-0b47-3331-647f4354d06e}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeTypeWith
 VAR_INPUT

@@ -23,6 +23,26 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="IsEquivalentTo" Id="{5c46f4dc-9059-0b7f-2b4d-c813f15ee697}">
+      <Declaration><![CDATA[METHOD PUBLIC IsEquivalentTo : BOOL
+VAR_INPUT
+	Datatype : I_Datatype;
+END_VAR
+VAR
+	datatypeAsUdt : I_UserDefinedDatatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT Datatype.Root.TryResolveAsUserDefinedDatatype(datatypeAsUdt) THEN
+	RETURN;
+END_IF
+
+IF datatypeAsUdt.Identifier <> Identifier THEN
+	RETURN;
+END_IF
+
+IsEquivalentTo := SUPER^.IsEquivalentTo(Datatype);]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="IsUserDefined" Id="{bec904ee-ddc4-4330-9cbc-67c183e16939}">
       <Declaration><![CDATA[PROPERTY PUBLIC IsUserDefined : BOOL]]></Declaration>
       <Get Name="Get" Id="{6d8d4eb1-bb1d-412d-8e85-9da1c88e349f}">

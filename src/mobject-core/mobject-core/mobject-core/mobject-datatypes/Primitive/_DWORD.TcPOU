@@ -183,7 +183,7 @@ VAR
 	pTargetData : POINTER TO DWORD;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT (Target.TypeName = TypeName) THEN
+        <ST><![CDATA[IF NOT IsEquivalentTo(Target) THEN
 	RETURN;
 END_IF
 

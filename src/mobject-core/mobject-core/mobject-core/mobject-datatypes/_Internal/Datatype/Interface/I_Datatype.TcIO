@@ -25,9 +25,21 @@ END_VAR
       <Declaration><![CDATA[METHOD Clone : I_Datatype
 ]]></Declaration>
     </Method>
+    <Method Name="IsEquivalentTo" Id="{b8a569e7-18c7-0a4f-3615-23b842b124b7}">
+      <Declaration><![CDATA[METHOD PUBLIC IsEquivalentTo : BOOL
+VAR_INPUT
+	Datatype : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
     <Property Name="IsUserDefined" Id="{0446cf84-05ec-4e56-be5c-a67118db8177}">
       <Declaration><![CDATA[PROPERTY PUBLIC IsUserDefined : BOOL]]></Declaration>
       <Get Name="Get" Id="{30f423b3-7fa4-4d61-994e-65acaf766845}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Root" Id="{e7333a8b-5da9-02d2-1e69-bed566156365}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Root : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{a0608254-33d4-08b3-36e8-2c7208a013ac}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>

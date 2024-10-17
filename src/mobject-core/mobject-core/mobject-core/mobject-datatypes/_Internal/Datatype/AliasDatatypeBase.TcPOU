@@ -53,6 +53,15 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="IsEquivalentTo" Id="{b65879f0-85bf-0aec-098c-0d662c3422ba}">
+      <Declaration><![CDATA[METHOD PUBLIC IsEquivalentTo : BOOL
+VAR_INPUT
+	Datatype : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsEquivalentTo := Root.IsEquivalentTo(Datatype.Root);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="OnSerializeTypeWith" Id="{50c21e86-9c66-0865-337d-e5624a0cbf3e}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED OnSerializeTypeWith
 VAR_INPUT
@@ -64,14 +73,14 @@ Serializer.AddKey('baseDatatype');
 _baseDatatype.SerializeTypeWith(Serializer);]]></ST>
       </Implementation>
     </Method>
-    <Property Name="RootDatatype" Id="{5daf7fde-382b-091c-2b1a-0472083e4613}">
-      <Declaration><![CDATA[PROPERTY PUBLIC RootDatatype : I_Datatype]]></Declaration>
+    <Property Name="Root" Id="{5daf7fde-382b-091c-2b1a-0472083e4613}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Root : I_Datatype]]></Declaration>
       <Get Name="Get" Id="{e8905f4d-2aa1-0f12-0600-df6a7ba7d064}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[RootDatatype := _rootDatatype;]]></ST>
+          <ST><![CDATA[Root := _rootDatatype;]]></ST>
         </Implementation>
       </Get>
     </Property>

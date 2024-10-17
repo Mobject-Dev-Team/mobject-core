@@ -8,11 +8,5 @@
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
-    <Property Name="RootDatatype" Id="{e7333a8b-5da9-02d2-1e69-bed566156365}">
-      <Declaration><![CDATA[PROPERTY PUBLIC RootDatatype : I_Datatype]]></Declaration>
-      <Get Name="Get" Id="{a0608254-33d4-08b3-36e8-2c7208a013ac}">
-        <Declaration><![CDATA[]]></Declaration>
-      </Get>
-    </Property>
   </Itf>
 </TcPlcObject>
