@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="AliasDatatypeBase" Id="{43071a06-31c8-0f0a-109c-de25a9d3f60c}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK ABSTRACT AliasDatatypeBase EXTENDS UserDefinedDatatypeBase IMPLEMENTS I_AliasDatatype
 VAR
-	_baseDatatype : I_Datatype;
+	_baseDatatype : I_Datatype; // this value is the single level down
+	_rootDatatype : I_Datatype; // this value is the very root of the alias (i.e. if there are stacked alias)
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -18,9 +19,27 @@ END_VAR
 VAR_INPUT
 	BaseType : I_Datatype;
 END_VAR
-]]></Declaration>
+VAR
+	current : I_AliasDatatype;
+	root : I_AliasDatatype;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_baseDatatype := BaseType;]]></ST>
+        <ST><![CDATA[IF BaseType = 0 THEN
+	RETURN;
+END_IF
+
+_baseDatatype := BaseType;
+
+// find root datatype
+current := THIS^;
+WHILE (TRUE) DO
+	IF current.BaseDatatype.TryResolveAsAliasDatatype(root) THEN
+		current := root;
+		CONTINUE;
+	END_IF
+	EXIT;
+END_WHILE
+_rootDatatype := current.BaseDatatype;]]></ST>
       </Implementation>
     </Method>
     <Property Name="BaseDatatype" Id="{34002056-d771-048e-2dbb-e738f41b9379}">
@@ -34,6 +53,15 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="IsEquivalentTo" Id="{b65879f0-85bf-0aec-098c-0d662c3422ba}">
+      <Declaration><![CDATA[METHOD PUBLIC IsEquivalentTo : BOOL
+VAR_INPUT
+	Datatype : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsEquivalentTo := Root.IsEquivalentTo(Datatype.Root);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="OnSerializeTypeWith" Id="{50c21e86-9c66-0865-337d-e5624a0cbf3e}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED OnSerializeTypeWith
 VAR_INPUT
@@ -45,6 +73,17 @@ Serializer.AddKey('baseDatatype');
 _baseDatatype.SerializeTypeWith(Serializer);]]></ST>
       </Implementation>
     </Method>
+    <Property Name="Root" Id="{5daf7fde-382b-091c-2b1a-0472083e4613}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Root : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{e8905f4d-2aa1-0f12-0600-df6a7ba7d064}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Root := _rootDatatype;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SerializeWith" Id="{6182b564-094c-0830-0faf-6a2ab85fdfd7}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT

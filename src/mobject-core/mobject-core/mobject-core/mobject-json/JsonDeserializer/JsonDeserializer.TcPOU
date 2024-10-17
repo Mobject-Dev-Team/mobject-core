@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="JsonDeserializer" Id="{33607e16-d857-42ff-a777-ee399a72a022}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -298,6 +298,17 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TryGetDword := rootNode.TryGetDword(Destination, Feedback);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetElementByIndex" Id="{474769dc-4905-0ab2-0cc8-226e8072f161}">
+      <Declaration><![CDATA[METHOD TryGetElementByIndex : BOOL
+VAR_INPUT
+	Index : UDINT;
+	Destination : REFERENCE TO I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetElementByIndex := rootNode.TryGetElementByIndex(Index, Destination, Feedback);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetFileTime" Id="{f5f266cd-a2bf-44cb-bc66-3de5433dcfa9}">

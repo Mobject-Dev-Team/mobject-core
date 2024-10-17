@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="OrderedDictionaryTreeNode" Id="{930a83ed-432c-07f9-2b7a-4eaed2f824fa}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -22,21 +22,6 @@ END_VAR
     <Folder Name="Constructor" Id="{155faa69-7235-0949-1844-4cf36621f57f}" />
     <Folder Name="Destructor" Id="{a95d87fd-1a1d-0a01-06c3-55923247efdb}" />
     <Folder Name="Private" Id="{18744f92-0f64-0fe8-24b7-248857e86cf3}" />
-    <Method Name="Clone" Id="{e4293b1d-77e5-080f-1893-41e5c6e255f9}">
-      <Declaration><![CDATA[METHOD PUBLIC Clone
-VAR_INPUT
-	Node : I_OrderedDictionaryTreeNode;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[DestroyBuffer();
-CreateBuffer(Node.NodeBufferSize);
-CopySourceToBuffer(Node.NodeBufferPointer);
-_key := Node.Key;
-_previous := Node.Previous;
-_next := Node.Next;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="CopyBufferToDestination" Id="{462ec0cf-039d-0748-31a7-8a5653c5865e}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE CopyBufferToDestination
 VAR_INPUT
@@ -80,6 +65,21 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="DeepCopy" Id="{e4293b1d-77e5-080f-1893-41e5c6e255f9}">
+      <Declaration><![CDATA[METHOD PUBLIC DeepCopy
+VAR_INPUT
+	Node : I_OrderedDictionaryTreeNode;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DestroyBuffer();
+CreateBuffer(Node.NodeBufferSize);
+CopySourceToBuffer(Node.NodeBufferPointer);
+_key := Node.Key;
+_previous := Node.Previous;
+_next := Node.Next;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="DestroyBuffer" Id="{7c1d721a-68db-0e28-122b-bf176ea601fc}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE DestroyBuffer
 VAR_INPUT

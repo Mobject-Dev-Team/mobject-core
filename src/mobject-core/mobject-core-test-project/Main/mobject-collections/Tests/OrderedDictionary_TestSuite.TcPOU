@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="OrderedDictionary_TestSuite" Id="{471d5714-31e5-0bb5-3f2b-a20fc64d7c0c}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK OrderedDictionary_TestSuite EXTENDS TcUnit.FB_TestSuite
 VAR
@@ -30,6 +30,7 @@ CheckTryGetValueTo();
 CheckTryGetValue();
 CheckWorksWithArrays();
 CheckWorksWithIntegers();
+CheckWorksWithManyItems();
 CheckWorksWithStrings();
 CheckIsEmptyWhenEmpty();
 CheckIsEmptyWhenFull();]]></ST>
@@ -717,6 +718,45 @@ AssertEquals(
 	Expected := expected,
 	Actual := out,
 	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckWorksWithManyItems" Id="{015f7480-0426-092c-2d67-4eaf547a0fee}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckWorksWithManyItems
+VAR
+	in : INT := 0;
+	out : DINT;
+	expected : DINT := 13;
+	dictionary : OrderedDictionary;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('CheckWorksWithManyItems');
+
+dictionary.TryAdd('TCVN_PPM_NONE', in);
+dictionary.TryAdd('TCVN_PPM_MONO1P', in);
+dictionary.TryAdd('TCVN_PPM_MONO2P', in);
+dictionary.TryAdd('TCVN_PPM_MONO4P', in);
+dictionary.TryAdd('TCVN_PPM_MONO10PACKED', in);
+dictionary.TryAdd('TCVN_PPM_MONO12PACKED', in);
+dictionary.TryAdd('TCVN_PPM_RGB10V1PACKED', in);
+dictionary.TryAdd('TCVN_PPM_RGB10P32', in);
+dictionary.TryAdd('TCVN_PPM_RGB12V1PACKED', in);
+dictionary.TryAdd('TCVN_PPM_RGB565P', in);
+dictionary.TryAdd('TCVN_PPM_BGR565P', in);
+dictionary.TryAdd('TCVN_PPM_MONO10P', in);
+dictionary.TryAdd('TCVN_PPM_MONO12P', in);
+
+out := dictionary.Count;
+
+dictionary.Clear();
+
+AssertEquals(
+	Expected := expected,
+	Actual := out,
+	Message := 'Did not produce the expected count when adding many items'
 );
 
 TEST_FINISHED();]]></ST>

@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.4.0-beta
+
+- Optimized OrderedDictionary clear
+- Moved datatype pack to mobject-graph as this was not common to mobject-datatypes
+- Added .IsOdd and .IsEven to numeric data type
+- Removed List due to compatibility issues with 4026.62. This will return once fixed.
+- Added support for Arrays
+- Added support for Alias linking
+
 ## v0.3.0-beta
 
 - Changed I_DatatypePack.RegisterWith, to I_DatatypePack.RegisterWithDatatypes

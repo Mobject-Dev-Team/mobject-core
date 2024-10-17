@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="_BYTE_TestSuite" Id="{87d75d7c-a5bb-0c5e-3b98-6e26f98673fb}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK _BYTE_TestSuite EXTENDS TcUnit.FB_TestSuite
 VAR
@@ -111,6 +111,42 @@ TEST_FINISHED();
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="TestIsEvenReturnsFalse" Id="{a99acaab-1562-0024-1654-1bcadb82e93e}">
+      <Declaration><![CDATA[METHOD PUBLIC TestIsEvenReturnsFalse
+VAR
+    _type : _BYTE(1);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsEvenReturnsFalse');
+
+AssertFalse(
+	Condition := _type.IsEven,
+    Message := 'Type incorrectly identified as being even'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIsEvenReturnsTrue" Id="{463a1c76-acf4-0f45-1de2-f46da82467a4}">
+      <Declaration><![CDATA[METHOD PUBLIC TestIsEvenReturnsTrue
+VAR
+    _type : _BYTE(2);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsEvenReturnsTrue');
+
+AssertTrue(
+	Condition := _type.IsOdd,
+    Message := 'Type did not correctly identify itself as being even'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TestIsFloat" Id="{8a62e45b-da06-48cf-926c-278f508c2836}">
       <Declaration><![CDATA[METHOD PUBLIC TestIsFloat
 VAR
@@ -123,6 +159,42 @@ END_VAR
 AssertFalse(
 	Condition := _type.IsFloat,
     Message := 'Type did not correctly identify itself as being unsigned'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIsOddReturnsFalse" Id="{ec1e51c4-0be6-0397-0d5d-052c7b47f12b}">
+      <Declaration><![CDATA[METHOD PUBLIC TestIsOddReturnsFalse
+VAR
+    _type : _BYTE(2);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsOddReturnsFalse');
+
+AssertFalse(
+	Condition := _type.IsOdd,
+    Message := 'Type incorrectly identified as being odd'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIsOddReturnsTrue" Id="{c7c56f35-4aa7-0d3c-2606-b7883e082378}">
+      <Declaration><![CDATA[METHOD PUBLIC TestIsOddReturnsTrue
+VAR
+    _type : _BYTE(1);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsOddReturnsTrue');
+
+AssertTrue(
+	Condition := _type.IsOdd,
+    Message := 'Type did not correctly identify itself as being odd'
 );
 
 TEST_FINISHED();

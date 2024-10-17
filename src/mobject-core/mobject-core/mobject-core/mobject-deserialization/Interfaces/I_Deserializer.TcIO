@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <Itf Name="I_Deserializer" Id="{98929524-2cde-052b-2e7e-1fc5ba1a5a4c}">
     <Declaration><![CDATA[INTERFACE I_Deserializer EXTENDS I_Disposable]]></Declaration>
     <Method Name="Clone" Id="{fe21415e-0706-0bf7-1f05-31861c23316e}">
@@ -105,6 +105,14 @@ END_VAR]]></Declaration>
       <Declaration><![CDATA[METHOD TryGetDword : BOOL
 VAR_INPUT
 	Destination : REFERENCE TO DWORD;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetElementByIndex" Id="{6825aa58-f1d2-056b-38e8-c5140af090a5}">
+      <Declaration><![CDATA[METHOD TryGetElementByIndex : BOOL
+VAR_INPUT
+	Index : UDINT;
+	Destination : REFERENCE TO I_Deserializer;
 	Feedback : I_DeserializerFeedback;
 END_VAR]]></Declaration>
     </Method>

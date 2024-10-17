@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <Itf Name="I_ArrayDatatype" Id="{a8e57a5b-bfda-0173-132d-0647d5e8567e}">
+    <Declaration><![CDATA[INTERFACE I_ArrayDatatype EXTENDS I_UserDefinedDatatype]]></Declaration>
+    <Property Name="Dimention" Id="{be1fb109-0ba8-07ed-024c-2305193d98ca}">
+      <Declaration><![CDATA[PROPERTY Dimention : UDINT]]></Declaration>
+      <Get Name="Get" Id="{fe5c673e-18e8-0edc-05c0-f82ce999e57e}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryGetLowerBound" Id="{6864720b-2d0e-07fd-38a5-cca1bb55b3e5}">
+      <Declaration><![CDATA[METHOD TryGetLowerBound : BOOL
+VAR_INPUT
+	Dimention : UDINT;
+	Destination : REFERENCE TO DINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetUpperBound" Id="{b9333345-152f-080b-3047-9d07a376b50b}">
+      <Declaration><![CDATA[METHOD TryGetUpperBound : BOOL
+VAR_INPUT
+	Dimention : UDINT;
+	Destination : REFERENCE TO DINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs1DArrayDatatype" Id="{8dd4a298-7bd3-05ea-21dc-2b952e48cd64}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs1DArrayDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ArrayDatatype_1D;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs2DArrayDatatype" Id="{4cca6520-8e58-0fea-39a1-23b7233134f6}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs2DArrayDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ArrayDatatype_2D;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs3DArrayDatatype" Id="{f388c645-feb3-0679-314c-0dc086cfc97f}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs3DArrayDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ArrayDatatype_3D;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

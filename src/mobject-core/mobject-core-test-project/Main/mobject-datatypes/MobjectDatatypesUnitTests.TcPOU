@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="MobjectDatatypesUnitTests" Id="{b716a62d-e363-0cde-3529-ab22dc768e65}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MobjectDatatypesUnitTests
 VAR
@@ -29,9 +29,14 @@ VAR
     //_LDATE, LDATE_AND_TIME, _LDT, LTIME_OF_DAY & _LTOD require TC build >=4026.0
     _STRING_TestSuite : _STRING_TestSuite;
 	
+	// array testing
+	_ArrayDatatype_1D_TestSuite : _ArrayDatatype_1D_TestSuite;
+	_ArrayDatatype_2D_TestSuite : _ArrayDatatype_2D_TestSuite;
+	_ArrayDatatype_3D_TestSuite : _ArrayDatatype_3D_TestSuite;
+	
+	// base type testing
 	aliasDatatype_TestSuite : AliasDatatype_TestSuite;
 	datatype_TestSuite : Datatype_TestSuite;
-	numericDatatype_TestSuite : NumericDatatype_TestSuite;
 	structuredDatatype_TestSuite : StructuredDatatype_TestSuite;
 	enumDatatype_TestSuite : EnumDatatype_TestSuite;
 END_VAR

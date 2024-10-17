@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="JsonDeserializerNullNode" Id="{f17b6ce9-445c-44fb-9bc2-3a3ee492d9a8}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -246,6 +246,21 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[error := errorFactory.CreateIncorrectTypeError('DWORD');
+Feedback.LogError(error);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetElementByIndex" Id="{9f9a7cea-b69b-0015-30d3-6403ff0aa914}">
+      <Declaration><![CDATA[METHOD TryGetElementByIndex : BOOL
+VAR_INPUT
+	Index : UDINT;
+	Destination : REFERENCE TO I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[error := errorFactory.CreateIncorrectTypeError('ARRAY');
 Feedback.LogError(error);]]></ST>
       </Implementation>
     </Method>

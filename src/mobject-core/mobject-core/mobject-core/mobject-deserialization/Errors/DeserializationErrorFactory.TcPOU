@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="DeserializationErrorFactory" Id="{34f1103c-9eec-0133-2265-a2d2c3c20696}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -52,6 +52,20 @@ END_VAR
       <Implementation>
         <ST><![CDATA[pError := __NEW(IncorrectTypeDeserializationError(DataType := ExpectedType));
 CreateIncorrectTypeError := pError^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateInvalidArrayIndexError" Id="{4dd69cd0-acdc-01ab-1db6-6eabfa7ddadf}">
+      <Declaration><![CDATA[METHOD PUBLIC CreateInvalidArrayIndexError : I_Error
+VAR_INPUT
+	AttemptedIndex : DINT;
+END_VAR
+VAR
+	pError : POINTER TO InvalidArrayIndexDeserializationError;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pError := __NEW(InvalidArrayIndexDeserializationError(Index := AttemptedIndex));
+CreateInvalidArrayIndexError := pError^;]]></ST>
       </Implementation>
     </Method>
     <Method Name="CreateInvalidKeyError" Id="{da5ac6f7-a77a-0b5f-1215-36517bfeefa4}">

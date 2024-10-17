@@ -19,7 +19,7 @@
     <Company>mobject</Company>
     <Released>false</Released>
     <Title>mobject-core</Title>
-    <ProjectVersion>0.3.0</ProjectVersion>
+    <ProjectVersion>0.4.0</ProjectVersion>
     <DefaultNamespace>mobject-core</DefaultNamespace>
     <Author>mobject dev team</Author>
     <Placeholder>mobject-core</Placeholder>
@@ -60,7 +60,6 @@
     <Folder Include="mobject-collections\_Internal\LinkedList\Enumerator" />
     <Folder Include="mobject-collections\_Internal\LinkedList\Node" />
     <Folder Include="mobject-collections\_Internal\List" />
-    <Folder Include="mobject-collections\_Internal\List\Enumerator" />
     <Folder Include="mobject-collections\_Internal\List\Node" />
     <Folder Include="mobject-collections\_Internal\OrderedDictionary" />
     <Folder Include="mobject-collections\_Internal\OrderedDictionary\Enumerator" />
@@ -97,7 +96,6 @@
     <Folder Include="mobject-datatypes\DatatypeOperations" />
     <Folder Include="mobject-datatypes\DatatypeOperations\Collection" />
     <Folder Include="mobject-datatypes\DatatypeOperations\Interface" />
-    <Folder Include="mobject-datatypes\DatatypePack" />
     <Folder Include="mobject-datatypes\Datatypes" />
     <Folder Include="mobject-datatypes\Datatypes\Base" />
     <Folder Include="mobject-datatypes\Datatypes\Events" />
@@ -117,6 +115,7 @@
     <Folder Include="mobject-deserialization\Errors" />
     <Folder Include="mobject-deserialization\Errors\CustomError" />
     <Folder Include="mobject-deserialization\Errors\IncorrectType" />
+    <Folder Include="mobject-deserialization\Errors\Invalid Index" />
     <Folder Include="mobject-deserialization\Errors\Invalid Key" />
     <Folder Include="mobject-deserialization\Errors\Missing Key" />
     <Folder Include="mobject-deserialization\GarbageCollector" />
@@ -250,9 +249,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-collections\_Internal\LinkedList\Node\LinkedListNode.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="mobject-collections\_Internal\List\Enumerator\ListForwardEnumerator.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-collections\_Internal\List\Node\ListNode.TcPOU">
@@ -1567,9 +1563,6 @@
     <Compile Include="mobject-datatypes\DatatypeOperations\WriteBoolToBitOperation.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="mobject-datatypes\DatatypePack\I_DatatypePack.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="mobject-datatypes\Datatypes\Base\Datatypes.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -1588,6 +1581,9 @@
     <Compile Include="mobject-datatypes\Datatypes\Events\I_StructuredDatatypeAddedEvent.TcIO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-datatypes\Datatypes\Events\I_ArrayDatatypeAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="mobject-datatypes\Datatypes\Interface\I_Datatypes.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -1595,9 +1591,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Functions\GetByteOffset.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="mobject-datatypes\PrimitiveDatatypePack.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Primitive\_BIT.TcPOU">
@@ -1648,6 +1641,10 @@
     <Compile Include="mobject-datatypes\Primitive\_UDINT.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-datatypes\Primitive\_PVOID.TcPOU">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Compile>
     <Compile Include="mobject-datatypes\Primitive\_UINT.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -1663,6 +1660,12 @@
     <Compile Include="mobject-datatypes\_Internal\Datatype\AliasDatatypeBase.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-datatypes\_Internal\Datatype\ArrayDatatypeBase_2D.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\_Internal\Datatype\ArrayDatatypeBase_3D.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\DatatypeBase.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -1673,6 +1676,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_AliasDatatype.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_ArrayDatatype_1D.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_ArrayDatatype_2D.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_ArrayDatatype_3D.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_BitDatatype.TcIO">
@@ -1693,6 +1705,9 @@
     <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_StructuredDatatype.TcIO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_ArrayDatatype.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_UserDefinedDatatype.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -1700,6 +1715,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\StructuredDatatypeBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\_Internal\Datatype\ArrayDatatypeBase_1D.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\UserDefinedDatatypeBase.TcPOU">
@@ -1721,6 +1739,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\Events\StructuredDatatypeAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\_Internal\Events\ArrayDatatypeAddedEvent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\StructureMembers\Host\StructureMemberHost.TcPOU">
@@ -1745,6 +1766,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-deserialization\Errors\IncorrectType\IncorrectTypeDeserializationError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-deserialization\Errors\Invalid Index\InvalidArrayIndexDeserializationError.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-deserialization\Errors\Invalid Key\InvalidKeyDeserializationError.TcPOU">
@@ -1900,6 +1924,62 @@
     <PlaceholderReference Include="Tc2_System">
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
+      <Parameters>
+        <Parameter ListName="PARAM" xmlns="">
+          <Key>TABLE_UPPER_BOUND</Key>
+          <Value>15</Value>
+        </Parameter>
+        <Parameter ListName="PARAM" xmlns="">
+          <Key>STRING_LENGTH_EXP</Key>
+          <Value>255</Value>
+        </Parameter>
+        <Parameter ListName="PARAM" xmlns="">
+          <Key>STRING_LENGTH_ADDRESS</Key>
+          <Value>20</Value>
+        </Parameter>
+        <Parameter ListName="PARAM" xmlns="">
+          <Key>STRING_LENGTH_COMMENT</Key>
+          <Value>255</Value>
+        </Parameter>
+        <Parameter ListName="PARAM" xmlns="">
+          <Key>STRING_LENGTH_OUTSTRING</Key>
+          <Value>255</Value>
+        </Parameter>
+        <Parameter ListName="PARAM" xmlns="">
+          <Key>TABLE_SHOW_VALID_ITEMS</Key>
+          <Value>FALSE</Value>
+        </Parameter>
+      </Parameters>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Parameters>
+        <Parameter ListName="PARAMETERLIST" xmlns="">
+          <Key>NMAXLICENSES</Key>
+          <Value>50</Value>
+        </Parameter>
+        <Parameter ListName="PARAMETERLIST" xmlns="">
+          <Key>NMAXLICENSEDEVICES</Key>
+          <Value>16</Value>
+        </Parameter>
+        <Parameter ListName="PARAMETERLIST" xmlns="">
+          <Key>NMAXCPUCOUNT</Key>
+          <Value>64</Value>
+        </Parameter>
+        <Parameter ListName="PARAMETERLIST" xmlns="">
+          <Key>CMAXCHARACTERS</Key>
+          <Value>16#FFFFFFF0</Value>
+        </Parameter>
+        <Parameter ListName="PARAMETERLIST" xmlns="">
+          <Key>NMAXFILESONDONGLE</Key>
+          <Value>20</Value>
+        </Parameter>
+        <Parameter ListName="PARAMETERLIST" xmlns="">
+          <Key>CMAXCSVFIELDVALUESIZE</Key>
+          <Value>255</Value>
+        </Parameter>
+      </Parameters>
+      <Namespace>Tc2_Utilities</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_DynamicMemory">
       <DefaultResolution>Tc3_DynamicMemory, * (Beckhoff Automation GmbH)</DefaultResolution>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="DictionaryTreeNode" Id="{4678eec6-e97b-0636-2914-7ff5f441eaef}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -20,19 +20,6 @@ END_VAR
     <Folder Name="Constructor" Id="{0f890dd3-beaf-007b-0699-78b1ea3f6ba9}" />
     <Folder Name="Destructor" Id="{fd7f6b61-274d-0c38-03cb-112a20bea0ef}" />
     <Folder Name="Private" Id="{9e8fa089-e3cf-0b45-2628-c6e744d7beeb}" />
-    <Method Name="Clone" Id="{22a9bda3-ae13-0e42-0e32-3cb9d3361f3b}">
-      <Declaration><![CDATA[METHOD PUBLIC Clone
-VAR_INPUT
-	Node : I_DictionaryTreeNode;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[DestroyBuffer();
-CreateBuffer(Node.NodeBufferSize);
-CopySourceToBuffer(Node.NodeBufferPointer);
-_key := Node.Key;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="CopyBufferToDestination" Id="{c38d820e-319f-02cb-2abb-e2d6a9beb266}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE CopyBufferToDestination
 VAR_INPUT
@@ -76,6 +63,19 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="DeepCopy" Id="{22a9bda3-ae13-0e42-0e32-3cb9d3361f3b}">
+      <Declaration><![CDATA[METHOD PUBLIC DeepCopy
+VAR_INPUT
+	Node : I_DictionaryTreeNode;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DestroyBuffer();
+CreateBuffer(Node.NodeBufferSize);
+CopySourceToBuffer(Node.NodeBufferPointer);
+_key := Node.Key;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="DestroyBuffer" Id="{cec4953f-c967-04cc-3b01-0e4ed4fb6ee8}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE DestroyBuffer
 VAR_INPUT

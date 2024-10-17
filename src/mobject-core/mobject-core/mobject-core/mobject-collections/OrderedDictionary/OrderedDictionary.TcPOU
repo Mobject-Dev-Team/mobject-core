@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="OrderedDictionary" Id="{3a0f6e79-8c73-094c-24f5-56716778979f}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -71,17 +71,36 @@ END_REPEAT;]]></ST>
 VAR_INPUT
 	Node : I_OrderedDictionaryTreeNode;
 END_VAR
+VAR
+	originalTailNode : I_OrderedDictionaryTreeNode;
+END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF head = 0 THEN
+        <ST><![CDATA[//LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Called with', Node);
+
+IF head = 0 THEN
 	head := Node;
 	tail := Node;
+	Node.Previous := 0;
+	Node.Next := 0;
+//	LogMsg('OrderedDictionary', 'AddNodeToEnd: Return, head = 0');
+//	LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Head is', head);
+//	LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Tail is', tail);
 	RETURN;
 END_IF
 
-Node.Previous := tail;
-Node.Previous.Next := Node;
-tail := Node;]]></ST>
+//LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Original Tail was', tail);
+originalTailNode := tail;
+tail := Node;
+//LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Tail is now', tail);
+
+originalTailNode.Next := node;
+//LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Original Tail next is', originalTailNode.Next);
+tail.Previous := originalTailNode;
+tail.Next := 0;
+//LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', 'AddNodeToEnd: Tail previous is now', tail.Previous);
+
+//LogMsg('OrderedDictionary', 'AddNodeToEnd: Return');]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddOrUpdate" Id="{88e9530d-854f-0a2c-0b74-1ac1c3168456}">
@@ -119,20 +138,34 @@ ELSIF (balanceFactor < -1) THEN
 	Node := LeftRotate(Node);
 END_IF
 
-Balance := Node;]]></ST>
+Balance := Node;
+
+//LogMsg('OrderedDictionary', ': Called');
+//LogMsg_I_OrderedDictionaryTreeNode('OrderedDictionary', ': RootNode is now', rootNode);
+//LogMsg('OrderedDictionary', ': Return');]]></ST>
       </Implementation>
     </Method>
     <Method Name="Clear" Id="{82793c0a-3844-07f1-1bda-f81d6a2b9624}">
       <Declaration><![CDATA[METHOD PUBLIC Clear
 VAR_INPUT
 END_VAR
-]]></Declaration>
+VAR
+	currentNode : I_OrderedDictionaryTreeNode;
+	nextNode : I_OrderedDictionaryTreeNode;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF rootNode = 0 THEN
+        <ST><![CDATA[IF head = 0 THEN
 	RETURN;
 END_IF
 
-THIS^.RecursiveClear(rootNode);
+currentNode := head;
+
+WHILE currentNode <> 0 DO
+	nextNode := currentNode.Next;
+	currentNode.Dispose();
+	currentNode := nextNode;
+END_WHILE
+
 head := 0;
 tail := 0;
 rootNode := 0;
@@ -173,23 +206,19 @@ Count := NodeCount;]]></ST>
     <Method Name="EmitChangedEvent" Id="{9c9204fa-78f0-0852-0fac-f4b73ba8e128}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE EmitChangedEvent
 VAR
-	pDictionaryChangedEvent : POINTER TO KeyValueCollectionChangedEvent;
+	dictionaryChangedEvent : KeyValueCollectionChangedEvent(Target := THIS^);
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pDictionaryChangedEvent := __NEW(KeyValueCollectionChangedEvent(Target := THIS^));
-eventEmitter.Emit('OnChanged', pDictionaryChangedEvent^);
-pDictionaryChangedEvent^.Dispose();]]></ST>
+        <ST><![CDATA[eventEmitter.Emit('OnChanged', dictionaryChangedEvent);]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitDisposedEvent" Id="{6bb0754d-ede2-09e4-32b0-3953fdf92cee}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE EmitDisposedEvent
 VAR
-	pDictionaryDisposedEvent : POINTER TO KeyValueCollectionDisposedEvent;
+	dictionaryDisposedEvent : KeyValueCollectionDisposedEvent(Target := THIS^);
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pDictionaryDisposedEvent := __NEW(KeyValueCollectionDisposedEvent(Target := THIS^));
-eventEmitter.Emit('OnDisposed', pDictionaryDisposedEvent^);
-pDictionaryDisposedEvent^.Dispose();]]></ST>
+        <ST><![CDATA[eventEmitter.Emit('OnDisposed', dictionaryDisposedEvent);]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_exit" Id="{bce606e7-00a7-0e8f-0878-40e0854eecf4}" FolderPath="Destructor\">
@@ -356,36 +385,6 @@ END_VAR]]></Declaration>
         <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RecursiveClear" Id="{4c9fa090-e6a9-0409-0793-1d27feab7968}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE RecursiveClear
-VAR_INPUT
-	Node : I_OrderedDictionaryTreeNode;
-END_VAR
-VAR
-	thisNodeKey : T_MAXSTRING;
-	leftNodeKey : T_MAXSTRING;
-	rightNodeKey : T_MAXSTRING;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF (Node = 0) THEN
-	RETURN;
-END_IF
-
-thisNodeKey := Node.key;
-
-IF (Node.Left <> 0) THEN
-	leftNodeKey := Node.Left.key;
-END_IF
-
-IF (Node.Right <> 0) THEN
-	rightNodeKey := Node.Right.key;
-END_IF
-
-RecursiveClear(Node.Left);
-RecursiveClear(Node.Right);
-Node.Dispose();]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="RecursiveCountNodes" Id="{198b0f8e-1e8a-01c8-2f79-41e5fa0988f7}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE RecursiveCountNodes
 VAR_INPUT
@@ -432,15 +431,15 @@ ELSE
         ELSE
             newNode := Node.Left;
         END_IF
-		RemoveNode(Node);
+		RemoveNodeFromLinkedList(Node);
         Node.Dispose();
         THIS^.updateHeight(newNode);
         RecursiveDelete := THIS^.Balance(newNode);
         RETURN;
     ELSE
-        minValueNode := FindMinimum(Node.Right);
-        Node.Clone(minValueNode);
-		ReplaceClonedNodeInOrder(Node, minValueNode);
+		RemoveNodeFromLinkedList(Node);
+		minValueNode := FindMinimum(Node.Right);
+		ReplaceNodeInLinkedList(minValueNode, Node);
         Node.Right := THIS^.RecursiveDelete(minValueNode.Key, Node.Right);	
     END_IF
 END_IF
@@ -520,34 +519,46 @@ END_VAR
 EmitChangedEvent();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RemoveNode" Id="{aec656f0-304e-075a-3a17-6c96ad48bd7e}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE RemoveNode
+    <Method Name="RemoveNodeFromLinkedList" Id="{aec656f0-304e-075a-3a17-6c96ad48bd7e}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE RemoveNodeFromLinkedList
 VAR_INPUT
 	Node : I_OrderedDictionaryTreeNode;
 END_VAR
+VAR
+	nodeBefore : I_OrderedDictionaryTreeNode; 
+	nodeAfter : I_OrderedDictionaryTreeNode;
+END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Node = head AND Node.Next = 0 THEN
+        <ST><![CDATA[// if the node is the head and has no further nodes following it, then it must
+// be the only node in the collection.  As such, set head, tail as 0.
+IF Node = head AND Node = tail THEN
 	head := 0;
-	tail := 0; 
+	tail := 0;
+	Node.Previous := 0;
+	Node.Next := 0;
 	RETURN;
 END_IF
 
-IF Node = tail AND Node.Previous = 0 THEN
-	head := 0;
-	tail := 0; 
-	RETURN;
-END_IF
-
+// if the node is at the start of more than one node, then
+// make the next in line the head, and remove it's knowlege of
+// the node being removed.
 IF Node = head THEN
 	Node.Next.Previous := 0;
 	head := Node.Next;
+	Node.Previous := 0;
+	Node.Next := 0;
 	RETURN;
 END_IF
 
+// if the node is at the end of more than one node, then
+// make the previous in line the tail, and remove it's knowlege of
+// the node being removed.
 IF Node = tail THEN
 	Node.Previous.Next := 0;
 	tail := Node.Previous;
+	Node.Previous := 0;
+	Node.Next := 0;
 	RETURN;
 END_IF
 
@@ -555,36 +566,50 @@ END_IF
 // but will have had the previous and next removed. Therefore only true deletes
 // will have these set.
 IF Node.Previous <> 0 AND Node.Next <> 0 THEN
-	Node.Previous.Next := Node.Next;
-	Node.Next.Previous := Node.Previous;
+	nodeBefore := Node.Previous;
+	nodeAfter := Node.Next;	
+	nodeBefore.Next := nodeAfter;
+	nodeAfter.Previous := nodeBefore;
+	Node.Next := 0;
+	Node.Previous := 0;
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ReplaceClonedNodeInOrder" Id="{b96cda98-5c9a-0a02-2961-3fef18a1ade7}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE ReplaceClonedNodeInOrder
+    <Method Name="ReplaceNodeInLinkedList" Id="{b96cda98-5c9a-0a02-2961-3fef18a1ade7}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE ReplaceNodeInLinkedList
 VAR_INPUT
-	NodeCloned : I_OrderedDictionaryTreeNode;
-	NodeToBeRemoved : I_OrderedDictionaryTreeNode;
+	OldNode : I_OrderedDictionaryTreeNode;
+	NewNode : I_OrderedDictionaryTreeNode;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NodeToBeRemoved = head THEN
-	head := NodeCloned;
+        <ST><![CDATA[// copy everything from the old node to the new node.
+NewNode.DeepCopy(OldNode);
+
+// if the node has a previous link, then that previous node will need to know that this
+// ToNode is now its correct next as it will still be pointing to the old node.
+IF OldNode.Previous <> 0 THEN
+	OldNode.Previous.Next := NewNode;
+END_IF
+OldNode.Previous := 0;
+
+// if the node has a next link, then that next node will need to know that this
+// ToNode is now its correct next as it will still be pointing to the old node.
+IF OldNode.Next <> 0 THEN
+	OldNode.Next.Previous := NewNode;
+END_IF
+OldNode.Next := 0;
+
+// if the head pointer was pointing at the old node then replace with new node.
+if head = OldNode then
+	head := NewNode;
 END_IF
 
-IF NodeToBeRemoved = tail THEN
-	tail := NodeCloned;
+// if the tail pointer was pointing at the old node then replace with new node.
+if tail = OldNode then
+	tail := NewNode;
 END_IF
-
-IF NodeCloned.Previous <> 0 THEN
-	NodeCloned.Previous.Next := NodeCloned;
-END_IF
-NodeToBeRemoved.Previous := 0;
-
-IF NodeCloned.Next <> 0 THEN
-	NodeCloned.Next.Previous := NodeCloned;
-END_IF
-NodeToBeRemoved.Next := 0;]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="RightRotate" Id="{6bd10827-5457-098c-079a-45832b6a258c}" FolderPath="Private\">

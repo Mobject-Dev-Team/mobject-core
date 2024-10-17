@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <Itf Name="I_Datatypes" Id="{fa5985fa-0352-0837-008f-2100e7182f33}">
     <Declaration><![CDATA[INTERFACE I_Datatypes EXTENDS I_EventEmitter]]></Declaration>
     <Method Name="Accept" Id="{ab5a6019-b90b-0356-36ad-ac3b7614d57c}">
@@ -7,30 +7,6 @@
 VAR_INPUT
 	Visitor : I_DatatypeVisitor;
 END_VAR]]></Declaration>
-    </Method>
-    <Method Name="GetAliasByIdentifier" Id="{2eb48292-09ae-0ce3-2529-21e731dfd8cb}">
-      <Declaration><![CDATA[METHOD PUBLIC GetAliasByIdentifier : BOOL
-VAR_INPUT
-	Identifier : T_MAXSTRING;
-	Destination : REFERENCE TO I_AliasDatatype;
-END_VAR
-]]></Declaration>
-    </Method>
-    <Method Name="GetPrimitiveByTypeName" Id="{84f9f9c9-5063-0c47-1c42-af2f88c84dd0}">
-      <Declaration><![CDATA[METHOD PUBLIC GetPrimitiveByTypeName : BOOL
-VAR_INPUT
-	TypeName : T_MAXSTRING;
-	Destination : REFERENCE TO I_AliasDatatype;
-END_VAR
-]]></Declaration>
-    </Method>
-    <Method Name="GetStructureByIdentifier" Id="{4071e151-c73c-0bed-3454-9ed0692110c3}">
-      <Declaration><![CDATA[METHOD PUBLIC GetStructureByIdentifier : BOOL
-VAR_INPUT
-	Identifier : T_MAXSTRING;
-	Destination : REFERENCE TO I_StructuredDatatype;
-END_VAR
-]]></Declaration>
     </Method>
     <Method Name="RegisterDatatype" Id="{a28830d7-6191-0883-0e41-e4c205ba804e}">
       <Declaration><![CDATA[METHOD RegisterDatatype
@@ -44,6 +20,54 @@ END_VAR
 VAR_INPUT
 	Serializer : I_Serializer;
 END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetAliasByIdentifier" Id="{2eb48292-09ae-0ce3-2529-21e731dfd8cb}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetAliasByIdentifier : BOOL
+VAR_INPUT
+	Identifier : T_MAXSTRING;
+	Destination : REFERENCE TO I_AliasDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetArrayByIdentifier" Id="{1e77a6ee-f035-0aa3-0935-9ed4ab35e6a3}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetArrayByIdentifier : BOOL
+VAR_INPUT
+	Identifier : T_MAXSTRING;
+	Destination : REFERENCE TO I_ArrayDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetEnumByIdentifier" Id="{cc8c44b8-14d0-0287-11a5-56136f79c410}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetEnumByIdentifier : BOOL
+VAR_INPUT
+	Identifier : T_MAXSTRING;
+	Destination : REFERENCE TO I_EnumDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetInterfaceByIdentifier" Id="{1987a886-9c50-0c24-3782-dd3c813dde2b}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetInterfaceByIdentifier : BOOL
+VAR_INPUT
+	Identifier : T_MAXSTRING;
+	Destination : REFERENCE TO I_InterfaceDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetPrimitiveByTypeName" Id="{84f9f9c9-5063-0c47-1c42-af2f88c84dd0}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetPrimitiveByTypeName : BOOL
+VAR_INPUT
+	TypeName : T_MAXSTRING;
+	Destination : REFERENCE TO I_AliasDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetStructureByIdentifier" Id="{4071e151-c73c-0bed-3454-9ed0692110c3}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetStructureByIdentifier : BOOL
+VAR_INPUT
+	Identifier : T_MAXSTRING;
+	Destination : REFERENCE TO I_StructuredDatatype;
+END_VAR
+]]></Declaration>
     </Method>
   </Itf>
 </TcPlcObject>

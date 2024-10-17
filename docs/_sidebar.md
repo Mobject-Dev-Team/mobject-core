@@ -8,7 +8,6 @@
 
     - [Dictionary](./mobject-collections/Dictionary.md)
     - [LinkedList](./mobject-collections/LinkedList.md)
-    - [List](./mobject-collections/List.md)
     - [OrderedDictionary](./mobject-collections/OrderedDictionary.md)
     - [Queue](./mobject-collections/Queue.md)
     - [Stack](./mobject-collections/Stack.md)
@@ -20,7 +19,6 @@
     - [I_CollectionDisposedEvent](./mobject-collections/I_CollectionDisposedEvent.md)
     - [I_LinkedList](./mobject-collections/I_LinkedList.md)
     - [I_LinkedListNode](./mobject-collections/I_LinkedListNode.md)
-    - [I_List](./mobject-collections/I_List.md)
     - [I_Queue](./mobject-collections/I_Queue.md)
     - [I_Stack](./mobject-collections/I_Stack.md)
 

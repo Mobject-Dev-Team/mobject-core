@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="InvalidArrayIndexDeserializationError" Id="{11d6e6a2-6083-06be-2e22-e7e6f3e01f83}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK InvalidArrayIndexDeserializationError EXTENDS Error
+VAR
+	index : DINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{4a9af5f6-0ac3-0fa8-16f8-1f034c004d45}" />
+    <Property Name="ErrorType" Id="{0708fdf4-b5ef-0898-0b51-0d2437b5653d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ErrorType : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{9a2adaf5-40ca-0b12-21ab-f730de041c2b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ErrorType := 'INVALID_ARRAY_INDEX_DESERIALIZATION_ERROR';]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{7be0ce88-ac66-056b-0a72-78f1a7b988e2}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Index : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[this^.index := Index;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Message" Id="{598bfc12-9466-0ec5-1108-f69ee4c1b1af}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Message : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{0051b229-1263-0621-0178-3bb0bf18eecf}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Message := CONCAT('Deserialization Failed, Array Index Out Of Bounds ', DINT_TO_STRING(index));]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

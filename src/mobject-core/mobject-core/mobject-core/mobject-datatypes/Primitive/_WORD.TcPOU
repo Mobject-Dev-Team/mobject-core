@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="_WORD" Id="{785b4543-75b4-4d22-ba61-129866dbb78f}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -59,6 +59,17 @@ END_VAR
         <ST><![CDATA[localData := InitialValue;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="IsEven" Id="{9e740dfe-6f0d-0e02-2109-625bfe544a0f}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsEven : BOOL]]></Declaration>
+      <Get Name="Get" Id="{9d1a7e75-20cb-0222-3716-8a44a1b6f195}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsEven := (Value mod 2) = 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="IsFloat" Id="{9031cfa6-6438-4d3a-94a7-7b1d37055da1}">
       <Declaration><![CDATA[PROPERTY PUBLIC IsFloat : BOOL]]></Declaration>
       <Get Name="Get" Id="{7390886d-ad43-4baa-ba6b-c5b294a25c3a}">
@@ -172,7 +183,7 @@ VAR
 	pTargetData : POINTER TO WORD;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT (Target.TypeName = TypeName) THEN
+        <ST><![CDATA[IF NOT IsEquivalentTo(Target) THEN
 	RETURN;
 END_IF
 

@@ -1,0 +1,665 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="_ArrayDatatype_2D_TestSuite" Id="{bdd79ff7-68ef-0de7-38db-447d6ed888b1}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK _ArrayDatatype_2D_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestAddress();
+TestBaseDatatype();
+TestClearReference();
+TestClone();
+TestTypeNameReturnsExpected();
+TestIdentifierReturnsExpected();
+TestLength();
+TestLowerBoundD1();
+TestLowerBoundD2();
+TestLowerBoundWithInvalidDimention();
+TestMakeReferenceToFollowsReference();
+TestMakeReferenceToUpdatesReference();
+TestSize();
+TestSerializeTypeWith();
+TestSerializeWith();
+TestTryDeserializeFrom();
+TestTryGetElementAsDatatypeWithInvalidDimentionTooBig();
+TestTryGetElementAsDatatypeWithInvalidDimentionTooSmall();
+TestTryMakeReferenceToFollowsReference();
+TestTryMakeReferenceToUpdatesReference();
+TestUpperBoundD1();
+TestUpperBoundD2();
+TestUpperBoundWithInvalidDimention();
+TestValueReturnsExpectedAfterChange();
+]]></ST>
+    </Implementation>
+    <Method Name="TestAddress" Id="{1a8b8c0f-f062-090b-33e9-12c3b93016b7}">
+      <Declaration><![CDATA[METHOD PUBLIC TestAddress
+VAR
+    _type : _Array0to1_0to2OfBool;
+    notExpected : PVOID := 0;
+    actual : PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestAddress');
+
+actual := _type.Address;
+
+AssertFalse(
+    Condition := (notExpected = actual),
+    Message := 'Type did not return a valid address.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestBaseDatatype" Id="{28f47fee-1f22-09fb-0ba7-46d39c69b92c}">
+      <Declaration><![CDATA[METHOD PUBLIC TestBaseDatatype
+VAR
+    _type : _Array0to1_0to2OfBool;
+    expected : T_MAXSTRING := 'BOOL';
+    actual : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestBaseDatatype');
+
+actual := _type.BaseDatatype.TypeName;
+
+AssertEquals_STRING(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Type did not return the correct base type'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestClearReference" Id="{4e5cecaa-b2e9-0129-0cc6-22ec73e89e9b}">
+      <Declaration><![CDATA[METHOD PUBLIC TestClearReference
+VAR
+    _type : _Array0to1_0to2OfBool;
+	target : ARRAY [0..1,0..2] OF BOOL;
+    expected : ARRAY [0..1,0..2] OF BOOL := [FALSE, FALSE, FALSE, FALSE, FALSE, FALSE];
+    actual : ARRAY [0..1,0..2] OF BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestClearReference');
+
+_type.MakeReferenceTo(target);
+_type.ClearReference();
+target[0,0] := TRUE;
+
+actual := _type.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value incorrectly followed target change'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestClone" Id="{2e927e79-33f2-0211-0a06-0cb3f327e3c2}">
+      <Declaration><![CDATA[METHOD PUBLIC TestClone
+VAR
+    _type : _Array0to1_0to2OfBool;
+	clone : I_Datatype;
+	isValidClone : BOOL;
+	compareResult : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestClone');
+
+clone := _type.Clone();
+
+isValidClone := clone <> 0;
+
+IF isValidClone THEN
+	compareResult := memcmp(_type.Address, clone.Address, clone.Size);
+END_IF
+
+AssertTrue(
+	Condition := isValidClone,
+	Message := 'Clone did not produce a clone'
+);
+
+AssertEquals_DINT(
+	Expected := 0,
+    Actual := compareResult,
+    Message := 'Clone did not return a valid clone.'
+);
+
+clone.Dispose();
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIdentifierReturnsExpected" Id="{1f329c78-e168-0891-3bf0-0d2dda97f077}">
+      <Declaration><![CDATA[METHOD PUBLIC TestIdentifierReturnsExpected
+VAR
+    _type : _Array0to1_0to2OfBool;
+    expected : STRING := 'ARRAY [0..1,0..2] OF BOOL';
+    actual : STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIdentifierReturnsExpected');
+
+actual := _type.Identifier;
+
+AssertEquals_STRING(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Type did not return correct iec type.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestLength" Id="{47f5e7f5-4b90-0c4f-056b-c0bc83184a1e}">
+      <Declaration><![CDATA[METHOD PUBLIC TestLength
+VAR
+    _type : _Array0to1_0to2OfBool;
+    expected : UDINT := 6;
+    actual : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestLength');
+
+actual := _type.Length;
+
+AssertEquals_UDINT(
+    Expected := Expected,
+    Actual := actual,
+    Message := 'Type did not return the correct array length.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestLowerBoundD1" Id="{74a4e143-ef99-0266-195a-5584c075df03}">
+      <Declaration><![CDATA[METHOD PUBLIC TestLowerBoundD1
+VAR
+    _type : _Array0to1_0to2OfBool;
+    expected : DINT := 0;
+    actual : DINT;
+	ok : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestLowerBoundD1');
+
+ok := _type.TryGetLowerBound(1, actual);
+
+AssertTrue(
+    Condition := ok,
+    Message := 'Type did not indicate that lower bound was possible to retreive.'
+);
+
+AssertEquals_DINT(
+    Expected := Expected,
+    Actual := actual,
+    Message := 'Type did not return the correct array lower bound.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestLowerBoundD2" Id="{acc18410-b446-0068-019f-27cf22c5bc03}">
+      <Declaration><![CDATA[METHOD PUBLIC TestLowerBoundD2
+VAR
+    _type : _Array0to1_0to2OfBool;
+    expected : DINT := 0;
+    actual : DINT;
+	ok : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestLowerBoundD2');
+
+ok := _type.TryGetLowerBound(2, actual);
+
+AssertTrue(
+    Condition := ok,
+    Message := 'Type did not indicate that lower bound was possible to retreive.'
+);
+
+AssertEquals_DINT(
+    Expected := Expected,
+    Actual := actual,
+    Message := 'Type did not return the correct array lower bound.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestLowerBoundWithInvalidDimention" Id="{f611c1d0-62a6-033c-36d7-470ba455d7f9}">
+      <Declaration><![CDATA[METHOD PUBLIC TestLowerBoundWithInvalidDimention
+VAR
+    _type : _Array0to1_0to2OfBool;
+    actual : DINT;
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestLowerBoundWithInvalidDimention');
+
+result := _type.TryGetLowerBound(-1, actual);
+
+AssertFalse(
+    Condition := result,
+    Message := 'Type did not indicate that the dimention was invalid'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMakeReferenceToFollowsReference" Id="{943516c0-8994-0d02-2e10-423cb9b9b07e}">
+      <Declaration><![CDATA[METHOD PUBLIC TestMakeReferenceToFollowsReference
+VAR
+	_type : _Array0to1_0to2OfBool;
+	target : ARRAY [0..1,0..2] OF BOOL;
+    expected : ARRAY [0..1,0..2] OF BOOL := [FALSE, TRUE, FALSE, TRUE, FALSE, FALSE];
+    actual : ARRAY [0..1,0..2] OF BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestMakeReferenceToFollowsReference');
+
+_type.MakeReferenceTo(target);
+target[0,1] := TRUE;
+target[1,0] := TRUE;
+
+actual := _type.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not follow target change'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestMakeReferenceToUpdatesReference" Id="{fadf6ca5-f80d-0fab-3f28-27b4efccd7c0}">
+      <Declaration><![CDATA[METHOD PUBLIC TestMakeReferenceToUpdatesReference
+VAR
+	_type : _Array0to1_0to2OfBool;
+	target : ARRAY [0..1,0..2] OF BOOL;
+    expected : ARRAY [0..1,0..2] OF BOOL := [FALSE, TRUE, FALSE, TRUE, FALSE, FALSE];
+    actual : ARRAY [0..1,0..2] OF BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestMakeReferenceToUpdatesReference');
+
+_type.MakeReferenceTo(target);
+_type.Value[0,1] := TRUE;
+_type.Value[1,0] := TRUE;
+
+actual := target;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not update target'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSerializeTypeWith" Id="{7afbb386-ef42-0016-05e9-5b51bd66f5ba}">
+      <Declaration><![CDATA[METHOD PUBLIC TestSerializeTypeWith
+VAR
+    _type : _Array0to1_0to2OfBool;
+    serializer : JsonSerializer;
+    expected : STRING(1000) := '{"typeName":"ARRAY","identifier":"ARRAY [0..1,0..2] OF BOOL","baseType":{"typeName":"BOOL"}}';
+    actual : STRING(1000);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestSerializeTypeWith');
+
+serializer.Reset();
+_type.SerializeTypeWith(serializer);
+serializer.TryGetSerializedData(ADR(actual), SIZEOF(actual));
+
+AssertEquals_STRING(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Serialization of type did not return correct string.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSerializeWith" Id="{9c990919-1086-0d55-3f6d-81a59b4955f9}">
+      <Declaration><![CDATA[METHOD PUBLIC TestSerializeWith
+VAR
+    _type : _Array0to1_0to2OfBool;
+    serializer : JsonSerializer;
+    expected : STRING(500) := '[[false,true,false],[true,false,false]]';
+    actual : STRING(500);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestSerializeWith');
+
+_type.Value[0,1] := TRUE;
+_type.Value[1,0] := TRUE;
+
+serializer.Reset();
+_type.SerializeWith(serializer);
+serializer.TryGetSerializedData(ADR(actual), SIZEOF(actual));
+
+AssertEquals_STRING(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Serialization of type data did not return correct string.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestSize" Id="{a68d28bd-5319-095d-0fab-599550a6f05f}">
+      <Declaration><![CDATA[METHOD PUBLIC TestSize
+VAR
+    _type : _Array0to1_0to2OfBool;
+	example : ARRAY [0..1,0..2] OF BOOL;
+    expected : UDINT := SIZEOF(example);
+    actual : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestSize');
+
+actual := _type.Size;
+
+AssertEquals_UDINT(
+    Expected := Expected,
+    Actual := actual,
+    Message := 'Type did not return the correct size.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryDeserializeFrom" Id="{a0aee742-808e-0a66-01e0-90ee70c79bdb}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryDeserializeFrom
+VAR
+    deserializer : JsonDeserializer;
+    feedback : DeserializerFeedback;
+    json : STRING(500) := '[[false,true,false],[true,false,false]]';
+    _type : _Array0to1_0to2OfBool;
+    expected :  ARRAY [0..1,0..2] OF BOOL := [FALSE, TRUE, FALSE, TRUE, FALSE, FALSE];
+    actual : ARRAY [0..1,0..2] OF BOOL;
+ END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryDeserializeFrom');
+
+deserializer.Reset();
+deserializer.TryLoad(json);
+_type.TryDeserializeFrom(Deserializer, Feedback);
+
+actual := _type.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Type did not deserialize correctly.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryGetElementAsDatatypeWithInvalidDimentionTooBig" Id="{f782908f-5cc9-02f5-3867-60ebdc644a85}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryGetElementAsDatatypeWithInvalidDimentionTooBig
+VAR
+    _type : _Array0to1_0to2OfBool;
+    actual : I_Datatype;
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryGetElementAsDatatypeWithInvalidDimentionTooBig');
+
+result := _type.TryGetElementAsDatatypeByIndex(0,3, actual);
+
+AssertFalse(
+    Condition := result,
+    Message := 'Type did not indicate that the dimention was invalid'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryGetElementAsDatatypeWithInvalidDimentionTooSmall" Id="{1cfe82d8-8775-076c-39d5-ddbd76d46271}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryGetElementAsDatatypeWithInvalidDimentionTooSmall
+VAR
+    _type : _Array0to1_0to2OfBool;
+    actual : I_Datatype;
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryGetElementAsDatatypeWithInvalidDimentionTooSmall');
+
+result := _type.TryGetElementAsDatatypeByIndex(-1, 0, actual);
+
+AssertFalse(
+    Condition := result,
+    Message := 'Type did not indicate that the dimention was invalid'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryMakeReferenceToFollowsReference" Id="{e17ad897-079b-0d9e-2bd1-7bab700b0547}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryMakeReferenceToFollowsReference
+VAR
+    _type : _Array0to1_0to2OfBool;
+	target : _Array0to1_0to2OfBool;
+    expected : ARRAY [0..1,0..2] OF BOOL := [FALSE, TRUE, FALSE, TRUE, FALSE, FALSE];
+    actual :  ARRAY [0..1,0..2] OF BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryMakeReferenceToFollowsReference');
+
+_type.TryMakeReferenceTo(target);
+target.Value[0,1] := TRUE;
+target.Value[1,0] := TRUE;
+
+actual := _type.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not follow target change'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryMakeReferenceToUpdatesReference" Id="{06b4ed6a-dd42-01de-3780-9248a2e81fc6}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryMakeReferenceToUpdatesReference
+VAR
+    _type : _Array0to1_0to2OfBool;
+	target : _Array0to1_0to2OfBool;
+    expected : ARRAY [0..1,0..2] OF BOOL := [FALSE, TRUE, FALSE, TRUE, FALSE, FALSE];
+    actual : ARRAY [0..1,0..2] OF BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryMakeReferenceToUpdatesReference');
+
+_type.TryMakeReferenceTo(target);
+_type.Value[0,1] := TRUE;
+_type.Value[1,0] := TRUE;
+
+actual := target.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Value did not update target'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTypeNameReturnsExpected" Id="{8f2ca238-0775-0249-063c-c48ae7896e8c}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTypeNameReturnsExpected
+VAR
+    _type : _Array0to1_0to2OfBool;
+    expected : STRING := 'ARRAY';
+    actual : STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTypeNameReturnsExpected');
+
+actual := _type.TypeName;
+
+AssertEquals_STRING(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Type did not return correct iec type.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestUpperBoundD1" Id="{003b6f21-8c80-0650-0d7b-900110673546}">
+      <Declaration><![CDATA[METHOD PUBLIC TestUpperBoundD1
+VAR
+    _type : _Array0to1_0to2OfBool;
+    expected : DINT := 1;
+    actual : DINT;
+	ok : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestUpperBoundD1');
+
+ok := _type.TryGetUpperBound(1, actual);
+
+AssertTrue(
+    Condition := ok,
+    Message := 'Type did not indicate that upper bound was possible to retreive.'
+);
+
+AssertEquals_DINT(
+    Expected := Expected,
+    Actual := actual,
+    Message := 'Type did not return the correct array upper bound.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestUpperBoundD2" Id="{c6205229-9a01-0830-3ed3-6ee746a5b010}">
+      <Declaration><![CDATA[METHOD PUBLIC TestUpperBoundD2
+VAR
+    _type : _Array0to1_0to2OfBool;
+    expected : DINT := 2;
+    actual : DINT;
+	ok : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestUpperBoundD2');
+
+ok := _type.TryGetUpperBound(2, actual);
+
+AssertTrue(
+    Condition := ok,
+    Message := 'Type did not indicate that upper bound was possible to retreive.'
+);
+
+AssertEquals_DINT(
+    Expected := Expected,
+    Actual := actual,
+    Message := 'Type did not return the correct array upper bound.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestUpperBoundWithInvalidDimention" Id="{f807d611-59b6-04ee-0623-bf62de68509c}">
+      <Declaration><![CDATA[METHOD PUBLIC TestUpperBoundWithInvalidDimention
+VAR
+    _type : _Array0to1_0to2OfBool;
+    actual : DINT;
+	result : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestUpperBoundWithInvalidDimention');
+
+result := _type.TryGetUpperBound(3, actual);
+
+AssertFalse(
+    Condition := result,
+    Message := 'Type did not indicate that the dimention was invalid'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestValueReturnsExpectedAfterChange" Id="{064fef37-ac3f-0b61-1505-3eab0eae3634}">
+      <Declaration><![CDATA[METHOD PUBLIC TestValueReturnsExpectedAfterChange
+VAR
+    _type : _Array0to1_0to2OfBool;
+	value : ARRAY [0..1,0..2] OF BOOL := [FALSE, TRUE, FALSE, TRUE, FALSE, FALSE];
+    expected : ARRAY [0..1,0..2] OF BOOL := [FALSE, TRUE, FALSE, TRUE, FALSE, FALSE];
+    actual : ARRAY [0..1,0..2] OF BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestValueReturnsExpectedAfterChange');
+
+_type.Value := value;
+actual := _type.Value;
+
+AssertEquals(
+    Expected := expected,
+    Actual := actual,
+    Message := 'Expected value not returned after change.'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
