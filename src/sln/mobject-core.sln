@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # TcXaeShell Solution File, Format Version 11.00
 VisualStudioVersion = 15.0.33403.129
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{DFBE7525-6864-4E62-8B2E-D530D69D9D96}") = "mobject-core", "mobject-core\mobject-core.tspproj", "{59B69CFF-5D85-4F7F-9537-488E592B093E}"
+Project("{DFBE7525-6864-4E62-8B2E-D530D69D9D96}") = "lib", "lib\lib.tspproj", "{59B69CFF-5D85-4F7F-9537-488E592B093E}"
 EndProject
-Project("{B1E792BE-AA5F-4E3C-8C82-674BF9C0715B}") = "mobject-core-test-project", "mobject-core-test-project\mobject-core-test-project.tsproj", "{8AE07C69-BD6D-4B28-9635-39C4206960A9}"
+Project("{B1E792BE-AA5F-4E3C-8C82-674BF9C0715B}") = "libTest", "libTest\libTest.tsproj", "{8AE07C69-BD6D-4B28-9635-39C4206960A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
