@@ -1,0 +1,1672 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="JsonDeserializerNode" Id="{acb3f337-d67d-4c03-b7fb-69e8ecdb898b}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK JsonDeserializerNode EXTENDS Disposable IMPLEMENTS I_Deserializer
+VAR	
+	parent : I_JsonDeserializer;
+	jsonParser : REFERENCE TO JsonDomParser;
+	root : SJsonValue;
+	garbageCollector : I_DeserializerGarbageCollector;
+	nullNode : I_Deserializer;
+	errorFactory : DeserializationErrorFactory;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{5b066cf1-4ee9-4900-8010-7eca441b1a61}" />
+    <Folder Name="Protected" Id="{8e144e4b-e759-430a-8ae9-960d84ba7f0f}" />
+    <Method Name="Clone" Id="{8c0635e6-eab5-4a43-9a1a-b3f521c41e71}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Deserializer
+VAR
+	pClone : POINTER TO JsonDeserializer;
+	jsonSize : UDINT;
+	pJsonString : POINTER TO STRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pClone := __NEW(JsonDeserializer);
+Clone := pClone^;
+
+jsonSize := jsonParser.GetJsonLength(root);
+
+IF jsonSize = 0 THEN
+	// no further cloning to do. 
+	RETURN;
+END_IF
+
+pJsonString := __NEW(BYTE, jsonSize);
+
+IF jsonParser.CopyJson(root, pJsonString^, jsonSize) = 0 THEN
+	__DELETE(pJsonString);
+	RETURN;
+END_IF
+
+pClone^.TryLoad(pJsonString^);
+__DELETE(pJsonString);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateArrayForwardEnumerator" Id="{fa5a9675-d338-4cf0-990a-e88b602273a9}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateArrayForwardEnumerator : I_DeserializerArrayForwardEnumerator
+VAR_INPUT
+	DeserializerRoot : SJsonValue;
+END_VAR
+VAR 
+	pForwardEnumerator : POINTER TO JsonDeserializerArrayForwardEnumerator;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pForwardEnumerator := __NEW(JsonDeserializerArrayForwardEnumerator(
+	ParentJsonDeserializer := parent,
+	ParentJsonDomParser := jsonParser, 
+	NodeRoot := DeserializerRoot, 
+	ParentGarbageCollector := garbageCollector, 
+	ParentNullDeserializer := nullNode
+));
+
+CreateArrayForwardEnumerator := pForwardEnumerator^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateDeserializer" Id="{f08803d4-276e-4163-86d0-06677a5af2dd}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateDeserializer : I_Deserializer
+VAR_INPUT
+	DeserializerRoot : SJsonValue;
+END_VAR
+VAR 
+	pNode : POINTER TO JsonDeserializerNode;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNode := __NEW(JsonDeserializerNode(
+	ParentJsonDeserializer := parent,
+	ParentJsonDomParser := jsonParser, 
+	NodeRoot := DeserializerRoot, 
+	ParentGarbageCollector := garbageCollector, 
+	ParentNullDeserializer := nullNode
+));
+
+CreateDeserializer := pNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateObjectForwardEnumerator" Id="{a26909ce-95cd-4734-ae17-550724b09eb5}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateObjectForwardEnumerator : I_DeserializerObjectForwardEnumerator
+VAR_INPUT
+	DeserializerRoot : SJsonValue;
+END_VAR
+VAR 
+	pForwardEnumerator : POINTER TO JsonDeserializerObjectForwardEnumerator;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pForwardEnumerator := __NEW(JsonDeserializerObjectForwardEnumerator(
+	ParentJsonDeserializer := parent,
+	ParentJsonDomParser := jsonParser, 
+	NodeRoot := DeserializerRoot, 
+	ParentGarbageCollector := garbageCollector, 
+	ParentNullDeserializer := nullNode
+));
+
+CreateObjectForwardEnumerator := pForwardEnumerator^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Dispose" Id="{14528b02-315b-47df-ab5a-af3444697a95}">
+      <Declaration><![CDATA[METHOD Dispose
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[garbageCollector.Deregister(THIS^);
+super^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{f111d4d2-073c-42b6-b4ca-bfc0cff176b5}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	ParentJsonDeserializer : I_JsonDeserializer;
+	ParentJsonDomParser : REFERENCE TO JsonDomParser;
+	NodeRoot : SJsonValue;
+	ParentGarbageCollector : I_DeserializerGarbageCollector;
+	ParentNullDeserializer : I_Deserializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.parent := ParentJsonDeserializer;
+THIS^.jsonParser REF= ParentJsonDomParser;
+THIS^.root := NodeRoot;
+THIS^.garbageCollector := ParentGarbageCollector;
+THIS^.nullNode := ParentNullDeserializer;
+
+ParentGarbageCollector.Register(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetArray" Id="{01d22880-7437-4876-8073-cb9b5c6a82d0}">
+      <Declaration><![CDATA[METHOD GetArray : I_Deserializer]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsArray(root) THEN
+	GetArray := nullNode;
+	RETURN;
+END_IF
+
+GetArray := CreateDeserializer(root);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetArrayEnumerator" Id="{4001fcf3-9742-4a72-bbca-3dfb93181ed1}">
+      <Declaration><![CDATA[METHOD GetArrayEnumerator : I_DeserializerArrayForwardEnumerator
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetArrayEnumerator := CreateArrayForwardEnumerator(root);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetElementByIndex" Id="{8d2d7a15-1692-4594-b439-cac6b8a73f45}">
+      <Declaration><![CDATA[METHOD GetElementByIndex : I_Deserializer
+VAR_INPUT
+	Index : UDINT;
+END_VAR
+VAR
+	newRoot : SJsonValue;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsArray(root) THEN
+	GetElementByIndex := nullNode;
+	RETURN;
+END_IF
+
+newRoot := jsonParser.GetArrayValueByIdx(root, Index);
+
+IF newRoot = 0 THEN
+	GetElementByIndex := nullNode;
+	RETURN;
+END_IF
+
+GetElementByIndex := CreateDeserializer(newRoot);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetKeyArray" Id="{79802935-f481-47e3-abba-a5bc5b1b7d6d}">
+      <Declaration><![CDATA[METHOD GetKeyArray : I_Deserializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+END_VAR
+VAR
+	member : SJsonValue;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF key = '' THEN
+	RETURN;
+END_IF
+
+member := jsonParser.FindMember(root,Key);
+
+IF member = 0 THEN
+	GetKeyArray := nullNode;
+	RETURN;
+END_IF
+
+IF NOT jsonParser.IsArray(member) THEN
+	GetKeyArray := nullNode;
+	RETURN;
+END_IF
+
+GetKeyArray := CreateDeserializer(member);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetKeyObject" Id="{bb80ea39-01f3-4d8c-884b-2b7abd8d4477}">
+      <Declaration><![CDATA[METHOD GetKeyObject : I_Deserializer
+VAR_INPUT
+	Key : T_MAXSTRING;
+END_VAR
+VAR
+	newRoot : SJsonValue;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[newRoot := jsonParser.FindMember(root, Key);
+
+IF newRoot = 0 THEN
+	GetKeyObject := nullNode;
+	RETURN;
+END_IF
+
+GetKeyObject := CreateDeserializer(newRoot);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetObject" Id="{3e00c2d8-84bb-4a06-94eb-80e2119547fb}">
+      <Declaration><![CDATA[METHOD GetObject : I_Deserializer
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsObject(root) THEN
+	GetObject := nullNode;
+	RETURN;
+END_IF
+
+GetObject := CreateDeserializer(root);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetObjectEnumerator" Id="{034c8532-8bc9-4e16-9d23-9b766311be43}">
+      <Declaration><![CDATA[METHOD GetObjectEnumerator : I_DeserializerObjectForwardEnumerator
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetObjectEnumerator := CreateObjectForwardEnumerator(root);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetValue" Id="{8e257f4a-9186-4aac-8511-55a58cdb5dc7}">
+      <Declaration><![CDATA[METHOD GetValue : I_Deserializer
+VAR
+	newRoot : SJsonValue;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[newRoot := jsonParser.GetMemberValue(root);
+
+IF newRoot = 0 THEN
+	GetValue := nullNode;
+	RETURN;
+END_IF
+
+GetValue := CreateDeserializer(newRoot);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeKeyToObject" Id="{b30d741f-9ff6-4127-ba75-b9fccb6e9c68}">
+      <Declaration><![CDATA[METHOD TryDeserializeKeyToObject : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Object : I_Deserializable;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	error : I_Error;
+	deserializer : I_Deserializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+deserializer := CreateDeserializer(member);
+TryDeserializeKeyToObject := Object.TryDeserializeFrom(deserializer, Feedback);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeToObject" Id="{7de0fb50-9c01-4c59-b1c6-e69f2475dc4c}">
+      <Declaration><![CDATA[METHOD TryDeserializeToObject : BOOL
+VAR_INPUT
+	Object : I_Deserializable;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryDeserializeToObject := Object.TryDeserializeFrom(THIS^, Feedback);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetBase64" Id="{7c8c458e-fb14-41a9-84b4-ee6e3c10a282}">
+      <Declaration><![CDATA[METHOD TryGetBase64 : BOOL
+VAR_INPUT
+	pBytes : POINTER TO BYTE;
+	nBytes : DINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsBase64(root) THEN
+	error := errorFactory.CreateIncorrectTypeError('Base64');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+jsonParser.GetBase64(root, pBytes, nBytes);
+TryGetBase64 := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetBool" Id="{1f17f020-bf50-434b-a1cd-8d10f052dd29}">
+      <Declaration><![CDATA[METHOD TryGetBool : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO BOOL;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : BOOL;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadBool(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('BOOL');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetBool := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetByte" Id="{a4997db1-9b8d-4bdc-8340-d098cc9eca8b}">
+      <Declaration><![CDATA[METHOD TryGetByte : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO BYTE;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : BYTE;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('BYTE');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetByte := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetDateTime" Id="{3967af1e-56ab-4b34-86ad-54369c42c4c2}">
+      <Declaration><![CDATA[METHOD TryGetDateTime : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO DATE_AND_TIME;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsISO8601TimeFormat(root) THEN
+	error := errorFactory.CreateIncorrectTypeError('DATE_AND_TIME');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := jsonParser.GetDateTime(root);
+TryGetDateTime := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetDcTime" Id="{d98459d4-a2b1-4854-b58c-d898058a7fae}">
+      <Declaration><![CDATA[METHOD TryGetDcTime : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO DCTIME;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsISO8601TimeFormat(root) THEN
+	error := errorFactory.CreateIncorrectTypeError('DCTIME');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := jsonParser.GetDcTime(root);
+TryGetDcTime := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetDint" Id="{f5e2080c-ccc4-4179-9fd2-7f4c7b47402e}">
+      <Declaration><![CDATA[METHOD TryGetDint : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO DINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : DINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('DINT');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetDint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetDword" Id="{d47eebde-e99b-43e8-9351-1c52156078f3}">
+      <Declaration><![CDATA[METHOD TryGetDword : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO DWORD;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : DWORD;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('DWORD');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetDword := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetElementByIndex" Id="{09accec9-5bd5-0f45-2ad0-3b967ee58dde}">
+      <Declaration><![CDATA[METHOD TryGetElementByIndex : BOOL
+VAR_INPUT
+	Index : UDINT;
+	Destination : REFERENCE TO I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	newRoot : SJsonValue;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsArray(root) THEN
+	error := errorFactory.CreateIncorrectTypeError('ARRAY');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+newRoot := jsonParser.GetArrayValueByIdx(root, Index);
+
+IF newRoot = 0 THEN
+	error := errorFactory.CreateInvalidArrayIndexError(Index);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := CreateDeserializer(newRoot);
+TryGetElementByIndex := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetFileTime" Id="{d363f11c-0dbc-49ae-b5c9-ec8bf95c072a}">
+      <Declaration><![CDATA[METHOD TryGetFileTime : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO FILETIME;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsISO8601TimeFormat(root) THEN
+	error := errorFactory.CreateIncorrectTypeError('FILETIME');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := jsonParser.GetFileTime(root);
+TryGetFileTime := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetHexAsBytes" Id="{490c0754-e762-427c-afac-725e9c0fc268}">
+      <Declaration><![CDATA[METHOD TryGetHexAsBytes : BOOL
+VAR_INPUT
+	pBytes : POINTER TO BYTE;
+	nBytes : DINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsHexBinary(root) THEN
+	error := errorFactory.CreateIncorrectTypeError('HexBinary');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+jsonParser.GetHexBinary(root, pBytes, nBytes);
+TryGetHexAsBytes := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetInt" Id="{b4b109b5-9470-4006-a8f4-51aaf8943980}">
+      <Declaration><![CDATA[METHOD TryGetInt : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO INT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : INT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('INT');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetInt := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyBase64" Id="{e325aeea-1ef7-4895-ba6a-d7b5ac994110}">
+      <Declaration><![CDATA[METHOD TryGetKeyBase64 : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	pBytes : POINTER TO BYTE;
+	nBytes : DINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT jsonParser.IsBase64(member) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('Base64',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+jsonParser.GetBase64(member, pBytes, nBytes);
+TryGetKeyBase64 := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyBool" Id="{c5f0ad99-9e23-4045-b8bd-4e08a09f0635}">
+      <Declaration><![CDATA[METHOD TryGetKeyBool : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO BOOL;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : BOOL;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadBool(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('BOOL',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyBool := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyByte" Id="{ed2270cc-5a5d-4e37-b016-801f7b50c9f0}">
+      <Declaration><![CDATA[METHOD TryGetKeyByte : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO BYTE;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : BYTE;
+	member : SJsonValue;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('BYTE',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyByte := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyDateTime" Id="{42891c23-2906-4704-add6-29a1ac5757e7}">
+      <Declaration><![CDATA[METHOD TryGetKeyDateTime : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO DATE_AND_TIME;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJSonValue;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT jsonParser.IsISO8601TimeFormat(member) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('DATE_AND_TIME',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := jsonParser.GetDateTime(member);
+TryGetKeyDateTime := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyDcTime" Id="{e249e9bb-0315-4135-9d66-18d5e1c1e90e}">
+      <Declaration><![CDATA[METHOD TryGetKeyDcTime : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO DCTIME;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJSonValue;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT jsonParser.IsISO8601TimeFormat(member) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('DCTIME',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := jsonParser.GetDcTime(member);
+TryGetKeyDcTime := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyDint" Id="{057e2f8f-819a-4c24-a3f0-96a29a911222}">
+      <Declaration><![CDATA[METHOD TryGetKeyDint : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO DINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : DINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('DINT',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyDint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyDword" Id="{de89a773-da54-416a-a26f-e09cdcbd7734}">
+      <Declaration><![CDATA[METHOD TryGetKeyDword : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO DWORD;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : DWORD;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('DWORD',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyDword := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyFileTime" Id="{07ad3496-a26c-403b-a3fc-60cbac6fd186}">
+      <Declaration><![CDATA[METHOD TryGetKeyFileTime : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO FILETIME;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJSonValue;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT jsonParser.IsISO8601TimeFormat(member) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('FILETIME',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := jsonParser.GetFileTime(member);
+TryGetKeyFileTime := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyHexAsBytes" Id="{f66597a0-700b-44b6-b82a-b87ec01ff437}">
+      <Declaration><![CDATA[METHOD TryGetKeyHexAsBytes : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	pBytes : POINTER TO BYTE;
+	nBytes : DINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT jsonParser.IsHexBinary(member) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('HexBinary',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+jsonParser.GetHexBinary(member, pBytes, nBytes);
+TryGetKeyHexAsBytes := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyInt" Id="{046c3428-2067-4f2c-9681-b67143f5713a}">
+      <Declaration><![CDATA[METHOD TryGetKeyInt : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO INT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : INT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('INT',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyInt := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyLint" Id="{79aecdfa-9398-4d72-ac34-d293a89ea1aa}">
+      <Declaration><![CDATA[METHOD TryGetKeyLint : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO LINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : LINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('LINT',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyLint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyLreal" Id="{f70124c4-3128-440f-978a-e80e5ce37031}">
+      <Declaration><![CDATA[METHOD TryGetKeyLreal : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO LREAL;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : LREAL;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('LREAL',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyLreal := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyLtime" Id="{e7b8c0dc-9e67-442a-9da1-aec976074033}">
+      <Declaration><![CDATA[METHOD TryGetKeyLtime : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO LTIME;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	timeAsString : T_MAXSTRING;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT jsonParser.IsString(member) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('LTIME',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+timeAsString := jsonParser.GetString(member);
+Destination := STRING_TO_LTIME(timeAsString);
+
+TryGetKeyLtime := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyLword" Id="{b652981a-fef2-4e3a-b8a6-d35fd893c86b}">
+      <Declaration><![CDATA[METHOD TryGetKeyLword : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO LWORD;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : LWORD;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('LWORD',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyLword := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyReal" Id="{964e0b1c-db13-4c7c-b47c-828bbd2081d9}">
+      <Declaration><![CDATA[METHOD TryGetKeyReal : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO REAL;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : REAL;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('REAL',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyReal := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeySint" Id="{5de2194e-e825-4b79-bc71-1d60d3f0fc2a}">
+      <Declaration><![CDATA[METHOD TryGetKeySint : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO SINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : SINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('SINT',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeySint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyString" Id="{13260618-6113-44b8-bf32-97d21fe8901f}">
+      <Declaration><![CDATA[METHOD TryGetKeyString : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO T_MAXSTRING;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadString(member, Destination) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('STRING',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+TryGetKeyString := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyStringEx" Id="{08a9bfce-b3fc-03ef-13c4-3154889aa184}">
+      <Declaration><![CDATA[METHOD TryGetKeyStringEx : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	DestinationAddress : POINTER TO STRING;
+	DestinationSize : UDINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadStringEx(member, DestinationAddress, DestinationSize) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('STRING',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+TryGetKeyStringEx := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyTime" Id="{3ae2f48d-c22e-4732-8e42-09da62c0fc3b}">
+      <Declaration><![CDATA[METHOD TryGetKeyTime : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO TIME;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	timeAsString : T_MAXSTRING;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT jsonParser.IsString(member) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('TIME',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+timeAsString := jsonParser.GetString(member);
+Destination := STRING_TO_TIME(timeAsString);
+
+TryGetKeyTime := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyTod" Id="{11fc8c35-7189-486a-930b-e2de75c45e06}">
+      <Declaration><![CDATA[METHOD TryGetKeyTod : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO TOD;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	timeAsString : T_MAXSTRING;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT jsonParser.IsString(member) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('TOD',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+timeAsString := jsonParser.GetString(member);
+Destination := STRING_TO_TOD(timeAsString);
+
+TryGetKeyTod := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyUdint" Id="{2722acc0-9a66-4971-988c-a2685c630a1f}">
+      <Declaration><![CDATA[METHOD TryGetKeyUdint : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO UDINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : UDINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('UDINT',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyUdint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyUint" Id="{7b218c6d-eb86-4569-b9f9-81993f95ccde}">
+      <Declaration><![CDATA[METHOD TryGetKeyUint : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO UINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : UINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('UINT',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyUint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyUlint" Id="{ab2e37ab-27c6-477a-a966-7e3bd1de10c4}">
+      <Declaration><![CDATA[METHOD TryGetKeyUlint : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO ULINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : ULINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('ULINT',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyUlint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyUsint" Id="{d90f07f7-efa2-4551-86ab-63d075b1fede}">
+      <Declaration><![CDATA[METHOD TryGetKeyUsint : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO USINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : USINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('USINT',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyUsint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyWord" Id="{24b9c3d2-a785-44be-9df5-67a3cbc4b830}">
+      <Declaration><![CDATA[METHOD TryGetKeyWord : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Destination : REFERENCE TO WORD;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	value : WORD;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadNumber(member, value) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('USINT',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetKeyWord := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetLint" Id="{1ad1b993-b05a-46be-8d4d-723ab569909b}">
+      <Declaration><![CDATA[METHOD TryGetLint : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO LINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : LINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('LINT');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetLint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetLreal" Id="{83e16cd0-2ac5-4d6a-95ea-fa86c760e265}">
+      <Declaration><![CDATA[METHOD TryGetLreal : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO LREAL;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : LREAL;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('LREAL');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetLreal := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetLtime" Id="{c0b2b8b5-946d-4e4d-8387-091c09fbd7f3}">
+      <Declaration><![CDATA[METHOD TryGetLtime : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO LTIME;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	timeAsString : T_MAXSTRING;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsString(root) THEN
+	error := errorFactory.CreateIncorrectTypeError('LTIME');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+timeAsString := jsonParser.GetString(root);
+Destination := STRING_TO_LTIME(timeAsString);
+
+TryGetLtime := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetLword" Id="{07e57067-679f-4dca-8914-0cedd0bb58c5}">
+      <Declaration><![CDATA[METHOD TryGetLword : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO LWORD;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : LWORD;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('LWORD');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetLword := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetMember" Id="{727d2ed3-4548-4a8c-b783-ca5ec3b818cb}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED TryGetMember : BOOL
+VAR_INPUT
+	MemberName : T_MAXSTRING;
+	Member : REFERENCE TO SJsonValue;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	localMember : SJsonValue;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF MemberName = '' THEN
+	error := errorFactory.CreateInvalidKeyError();
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+localMember := jsonParser.FindMember(root, MemberName);
+
+IF localMember = 0 THEN
+	error := errorFactory.CreateMissingKeyError(MemberName);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Member := localMember;
+TryGetMember := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetReal" Id="{218789bd-bce0-464d-8985-c8f7409aabaa}">
+      <Declaration><![CDATA[METHOD TryGetReal : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO REAL;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : REAL;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('REAL');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetReal := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetSint" Id="{6e5e4565-4347-4d54-9c6e-fa933f460228}">
+      <Declaration><![CDATA[METHOD TryGetSint : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO SINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : SINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('SINT');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetSint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetString" Id="{3ddd0c8f-e06a-467c-9711-f815733b4275}">
+      <Declaration><![CDATA[METHOD TryGetString : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO T_MAXSTRING;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadString(root, Destination) THEN
+	error := errorFactory.CreateIncorrectTypeError('STRING');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+TryGetString := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetStringEx" Id="{74e13dbf-a50b-0474-1d3c-997df706095d}">
+      <Declaration><![CDATA[METHOD TryGetStringEx : BOOL
+VAR_INPUT
+	DestinationAddress : POINTER TO STRING;
+	DestinationSize : UDINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadStringEx(root, DestinationAddress, DestinationSize) THEN
+	error := errorFactory.CreateIncorrectTypeError('STRING');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+TryGetStringEx := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetTime" Id="{2a94b167-1b38-4984-8e4f-645821b25bb9}">
+      <Declaration><![CDATA[METHOD TryGetTime : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO TIME;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	timeAsString : T_MAXSTRING;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsString(root) THEN
+	error := errorFactory.CreateIncorrectTypeError('TIME');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+timeAsString := jsonParser.GetString(root);
+Destination := STRING_TO_TIME(timeAsString);
+
+TryGetTime := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetTod" Id="{07583cab-def2-4e2f-b9e7-7e08cc4bae03}">
+      <Declaration><![CDATA[METHOD TryGetTod : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO TOD;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	timeAsString : T_MAXSTRING;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonParser.IsString(root) THEN
+	error := errorFactory.CreateIncorrectTypeError('TOD');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+timeAsString := jsonParser.GetString(root);
+Destination := STRING_TO_TOD(timeAsString);
+
+TryGetTod := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetUdint" Id="{39a3977d-7437-4d6a-8120-30c42190d6cc}">
+      <Declaration><![CDATA[METHOD TryGetUdint : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO UDINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : UDINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('UDINT');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetUdint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetUint" Id="{dd41833a-ecf2-4fab-add9-8ea286be1dec}">
+      <Declaration><![CDATA[METHOD TryGetUint : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO UINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : UINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('UINT');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetUint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetUlint" Id="{c65e9641-37a0-43ef-aa41-09e1a98a675a}">
+      <Declaration><![CDATA[METHOD TryGetUlint : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO ULINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : ULINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('ULINT');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetUlint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetUsint" Id="{911ebc0e-2b3f-4064-82e5-590725c2d5e9}">
+      <Declaration><![CDATA[METHOD TryGetUsint : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO USINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : USINT;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('USINT');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetUsint := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetWord" Id="{6c32d479-bc25-4480-9787-758990ed9b65}">
+      <Declaration><![CDATA[METHOD TryGetWord : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO WORD;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	value : WORD;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadNumber(root, value) THEN
+	error := errorFactory.CreateIncorrectTypeError('WORD');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+Destination := value;
+TryGetWord := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryReadBool" Id="{ce9eb957-4d3a-49ab-bd2c-bee8cb56655b}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED TryReadBool : BOOL
+VAR_INPUT
+	JsonValue : SJsonValue;
+	Destination : ANY;
+END_VAR
+VAR
+	_BOOL : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF jsonValue = 0 THEN
+	RETURN;
+END_IF
+
+IF jsonParser.IsBool(jsonValue) THEN
+	_BOOL := jsonParser.GetBool(jsonValue);
+	TryReadBool := TryConvert_BOOL_TO_DESTINATION(_BOOL,Destination);
+	RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryReadNumber" Id="{9b18032a-dcd3-4a7b-8458-e07a8d9a3c00}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED TryReadNumber : BOOL
+VAR_INPUT
+	JsonValue : SJsonValue;
+	Destination : ANY;
+END_VAR
+VAR
+	_DINT : DINT;
+	_LINT : LINT;
+	_UDINT : UDINT;
+	_ULINT : ULINT;
+	_LREAL : LREAL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF jsonValue = 0 THEN
+	RETURN;
+END_IF
+
+IF jsonParser.IsInt(jsonValue) THEN
+	_DINT := jsonParser.GetInt(jsonValue);
+	TryReadNumber := TryConvert_DINT_TO_DESTINATION(_DINT,Destination);
+	RETURN;
+END_IF
+
+IF jsonParser.IsInt64(jsonValue) THEN
+	_LINT := jsonParser.GetInt64(jsonValue);
+	TryReadNumber := TryConvert_LINT_TO_DESTINATION(_LINT,Destination);
+	RETURN;
+END_IF
+
+IF jsonParser.IsUInt(jsonValue) THEN
+	_UDINT := jsonParser.GetUInt(jsonValue);
+	TryReadNumber := TryConvert_UDINT_TO_DESTINATION(_UDINT,Destination);
+	RETURN;
+END_IF
+
+IF jsonParser.IsUInt64(jsonValue) THEN
+	_ULINT := jsonParser.GetUInt64(jsonValue);
+	TryReadNumber := TryConvert_ULINT_TO_DESTINATION(_ULINT,Destination);
+	RETURN;
+END_IF
+
+IF jsonParser.IsDouble(jsonValue) THEN
+	_LREAL := jsonParser.GetDouble(jsonValue);
+	TryReadNumber := TryConvert_LREAL_TO_DESTINATION(_LREAL,Destination);
+	RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryReadString" Id="{2053a3fd-ec05-49a7-8d7a-1679b6942c68}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED TryReadString : BOOL
+VAR_INPUT
+	JsonValue : SJsonValue;
+	Destination : REFERENCE TO T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF jsonValue = 0 THEN
+	RETURN;
+END_IF
+
+IF jsonParser.IsString(jsonValue) THEN
+	IF (jsonParser.CopyString(jsonValue,Destination,DINT_TO_UDINT(SIZEOF(Destination))) > 0) THEN;
+		TryReadString := TRUE;
+		RETURN;
+	END_IF
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryReadStringEx" Id="{8d065d19-ee13-0b71-26db-6b8cf75d9d62}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED TryReadStringEx : BOOL
+VAR_INPUT
+	JsonValue : SJsonValue;
+	DestinationAddress : POINTER TO STRING;
+	DestinationSize : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF jsonValue = 0 THEN
+	RETURN;
+END_IF
+
+IF jsonParser.IsString(jsonValue) THEN
+	IF (jsonParser.CopyString(jsonValue,DestinationAddress^,DestinationSize) > 0) THEN;
+		TryReadStringEx := TRUE;
+		RETURN;
+	END_IF
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
