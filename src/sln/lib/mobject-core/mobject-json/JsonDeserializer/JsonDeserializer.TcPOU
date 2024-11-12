@@ -527,11 +527,23 @@ END_VAR]]></Declaration>
       <Declaration><![CDATA[METHOD TryGetKeyString : BOOL
 VAR_INPUT
 	Key : T_MAXSTRING;
-	Destination : REFERENCE TO STRING;
+	Destination : REFERENCE TO T_MAXSTRING;
 	Feedback : I_DeserializerFeedback;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TryGetKeyString := rootNode.TryGetKeyString(Key, Destination, Feedback);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyStringEx" Id="{712bbcec-f31e-05fb-272e-34bed025c54d}">
+      <Declaration><![CDATA[METHOD TryGetKeyStringEx : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	DestinationAddress : POINTER TO STRING;
+	DestinationSize : UDINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetKeyStringEx := rootNode.TryGetKeyStringEx(Key, DestinationAddress, DestinationSize, Feedback);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetKeyTime" Id="{36761ef9-1461-449a-a02c-08088b4b7b03}">
@@ -676,11 +688,22 @@ END_VAR]]></Declaration>
     <Method Name="TryGetString" Id="{de4e33a0-ab56-4d57-ad2a-2035c735b78c}">
       <Declaration><![CDATA[METHOD TryGetString : BOOL
 VAR_INPUT
-	Destination : REFERENCE TO STRING;
+	Destination : REFERENCE TO T_MAXSTRING;
 	Feedback : I_DeserializerFeedback;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TryGetString := rootNode.TryGetString(Destination, Feedback);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetStringEx" Id="{2c468514-d88e-0fab-0c0a-e26aef09f5b4}">
+      <Declaration><![CDATA[METHOD TryGetStringEx : BOOL
+VAR_INPUT
+	DestinationAddress : POINTER TO STRING;
+	DestinationSize : UDINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetStringEx := rootNode.TryGetStringEx(DestinationAddress, DestinationSize, Feedback);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetTime" Id="{1ab23048-c202-493d-b3ae-ba72573f1eb2}">

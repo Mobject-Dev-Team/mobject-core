@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="JsonDeserializerArrayForwardEnumerator_TestSuite" Id="{af2a6ac6-a4bc-46f3-846d-0a7ab67b0092}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK JsonDeserializerArrayForwardEnumerator_TestSuite EXTENDS TcUnit.FB_TestSuite
 VAR
@@ -73,12 +73,12 @@ TEST_FINISHED();]]></ST>
 VAR
 	jsonDeserializer : JsonDeserializer;
 	enumerator : I_DeserializerArrayForwardEnumerator;
-    json : STRING := '[{"name":"hello"}, {"name":"world"}, {"name":"foobar"}]';
-	out1, out2, out3 : STRING;
+    json : T_MAXSTRING := '[{"name":"hello"}, {"name":"world"}, {"name":"foobar"}]';
+	out1, out2, out3 : T_MAXSTRING;
 	feedback1, feedback2, feedback3 : DeserializerFeedback;
-	expected1 : STRING := 'hello';
-	expected2 : STRING := 'world';
-	expected3 : STRING := 'foobar';
+	expected1 : T_MAXSTRING := 'hello';
+	expected2 : T_MAXSTRING := 'world';
+	expected3 : T_MAXSTRING := 'foobar';
 	result : BOOL;
 END_VAR
 ]]></Declaration>
@@ -125,12 +125,12 @@ TEST_FINISHED();]]></ST>
 VAR
 	jsonDeserializer : JsonDeserializer;
 	enumerator : I_DeserializerArrayForwardEnumerator;
-    json : STRING := '["one", "two", "three"]';
-	out1, out2, out3 : STRING;
+    json : T_MAXSTRING := '["one", "two", "three"]';
+	out1, out2, out3 : T_MAXSTRING;
 	feedback1, feedback2, feedback3 : DeserializerFeedback;
-	expected1 : STRING := 'one';
-	expected2 : STRING := 'two';
-	expected3 : STRING := 'three';
+	expected1 : T_MAXSTRING := 'one';
+	expected2 : T_MAXSTRING := 'two';
+	expected3 : T_MAXSTRING := 'three';
 	result : BOOL;
 END_VAR
 ]]></Declaration>

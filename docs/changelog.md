@@ -2,7 +2,9 @@
 
 ## v0.5.0-beta
 
-tba
+- changed folder layout to remove long file names
+- changed TryGetString and TryGetKeyString in I_Deserializer to use T_MAXSTRING
+- added TryGetStringEx and TryGetKeyStringEx to support longer than T_MAXSTRING
 
 ## v0.4.0-beta
 

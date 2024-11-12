@@ -275,7 +275,16 @@ END_VAR]]></Declaration>
       <Declaration><![CDATA[METHOD TryGetKeyString : BOOL
 VAR_INPUT
 	Key : T_MAXSTRING;
-	Destination : REFERENCE TO STRING;
+	Destination : REFERENCE TO T_MAXSTRING;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetKeyStringEx" Id="{de8c4a2f-3fcc-0e86-0aa4-47a97b89f1de}">
+      <Declaration><![CDATA[METHOD TryGetKeyStringEx : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	DestinationAddress : POINTER TO STRING;
+	DestinationSize : UDINT;
 	Feedback : I_DeserializerFeedback;
 END_VAR]]></Declaration>
     </Method>
@@ -382,7 +391,15 @@ END_VAR]]></Declaration>
     <Method Name="TryGetString" Id="{d36e385b-9c53-0e1b-2873-d0d14d97ac15}">
       <Declaration><![CDATA[METHOD TryGetString : BOOL
 VAR_INPUT
-	Destination : REFERENCE TO STRING;
+	Destination : REFERENCE TO T_MAXSTRING;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetStringEx" Id="{3aea9988-c99e-0487-2b73-38b18e04a7fc}">
+      <Declaration><![CDATA[METHOD TryGetStringEx : BOOL
+VAR_INPUT
+	DestinationAddress : POINTER TO STRING;
+	DestinationSize : UDINT;
 	Feedback : I_DeserializerFeedback;
 END_VAR]]></Declaration>
     </Method>

@@ -971,7 +971,7 @@ TryGetKeySint := TRUE;]]></ST>
       <Declaration><![CDATA[METHOD TryGetKeyString : BOOL
 VAR_INPUT
 	Key : T_MAXSTRING;
-	Destination : REFERENCE TO STRING;
+	Destination : REFERENCE TO T_MAXSTRING;
 	Feedback : I_DeserializerFeedback;
 END_VAR
 VAR
@@ -990,6 +990,32 @@ IF NOT TryReadString(member, Destination) THEN
 END_IF
 
 TryGetKeyString := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyStringEx" Id="{08a9bfce-b3fc-03ef-13c4-3154889aa184}">
+      <Declaration><![CDATA[METHOD TryGetKeyStringEx : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	DestinationAddress : POINTER TO STRING;
+	DestinationSize : UDINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	member : SJsonValue;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryGetMember(Key, member, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT TryReadStringEx(member, DestinationAddress, DestinationSize) THEN
+	error := errorFactory.CreateIncorrectKeyTypeError('STRING',Key);
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+TryGetKeyStringEx := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetKeyTime" Id="{3ae2f48d-c22e-4732-8e42-09da62c0fc3b}">
@@ -1346,21 +1372,40 @@ TryGetSint := TRUE;]]></ST>
     <Method Name="TryGetString" Id="{3ddd0c8f-e06a-467c-9711-f815733b4275}">
       <Declaration><![CDATA[METHOD TryGetString : BOOL
 VAR_INPUT
-	Destination : REFERENCE TO STRING;
+	Destination : REFERENCE TO T_MAXSTRING;
 	Feedback : I_DeserializerFeedback;
 END_VAR
 VAR
 	error : I_Error;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT jsonParser.IsString(root) THEN
+        <ST><![CDATA[IF NOT TryReadString(root, Destination) THEN
 	error := errorFactory.CreateIncorrectTypeError('STRING');
 	Feedback.LogError(error);
 	RETURN;
 END_IF
 
-Destination := jsonParser.GetString(root);
 TryGetString := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetStringEx" Id="{74e13dbf-a50b-0474-1d3c-997df706095d}">
+      <Declaration><![CDATA[METHOD TryGetStringEx : BOOL
+VAR_INPUT
+	DestinationAddress : POINTER TO STRING;
+	DestinationSize : UDINT;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT TryReadStringEx(root, DestinationAddress, DestinationSize) THEN
+	error := errorFactory.CreateIncorrectTypeError('STRING');
+	Feedback.LogError(error);
+	RETURN;
+END_IF
+
+TryGetStringEx := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetTime" Id="{2a94b167-1b38-4984-8e4f-645821b25bb9}">
@@ -1588,7 +1633,7 @@ END_IF]]></ST>
       <Declaration><![CDATA[METHOD PROTECTED TryReadString : BOOL
 VAR_INPUT
 	JsonValue : SJsonValue;
-	Destination : REFERENCE TO STRING;
+	Destination : REFERENCE TO T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF jsonValue = 0 THEN
@@ -1598,6 +1643,26 @@ END_IF
 IF jsonParser.IsString(jsonValue) THEN
 	IF (jsonParser.CopyString(jsonValue,Destination,DINT_TO_UDINT(SIZEOF(Destination))) > 0) THEN;
 		TryReadString := TRUE;
+		RETURN;
+	END_IF
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryReadStringEx" Id="{8d065d19-ee13-0b71-26db-6b8cf75d9d62}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED TryReadStringEx : BOOL
+VAR_INPUT
+	JsonValue : SJsonValue;
+	DestinationAddress : POINTER TO STRING;
+	DestinationSize : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF jsonValue = 0 THEN
+	RETURN;
+END_IF
+
+IF jsonParser.IsString(jsonValue) THEN
+	IF (jsonParser.CopyString(jsonValue,DestinationAddress^,DestinationSize) > 0) THEN;
+		TryReadStringEx := TRUE;
 		RETURN;
 	END_IF
 END_IF]]></ST>

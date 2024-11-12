@@ -553,7 +553,23 @@ Feedback.LogError(error);]]></ST>
       <Declaration><![CDATA[METHOD TryGetKeyString : BOOL
 VAR_INPUT
 	Key : T_MAXSTRING;
-	Destination : REFERENCE TO STRING;
+	Destination : REFERENCE TO T_MAXSTRING;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[error := errorFactory.CreateIncorrectKeyTypeError('STRING',Key);
+Feedback.LogError(error);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetKeyStringEx" Id="{ac53f22d-0597-09da-3e7d-15a4fa3978d1}">
+      <Declaration><![CDATA[METHOD TryGetKeyStringEx : BOOL
+VAR_INPUT
+	Key : T_MAXSTRING;
+	DestinationAddress : POINTER TO STRING;
+	DestinationSize : UDINT;
 	Feedback : I_DeserializerFeedback;
 END_VAR
 VAR
@@ -756,7 +772,22 @@ Feedback.LogError(error);]]></ST>
     <Method Name="TryGetString" Id="{16a43299-1e03-4dc4-900f-544a7e1cb2ba}">
       <Declaration><![CDATA[METHOD TryGetString : BOOL
 VAR_INPUT
-	Destination : REFERENCE TO STRING;
+	Destination : REFERENCE TO T_MAXSTRING;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[error := errorFactory.CreateIncorrectTypeError('STRING');
+Feedback.LogError(error);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetStringEx" Id="{5e2bce37-2ba5-01a2-3704-561060a3dac6}">
+      <Declaration><![CDATA[METHOD TryGetStringEx : BOOL
+VAR_INPUT
+	DestinationAddress : POINTER TO STRING;
+	DestinationSize : UDINT;
 	Feedback : I_DeserializerFeedback;
 END_VAR
 VAR

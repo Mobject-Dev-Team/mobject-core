@@ -42,6 +42,7 @@ TestTryDeserializeKeyToObjectFailsWithInvalidKey();
 TestTryGetKeyReal();
 TestTryGetKeySint();
 TestTryGetKeyString();
+TestTryGetKeyStringEx();
 TestTryGetKeyTime();
 TestTryGetKeyTod();
 TestTryGetKeyUdint();
@@ -57,6 +58,7 @@ TestTryDeserializeToObject();
 TestTryGetReal();
 TestTryGetSint();
 TestTryGetString();
+TestTryGetStringEx();
 TestTryGetTime();
 TestTryGetTod();
 TestTryGetUdint();
@@ -1201,10 +1203,10 @@ TEST_FINISHED();
       <Declaration><![CDATA[METHOD PUBLIC TestTryGetKeyString
 VAR
     jsonDeserializer : JsonDeserializer;
-    json : STRING := '{"data":"foobar"}';
-    out : STRING;
+    json : T_MAXSTRING := '{"data":"foobar"}';
+    out : T_MAXSTRING;
 	feedback : DeserializerFeedback;
-    expected : STRING := 'foobar';
+    expected : T_MAXSTRING := 'foobar';
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -1212,6 +1214,32 @@ END_VAR
 
 jsonDeserializer.TryLoad(json);
 jsonDeserializer.TryGetKeyString('data', out, feedback);
+
+AssertEquals(
+    Expected := expected,
+    Actual := out,
+    Message := 'Did not produce the expected STRING value from JSON'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryGetKeyStringEx" Id="{6a4eda59-a839-0c5a-3321-4a91163c8565}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryGetKeyStringEx
+VAR
+    jsonDeserializer : JsonDeserializer;
+    json : T_MAXSTRING := '{"data":"---------|---------|---------|---------|---------|---------|---------|---------|---------|"}';
+    out : T_MAXSTRING;
+	feedback : DeserializerFeedback;
+    expected : T_MAXSTRING := '---------|---------|---------|---------|---------|---------|---------|---------|---------|'; // 90 characters
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryGetKeyStringEx');
+
+jsonDeserializer.TryLoad(json);
+jsonDeserializer.TryGetKeyStringEx('data', ADR(out), SIZEOF(out), feedback);
 
 AssertEquals(
     Expected := expected,
@@ -1565,10 +1593,10 @@ TEST_FINISHED();
       <Declaration><![CDATA[METHOD PUBLIC TestTryGetString
 VAR
     jsonDeserializer : JsonDeserializer;
-    json : STRING := '"foobar"';
-    out : STRING;
+    json : T_MAXSTRING := '"foobar"';
+    out : T_MAXSTRING;
 	feedback : DeserializerFeedback;
-    expected : STRING := 'foobar';
+    expected : T_MAXSTRING := 'foobar';
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -1580,7 +1608,33 @@ jsonDeserializer.TryGetString(out, feedback);
 AssertEquals(
     Expected := expected,
     Actual := out,
-    Message := 'Did not produce the expected STRING value from JSON "foobar"'
+    Message := 'Did not produce the expected STRING value from JSON'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryGetStringEx" Id="{2135ee45-ead9-0768-060b-2ec8371f6c40}">
+      <Declaration><![CDATA[METHOD PUBLIC TestTryGetStringEx
+VAR
+    jsonDeserializer : JsonDeserializer;
+    json : T_MAXSTRING := '"---------|---------|---------|---------|---------|---------|---------|---------|---------|"';
+    out : T_MAXSTRING;
+	feedback : DeserializerFeedback;
+    expected : T_MAXSTRING := '---------|---------|---------|---------|---------|---------|---------|---------|---------|'; // 90 characters
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryGetStringEx');
+
+jsonDeserializer.TryLoad(json);
+jsonDeserializer.TryGetStringEx(Adr(out), sizeof(out), feedback);
+
+AssertEquals(
+    Expected := expected,
+    Actual := out,
+    Message := 'Did not produce the expected STRING value from JSON'
 );
 
 TEST_FINISHED();

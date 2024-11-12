@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="MockDeserializableUserObject" Id="{26a5c0a0-9bcd-4053-ae19-dc4ef45f044f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK MockDeserializableUserObject IMPLEMENTS I_Deserializable
 VAR
-	_name : STRING;
+	_name : T_MAXSTRING;
 	_age : INT;
 END_VAR
 ]]></Declaration>
@@ -40,7 +40,7 @@ END_VAR
       </Implementation>
     </Method>
     <Property Name="Name" Id="{462ded79-a15b-4005-b9f0-06ef83902385}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Name : STRING]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
       <Get Name="Get" Id="{a5665efe-bd30-4fe7-88d7-edfcfda2ac11}">
         <Declaration><![CDATA[VAR
 END_VAR
