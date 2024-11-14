@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.0-beta
+
+- added TryCopyContentFrom to interface datatypes. This will allow copying of the data inside of the interface, not just the interface value.
+
 ## v0.5.0-beta
 
 - changed folder layout to remove long file names
