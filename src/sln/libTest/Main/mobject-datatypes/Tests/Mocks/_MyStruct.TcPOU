@@ -101,7 +101,8 @@ VAR_STAT
 	structure : MyStruct;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_myBit.MakeReferenceTo(THIS^, GetByteOffset(localData, localData.MyBit), BITADR(structure.MyBit));]]></ST>
+        <ST><![CDATA[_myBit.MakeReferenceTo(THIS^, GetByteOffset(localData, localData.MyBit), BITADR(structure.MyBit));
+]]></ST>
       </Implementation>
     </Method>
     <Property Name="Size" Id="{74d051e4-7162-4209-9df9-958ebf74e194}">

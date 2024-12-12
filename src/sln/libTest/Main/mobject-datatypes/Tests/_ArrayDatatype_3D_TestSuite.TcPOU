@@ -289,7 +289,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[TEST('TestLowerBoundWithInvalidDimention');
 
-result := _type.TryGetLowerBound(-1, actual);
+result := _type.TryGetLowerBound(100, actual);
 
 AssertFalse(
     Condition := result,

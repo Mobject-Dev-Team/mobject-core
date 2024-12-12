@@ -6,7 +6,7 @@
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK InvalidArrayIndexDeserializationError EXTENDS Error
 VAR
-	index : DINT;
+	index : UDINT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -29,7 +29,7 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	Index : DINT;
+	Index : UDINT;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -43,7 +43,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[Message := CONCAT('Deserialization Failed, Array Index Out Of Bounds ', DINT_TO_STRING(index));]]></ST>
+          <ST><![CDATA[Message := CONCAT('Deserialization Failed, Array Index Out Of Bounds ', UDINT_TO_STRING(index));]]></ST>
         </Implementation>
       </Get>
     </Property>

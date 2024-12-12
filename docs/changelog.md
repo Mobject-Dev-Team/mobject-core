@@ -4,6 +4,7 @@
 
 - added TryCopyContentFrom to interface datatypes. This will allow copying of the data inside of the interface, not just the interface value.
 - disabled warnings
+- corrected DeserializerErrorFactory and Error to use UDINT
 
 ## v0.5.0-beta
 
