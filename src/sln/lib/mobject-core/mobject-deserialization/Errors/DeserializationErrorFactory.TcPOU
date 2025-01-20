@@ -57,7 +57,7 @@ CreateIncorrectTypeError := pError^;]]></ST>
     <Method Name="CreateInvalidArrayIndexError" Id="{4dd69cd0-acdc-01ab-1db6-6eabfa7ddadf}">
       <Declaration><![CDATA[METHOD PUBLIC CreateInvalidArrayIndexError : I_Error
 VAR_INPUT
-	AttemptedIndex : DINT;
+	AttemptedIndex : UDINT;
 END_VAR
 VAR
 	pError : POINTER TO InvalidArrayIndexDeserializationError;

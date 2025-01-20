@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <Itf Name="I_InterfaceDatatype" Id="{9ab490f0-4162-461c-a7e3-468cf80da484}">
     <Declaration><![CDATA[INTERFACE I_InterfaceDatatype EXTENDS I_Datatype
 ]]></Declaration>
@@ -11,5 +11,12 @@ END_VAR
 ]]></Declaration>
       </Get>
     </Property>
+    <Method Name="TryCopyContentFrom" Id="{5c2f0d2d-3d30-0fd3-01d6-16063cef08fc}">
+      <Declaration><![CDATA[METHOD PUBLIC TryCopyContentFrom : BOOL
+VAR_INPUT
+	Source : I_InterfaceDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
   </Itf>
 </TcPlcObject>

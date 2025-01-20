@@ -44,6 +44,16 @@ END_VAR]]></Declaration>
 Serializer.AddKeyString('identifier',Identifier);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="TryCopyContentFrom" Id="{2fb0b68b-0476-077e-1133-20e124f86f6b}">
+      <Declaration><![CDATA[METHOD PUBLIC ABSTRACT TryCopyContentFrom : BOOL
+VAR_INPUT
+	Source : I_InterfaceDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryCopyFrom" Id="{a0a4bb8e-cd4f-4087-b39c-d977c7f809fa}">
       <Declaration><![CDATA[METHOD PUBLIC TryCopyFrom : BOOL
 VAR_INPUT
