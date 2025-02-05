@@ -10,6 +10,10 @@
 
 This is the combination of core libraries created by [mobject](http://mobject.org). This library contains many useful classes and interfaces used to make PLC programming with OOP easier.
 
+## Installation
+
+The latest version of the library is found in the root of the repo. To install in to TwinCAT 4024, simply navigate to the repo folder and double click on `install-library.bat`
+
 ## What is mobject?
 
 Pronounced mob-ject.
