@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.0-beta
+
+- added \_PVOID datatype
+
 ## v0.6.0-beta
 
 - added TryCopyContentFrom to interface datatypes. This will allow copying of the data inside of the interface, not just the interface value.
