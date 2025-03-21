@@ -4,7 +4,7 @@
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK _PVOID EXTENDS DatatypeBase
+FUNCTION_BLOCK _PVOID EXTENDS DatatypeBase IMPLEMENTS I_PVOID
 VAR
 	localData : PVOID;
 	activeData : REFERENCE TO PVOID REF= localData;
@@ -113,6 +113,17 @@ END_IF
 pTargetData := Target.Address;
 activeData REF= pTargetData^;
 TryMakeReferenceTo := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_PVOID" Id="{b4926b36-3331-036a-3691-85baa08a2f6d}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_PVOID : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Destination := THIS^;
+TryResolveAs_PVOID := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Property Name="TypeName" Id="{2f0de6b3-5434-090f-3be7-268c1a830974}">

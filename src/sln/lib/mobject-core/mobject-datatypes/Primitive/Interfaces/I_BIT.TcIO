@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <Itf Name="I_BitDatatype" Id="{8c04bfe6-4da3-454f-afa5-baa039ba8426}">
-    <Declaration><![CDATA[INTERFACE I_BitDatatype EXTENDS I_Datatype
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <Itf Name="I_BIT" Id="{8c04bfe6-4da3-454f-afa5-baa039ba8426}">
+    <Declaration><![CDATA[INTERFACE I_BIT EXTENDS I_Datatype
 ]]></Declaration>
     <Property Name="BitOffset" Id="{c9a13c67-bb40-4448-b1c1-a7e30b25cb15}">
       <Declaration><![CDATA[PROPERTY PUBLIC BitOffset : DWORD]]></Declaration>

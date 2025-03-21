@@ -3,6 +3,8 @@
 ## v0.7.0-beta
 
 - added \_PVOID datatype
+- added interfaces to all of the primitives to allow for TryResolveAs...
+- added TryConvertTo and TryConvertTo\_
 
 ## v0.6.0-beta
 

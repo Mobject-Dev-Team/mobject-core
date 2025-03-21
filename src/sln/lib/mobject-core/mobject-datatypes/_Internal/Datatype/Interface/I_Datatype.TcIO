@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
   <Itf Name="I_Datatype" Id="{51a69d2e-c0c1-0516-1d53-b6243b074c1e}">
     <Declaration><![CDATA[INTERFACE I_Datatype extends I_Serializable, I_Deserializable, I_Disposable]]></Declaration>
     <Method Name="Accept" Id="{8aab0540-3d70-0faa-342b-c9c8c7ecf3f8}">
@@ -56,6 +56,18 @@ END_VAR
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
+    <Method Name="TryConvertTo" Id="{c3e6b5b8-4372-099f-26af-6d1969bd33e8}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConvertTo : BOOL
+VAR_INPUT
+	Destination : ANY;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryConvertTo_" Id="{0e70dee5-144f-0efc-127d-89c947c73ef5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConvertTo_ : BOOL
+VAR_INPUT
+	Destination : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
     <Method Name="TryCopyFrom" Id="{d118b90b-402a-49d5-8138-4b2026e6a7a7}">
       <Declaration><![CDATA[METHOD PUBLIC TryCopyFrom : BOOL
 VAR_INPUT
@@ -77,6 +89,153 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Method Name="TryResolveAs_BIT" Id="{778d46eb-2742-0c97-2a64-efb935801aa5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_BIT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_BIT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_BOOL" Id="{90f66166-275f-0d22-2641-7f543ef8a66c}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_BOOL : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_BOOL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_BYTE" Id="{5aa8e4cd-2b05-0234-379f-ce01a7d54130}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_BYTE : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_BYTE;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_DINT" Id="{9bf9bd26-c9eb-0206-16b7-52425ed6a222}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_DINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_DINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_DT" Id="{36379955-d8ce-0347-0e27-3ce815b60173}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_DT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_DT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_DWORD" Id="{9f8ba283-8fcc-044a-0590-517d836e151f}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_DWORD : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_DWORD;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_INT" Id="{0c357b71-7caf-070e-2220-5f6066db843e}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_INT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_INT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_LINT" Id="{c3d42200-4e9d-0067-0888-3311749a743f}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_LINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_LINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_LREAL" Id="{c996eabb-6d82-06ec-2858-ccdbc458db32}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_LREAL : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_LREAL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_LWORD" Id="{0d8af125-b45b-0aac-251e-34cf0e640410}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_LWORD : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_LWORD;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_PVOID" Id="{19e251cb-c110-0d33-1186-950c4ac21db5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_PVOID : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_PVOID;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_REAL" Id="{a32f2146-0000-0ec3-3f96-b23782fc82b5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_REAL : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_REAL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_SINT" Id="{67cccaa3-70ca-0322-019c-66e7213071dc}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_SINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_SINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_STRING" Id="{5ceebfa9-6cc4-02eb-30e5-d39669b76a4f}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_STRING : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_STRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_TIME_OF_DAY" Id="{3d60915a-7613-0f9d-14bd-6724c077f18f}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_TIME_OF_DAY : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_TIME_OF_DAY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_TOD" Id="{5c3b4567-a014-01fd-0808-9bf48ba6973f}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_TOD : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_TOD;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_UDINT" Id="{a4d2175d-9a02-097c-3c4e-64980ca5e865}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_UDINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_UDINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_UINT" Id="{5759f2b8-840d-0b0f-357e-619e8b17a240}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_UINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_UINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_ULINT" Id="{2afc8891-280a-03b6-1e72-b66b586a83b9}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_ULINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ULINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_USINT" Id="{ab5ca5b6-4a22-0381-045f-33f0386b545f}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_USINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_USINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_WORD" Id="{8347f906-06c0-0055-23e6-8ec9a252f600}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_WORD : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_WORD;
+END_VAR
+]]></Declaration>
+    </Method>
     <Method Name="TryResolveAsAliasDatatype" Id="{c185e5df-9218-03ac-0f52-284bc7b16735}">
       <Declaration><![CDATA[METHOD PUBLIC TryResolveAsAliasDatatype : BOOL
 VAR_INPUT
@@ -88,13 +247,6 @@ END_VAR
       <Declaration><![CDATA[METHOD PUBLIC TryResolveAsArrayDatatype : BOOL
 VAR_INPUT
 	Destination : REFERENCE TO I_ArrayDatatype;
-END_VAR
-]]></Declaration>
-    </Method>
-    <Method Name="TryResolveAsBitDatatype" Id="{9f36dfa4-8831-46bb-bdc9-fdf9ebc483d0}">
-      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsBitDatatype : BOOL
-VAR_INPUT
-	Destination : REFERENCE TO I_BitDatatype;
 END_VAR
 ]]></Declaration>
     </Method>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
   <POU Name="AliasDatatypeBase" Id="{43071a06-31c8-0f0a-109c-de25a9d3f60c}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -91,6 +91,24 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[_baseDatatype.SerializeWith(Serializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryConvertTo" Id="{02422975-ccef-0c83-042d-6f1bb93680f4}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConvertTo : BOOL
+VAR_INPUT
+	Destination : ANY;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryConvertTo := _baseDatatype.TryConvertTo(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryConvertTo_" Id="{289afa96-33fe-02e7-1e69-c25fdb7d7a42}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConvertTo_ : BOOL
+VAR_INPUT
+	Destination : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryConvertTo_ := _baseDatatype.TryConvertTo_(Destination);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryDeserializeFrom" Id="{83d0bd14-f34c-082f-0c86-6c1c312393f9}">

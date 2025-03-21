@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <Itf Name="I_REAL" Id="{401991fb-cfdf-0727-352e-9e4a6f57401a}">
+    <Declaration><![CDATA[INTERFACE I_REAL EXTENDS I_Datatype
+]]></Declaration>
+    <Property Name="Value" Id="{d6f0e9a4-21b9-0c3f-0756-00b3ef4ceaa0}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO REAL]]></Declaration>
+      <Get Name="Get" Id="{1cf58fe2-0aea-0eae-3e33-11ebd873a5eb}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

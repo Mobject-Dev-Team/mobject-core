@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <Itf Name="I_TIME_OF_DAY" Id="{c7e262db-2a91-00bc-1f03-ba314c220d34}">
+    <Declaration><![CDATA[INTERFACE I_TIME_OF_DAY EXTENDS I_Datatype
+]]></Declaration>
+    <Property Name="Value" Id="{810604ec-d4de-0fb7-36c6-311d484852ab}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO TIME_OF_DAY
+]]></Declaration>
+      <Get Name="Get" Id="{a6b506cc-0a96-0e23-1655-e70e7cbe6789}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

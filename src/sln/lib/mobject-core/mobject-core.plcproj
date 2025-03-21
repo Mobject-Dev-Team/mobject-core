@@ -100,6 +100,7 @@
     <Folder Include="mobject-datatypes\DatatypeVisitor" />
     <Folder Include="mobject-datatypes\Functions" />
     <Folder Include="mobject-datatypes\Primitive" />
+    <Folder Include="mobject-datatypes\Primitive\Interfaces" />
     <Folder Include="mobject-datatypes\_Internal" />
     <Folder Include="mobject-datatypes\_Internal\Datatype" />
     <Folder Include="mobject-datatypes\_Internal\Datatype\Interface" />
@@ -1584,10 +1585,76 @@
     <Compile Include="mobject-datatypes\Functions\GetByteOffset.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_BIT.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_BYTE.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_DINT.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_DT.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_DWORD.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_INT.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_LINT.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_LREAL.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_LWORD.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_PVOID.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_REAL.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_SINT.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_TOD.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_TIME_OF_DAY.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_STRING.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_BOOL.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_UDINT.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_UINT.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_ULINT.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_USINT.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_WORD.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="mobject-datatypes\Primitive\_BIT.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Primitive\_BOOL.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\_ANY.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Primitive\_BYTE.TcPOU">
@@ -1676,9 +1743,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_ArrayDatatype_3D.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_BitDatatype.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\_Internal\Datatype\Interface\I_Datatype.TcIO">

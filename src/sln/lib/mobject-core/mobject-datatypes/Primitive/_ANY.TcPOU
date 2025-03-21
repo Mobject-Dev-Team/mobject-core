@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="_ANY" Id="{934a0bfd-87e5-07e2-2196-07f5c55c1068}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK _ANY EXTENDS DatatypeBase
+VAR
+	targetDatatype : I_Datatype;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="Address" Id="{8de9ca49-8c61-0be7-395f-a23669223534}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Address : PVOID]]></Declaration>
+      <Get Name="Get" Id="{51f605b4-3fea-0e4b-04c3-be3118c3bea9}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF targetDatatype = 0 THEN
+	RETURN;
+END_IF
+
+Address := targetDatatype.Address;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="ClearReference" Id="{eddde866-a7d7-025d-09ea-db4dcbc4eeba}">
+      <Declaration><![CDATA[METHOD PUBLIC ClearReference
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[targetDatatype := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Clone" Id="{fba5394f-dcaa-0d82-30d4-3746a85090cd}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Datatype
+VAR
+    pClone : POINTER TO _ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pClone := __NEW(_ANY);
+Clone := pClone^;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{47d20db2-053b-0d0a-176e-4d1a12ff34e3}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF targetDatatype = 0 THEN
+	RETURN;
+END_IF
+
+targetDatatype.SerializeWith(Serializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Size" Id="{938839ef-a18d-0b64-3469-96388f33d585}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Size : UDINT]]></Declaration>
+      <Get Name="Get" Id="{9b106580-ea05-0365-16e0-86e7cfbdee5e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF targetDatatype = 0 THEN
+	RETURN;
+END_IF
+
+Size := targetDatatype.Size;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="TryDeserializeFrom" Id="{27251bbc-94a0-023e-15cb-0d3b9264a373}">
+      <Declaration><![CDATA[METHOD TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF targetDatatype = 0 THEN
+	RETURN;
+END_IF
+
+TryDeserializeFrom := targetDatatype.TryDeserializeFrom(Deserializer, Feedback);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryMakeReferenceTo" Id="{a4748025-4e2e-041c-3535-95a90c445df3}">
+      <Declaration><![CDATA[METHOD TryMakeReferenceTo : BOOL
+VAR_INPUT
+	Target : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF targetDatatype = 0 THEN
+	RETURN;
+END_IF
+
+targetDatatype := Target;
+TryMakeReferenceTo := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="TypeName" Id="{08f8a093-61ae-02a0-1efd-263cdd53516f}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TypeName : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{73ab7c26-9d1e-0322-36e7-9023396511bf}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TypeName := 'ANY';]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

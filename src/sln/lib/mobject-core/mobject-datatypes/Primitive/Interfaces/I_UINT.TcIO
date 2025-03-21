@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <Itf Name="I_UINT" Id="{186cd580-5db6-03ac-3f86-3d4e1fabe989}">
+    <Declaration><![CDATA[INTERFACE I_UINT EXTENDS I_Datatype
+]]></Declaration>
+    <Property Name="Value" Id="{3df8e921-de4d-08d7-3df8-3d543e2a7fcc}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO UINT]]></Declaration>
+      <Get Name="Get" Id="{dfa2282e-642a-09b1-13c3-ae28d13473ba}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

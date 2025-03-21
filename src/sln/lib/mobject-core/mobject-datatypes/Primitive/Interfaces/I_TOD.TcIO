@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <Itf Name="I_TOD" Id="{1287ebd8-bfc7-08d3-1630-07183c36c7ff}">
+    <Declaration><![CDATA[INTERFACE I_TOD EXTENDS I_Datatype
+]]></Declaration>
+    <Property Name="Value" Id="{322e0b2e-9721-03ce-0c48-76d61b637e0e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO TOD]]></Declaration>
+      <Get Name="Get" Id="{1edb240b-9c84-0e68-1b77-4871ed6973b9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>
