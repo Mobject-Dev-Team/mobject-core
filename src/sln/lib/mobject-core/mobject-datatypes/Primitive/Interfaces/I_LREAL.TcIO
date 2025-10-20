@@ -4,7 +4,9 @@
     <Declaration><![CDATA[INTERFACE I_LREAL EXTENDS I_Datatype
 ]]></Declaration>
     <Property Name="Value" Id="{d2f69e8a-bf83-0a22-0ffe-c3959cabad5a}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO LREAL]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO LREAL
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{4ae2590c-6b39-05b0-1bf1-c206cecc4ea8}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

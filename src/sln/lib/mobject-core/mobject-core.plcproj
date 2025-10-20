@@ -9,7 +9,7 @@
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>mobject_core</Name>
-    <ProgramVersion>3.1.4024.0</ProgramVersion>
+    <ProgramVersion>3.1.4026.19</ProgramVersion>
     <Application>{c5cf8dde-4419-4b29-a265-4537c27d465c}</Application>
     <TypeSystem>{dde0608f-31ae-4844-abed-1fac7f7a61ab}</TypeSystem>
     <Implicit_Task_Info>{b00bebdb-34f7-41be-8532-504bab13b3d7}</Implicit_Task_Info>
@@ -19,7 +19,7 @@
     <Company>mobject</Company>
     <Released>false</Released>
     <Title>mobject-core</Title>
-    <ProjectVersion>0.7.0</ProjectVersion>
+    <ProjectVersion>0.8.0</ProjectVersion>
     <DefaultNamespace>mobject-core</DefaultNamespace>
     <Author>mobject dev team</Author>
     <Placeholder>mobject-core</Placeholder>

@@ -284,7 +284,9 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Value" Id="{8be5d6eb-2265-4179-b8c2-35abed67bd8b}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO T_MaxString]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO T_MaxString
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{646977de-30b9-4851-be0a-fd6061952fb7}">
         <Declaration><![CDATA[VAR
 END_VAR

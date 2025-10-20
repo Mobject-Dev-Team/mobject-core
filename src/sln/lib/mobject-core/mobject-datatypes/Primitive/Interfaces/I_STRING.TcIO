@@ -4,7 +4,9 @@
     <Declaration><![CDATA[INTERFACE I_STRING EXTENDS I_Datatype
 ]]></Declaration>
     <Property Name="Value" Id="{9ce269e8-b3fe-0b8a-02fb-4ec8ece58e11}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO T_MaxString]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO T_MaxString
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{be9f4e24-4ae9-0303-0d86-8eb0c99cd5f4}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

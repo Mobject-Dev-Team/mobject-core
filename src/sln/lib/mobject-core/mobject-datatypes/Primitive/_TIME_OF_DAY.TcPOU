@@ -139,7 +139,9 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Value" Id="{22db774c-0d72-46b4-a6e3-91de72a2a61b}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO TIME_OF_DAY]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO TIME_OF_DAY
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{2e0726c9-a86a-40aa-95b6-50838455feba}">
         <Declaration><![CDATA[VAR
 END_VAR

@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
   <Itf Name="I_DINT" Id="{98ffdff1-1a46-099d-2567-8d2a1f656e58}">
     <Declaration><![CDATA[INTERFACE I_DINT EXTENDS I_Datatype
 ]]></Declaration>
     <Property Name="Value" Id="{1afc3a72-cc3c-00c6-057f-98a4091f8af1}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO DINT]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO DINT
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{ad3e71ca-7d9d-0db7-2066-470b341ce68d}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

@@ -124,7 +124,8 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="SerializeMaxValue" Id="{2b2dd19b-d33d-47a5-a3fd-8f7871724ec3}" FolderPath="Protected\">
+    <Method Name="SerializeMaxValue" Id="{2b2dd19b-d33d-47a5-a3fd-8f7871724ec3}"
+      FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED SerializeMaxValue
 VAR_INPUT
 	Serializer : I_Serializer;
@@ -134,7 +135,8 @@ END_VAR
         <ST><![CDATA[Serializer.AddByte(MaxValue);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="SerializeMinValue" Id="{6bd0c9eb-7393-4705-994d-fa6038d95d76}" FolderPath="Protected\">
+    <Method Name="SerializeMinValue" Id="{6bd0c9eb-7393-4705-994d-fa6038d95d76}"
+      FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED SerializeMinValue
 VAR_INPUT
 	Serializer : I_Serializer;
@@ -349,7 +351,9 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Value" Id="{2e144ab6-c08f-45e7-82aa-2cda5774589e}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO BYTE]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO BYTE
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{43823d97-4013-4032-a00f-d395ded07007}">
         <Declaration><![CDATA[VAR
 END_VAR

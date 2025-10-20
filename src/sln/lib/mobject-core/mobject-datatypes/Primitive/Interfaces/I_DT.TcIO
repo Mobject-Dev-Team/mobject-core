@@ -4,7 +4,9 @@
     <Declaration><![CDATA[INTERFACE I_DT EXTENDS I_Datatype
 ]]></Declaration>
     <Property Name="Value" Id="{b75375bf-82de-05d9-3869-6048998d6667}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO DT]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO DT
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{7ef68876-36b1-086d-2a19-f3461b9a55ee}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

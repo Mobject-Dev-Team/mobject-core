@@ -4,7 +4,9 @@
     <Declaration><![CDATA[INTERFACE I_TIME_OF_DAY EXTENDS I_Datatype
 ]]></Declaration>
     <Property Name="Value" Id="{810604ec-d4de-0fb7-36c6-311d484852ab}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO TIME_OF_DAY
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO TIME_OF_DAY
+{warning restore C5410}
 ]]></Declaration>
       <Get Name="Get" Id="{a6b506cc-0a96-0e23-1655-e70e7cbe6789}">
         <Declaration><![CDATA[]]></Declaration>

@@ -4,7 +4,9 @@
     <Declaration><![CDATA[INTERFACE I_USINT EXTENDS I_Datatype
 ]]></Declaration>
     <Property Name="Value" Id="{c2c0c38e-1a9d-0a84-3b70-9a83e1d81e8f}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO USINT]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO USINT
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{f19803be-ca81-050d-3f18-acbd21735195}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

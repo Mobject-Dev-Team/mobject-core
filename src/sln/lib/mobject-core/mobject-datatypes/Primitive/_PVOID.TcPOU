@@ -138,7 +138,9 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Value" Id="{4559dc0b-2c04-0410-0c6b-dfa3fe90cee5}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO PVOID]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO PVOID
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{2fde5ab5-7258-087a-1af2-47ade5c7b474}">
         <Declaration><![CDATA[VAR
 END_VAR

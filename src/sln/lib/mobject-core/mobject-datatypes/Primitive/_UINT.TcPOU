@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
   <POU Name="_UINT" Id="{db5ef119-9b74-4fad-aee9-d04bb2ab64dc}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -124,8 +124,7 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="SerializeMaxValue" Id="{7321e6af-fe15-42d6-ab68-57b1e56e9cba}"
-      FolderPath="Protected\">
+    <Method Name="SerializeMaxValue" Id="{7321e6af-fe15-42d6-ab68-57b1e56e9cba}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED SerializeMaxValue
 VAR_INPUT
 	Serializer : I_Serializer;
@@ -135,8 +134,7 @@ END_VAR
         <ST><![CDATA[Serializer.AddUint(MaxValue);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="SerializeMinValue" Id="{9aaae453-c4c0-453d-bdd4-7930aef2e599}"
-      FolderPath="Protected\">
+    <Method Name="SerializeMinValue" Id="{9aaae453-c4c0-453d-bdd4-7930aef2e599}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED SerializeMinValue
 VAR_INPUT
 	Serializer : I_Serializer;
@@ -351,7 +349,9 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Value" Id="{f3f0c4a3-be7e-49de-b4da-2a398a3e11f7}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO UINT]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO UINT
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{ecf19aa1-532d-4bb7-afa2-ffaded59098c}">
         <Declaration><![CDATA[VAR
 END_VAR

@@ -4,7 +4,9 @@
     <Declaration><![CDATA[INTERFACE I_PVOID EXTENDS I_Datatype
 ]]></Declaration>
     <Property Name="Value" Id="{7088cd81-5346-0785-28ef-b5c3b8b8f145}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO PVOID]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO PVOID
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{aa96481d-9d2d-03ce-26d2-51bb13049098}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

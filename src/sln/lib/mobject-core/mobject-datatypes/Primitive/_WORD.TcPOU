@@ -351,7 +351,9 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Value" Id="{e62bcf86-3880-4080-9eae-bbad242889c9}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO WORD]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO WORD
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{466faa1b-1333-47fa-aaf0-4b401c13734f}">
         <Declaration><![CDATA[VAR
 END_VAR

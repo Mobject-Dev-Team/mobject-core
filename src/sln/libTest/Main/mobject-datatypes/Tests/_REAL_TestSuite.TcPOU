@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
   <POU Name="_REAL_TestSuite" Id="{847bc499-018b-0b2f-0213-b03219cc49b6}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK _REAL_TestSuite EXTENDS TcUnit.FB_TestSuite
 VAR
@@ -209,7 +209,7 @@ TEST_FINISHED();
 VAR
     _type : _REAL(0.0);
     serializer : JsonSerializer;
-    expected : STRING(500) := '{"typeName":"REAL","minValue":-3.4028230607370967e38,"maxValue":3.4028230607370967e38,"isSigned":true,"isFloat":true}';
+    expected : STRING(500) := '{"typeName":"REAL","minValue":-3.4028230607370965e38,"maxValue":3.4028230607370965e38,"isSigned":true,"isFloat":true}';
     actual : STRING(500);
 END_VAR
 ]]></Declaration>

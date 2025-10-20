@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.8.0-beta
+
+- moved up to TwinCAT 4026.19
+- added compiler warning suppression
+
 ## v0.7.0-beta
 
 - added \_PVOID datatype

@@ -9,7 +9,7 @@
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>Main</Name>
-    <ProgramVersion>3.1.4024.0</ProgramVersion>
+    <ProgramVersion>3.1.4026.19</ProgramVersion>
     <Application>{1d6f946e-0e25-4fdb-8f85-369a5ced589e}</Application>
     <TypeSystem>{f59c88de-8a66-489f-8a81-e116b39f946d}</TypeSystem>
     <Implicit_Task_Info>{f715ef98-0f3d-4cb4-8a86-a03462e5fbba}</Implicit_Task_Info>
@@ -400,6 +400,10 @@
     <Folder Include="SharedMocks" />
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderReference Include="mobject-core">
+      <DefaultResolution>mobject-core, * (mobject)</DefaultResolution>
+      <Namespace>mobject_core</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Standard">
       <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_Standard</Namespace>
@@ -436,14 +440,14 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="mobject-core,0.7.0,mobject">
-      <Namespace>mobject_core</Namespace>
-    </LibraryReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Main.tmc">
       <SubType>Content</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderResolution Include="mobject-core">
+      <Resolution>mobject-core, 0.8.0 (mobject)</Resolution>
+    </PlaceholderResolution>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

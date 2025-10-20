@@ -4,7 +4,9 @@
     <Declaration><![CDATA[INTERFACE I_SINT EXTENDS I_Datatype
 ]]></Declaration>
     <Property Name="Value" Id="{4e9574dc-ac84-0283-2957-89519c13c6a5}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO SINT]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO SINT
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{be1daa36-d78f-0cae-2900-174e85da11d7}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

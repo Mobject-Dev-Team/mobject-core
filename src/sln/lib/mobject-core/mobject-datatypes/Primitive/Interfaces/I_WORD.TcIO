@@ -4,7 +4,9 @@
     <Declaration><![CDATA[INTERFACE I_WORD EXTENDS I_Datatype
 ]]></Declaration>
     <Property Name="Value" Id="{0faffda8-b0fa-03f8-2aa2-dee502b4be97}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO WORD]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO WORD
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{cd541c80-35cf-0ed9-3017-d228baba1d1b}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
