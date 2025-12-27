@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
   <POU Name="EventHandlerItem" Id="{f1740da3-00c1-49c4-98a2-5604b67a44ab}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -16,7 +16,7 @@ END_VAR]]></Declaration>
     </Implementation>
     <Folder Name="Constructor" Id="{ea9f4b43-77e8-41a8-81b1-2aa78ad5a1ff}" />
     <Method Name="Emit" Id="{1124dac4-8426-4846-a4c3-72ce9d7cfffb}">
-      <Declaration><![CDATA[METHOD PUBLIC Emit
+      <Declaration><![CDATA[METHOD PUBLIC Emit : BOOL
 VAR_INPUT
 	EventName : T_MaxString;
 	Event : I_Event;
@@ -30,7 +30,8 @@ IF handler = 0 THEN
 	RETURN;
 END_IF
 
-handler.HandleEvent(Event);]]></ST>
+handler.HandleEvent(Event);
+Emit := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="EqualTo" Id="{9c357721-07bc-4c25-9731-c98d09e0fd05}">
