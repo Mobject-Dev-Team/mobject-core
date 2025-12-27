@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="ServerResponse" Id="{2442627d-7496-4f6b-af53-517e3869f380}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ServerResponse IMPLEMENTS I_ServerResponse
+VAR
+	_header : Header(0);
+	_sent : BOOL := FALSE;
+	responseData : ResponseData;
+	headerAccessor : I_ServerResponseHeaderAccessor;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{e8cbe832-724d-4258-9644-602186047960}" />
+    <Folder Name="Private" Id="{02b7177e-0c8a-4f2a-a25b-c679e3130a56}" />
+    <Method Name="Accepted" Id="{6e56c744-dca2-49fb-81f6-ab1642a8984b}">
+      <Declaration><![CDATA[METHOD PUBLIC Accepted
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF _sent THEN
+	RETURN;
+END_IF
+
+headerAccessor.UpdateResponseWithAccepted(THIS^);
+CompleteResponseWithoutPayload();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Busy" Id="{1e41d8c7-d402-4fda-a0ff-e7e6a9830755}">
+      <Declaration><![CDATA[METHOD PUBLIC Busy
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF _sent THEN
+	RETURN;
+END_IF
+
+headerAccessor.UpdateResponseWithBusy(THIS^);
+CompleteResponseWithoutPayload();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CompleteResponseWithoutPayload" Id="{c9a20195-b63c-4cf1-9d9b-954c8e05178f}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CompleteResponseWithoutPayload
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_sent := TRUE;
+_header.ToString(responseData.Header);
+memset(ADR(responseData.Payload),0,SIZEOF(responseData.Payload));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CompleteResponseWithPayload" Id="{0d2d7ff9-4809-431c-984c-e6ae3599afb3}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CompleteResponseWithPayload
+VAR_INPUT
+	PayloadDataAddress : PVOID;
+	PayloadDataSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_sent := TRUE;
+_header.ToString(responseData.Header);
+memcpy(ADR(responseData.Payload),PayloadDataAddress,PayloadDataSize);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Error" Id="{999d566d-2849-4be7-a7f2-4a38bbc0bfe3}">
+      <Declaration><![CDATA[METHOD PUBLIC Error
+VAR_INPUT
+	ErrorCode : T_MAXSTRING;
+	Message : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF _sent THEN
+	RETURN;
+END_IF
+
+headerAccessor.UpdateResponseWithError(THIS^, ErrorCode, Message);
+CompleteResponseWithoutPayload();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{75613d85-36a0-483f-9cb9-b153a4a35fec}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	HeaderAccessor : I_ServerResponseHeaderAccessor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.headerAccessor := HeaderAccessor;
+memset(ADR(responseData),0,SIZEOF(responseData));]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Header" Id="{0fa71884-bf67-4292-8a3e-e8f67c31637d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Header : I_Header]]></Declaration>
+      <Get Name="Get" Id="{a88d816b-b864-488b-8dc3-acf657eb04c1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Header := _header;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="HeadersSent" Id="{29bf1bda-2f1e-43a3-b208-2c3514b2b8a0}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HeadersSent : BOOL]]></Declaration>
+      <Get Name="Get" Id="{9d97eeba-a138-41f0-bad4-6b5e2d32884b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HeadersSent := _sent;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Pending" Id="{2874985b-49d4-4b31-9a4e-3f0794be3590}">
+      <Declaration><![CDATA[METHOD PUBLIC Pending
+VAR_INPUT
+	ResponseId : REFERENCE TO T_MAXSTRING;
+	RetryDelayInMs : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF _sent THEN
+	RETURN;
+END_IF
+
+IF (NOT __ISVALIDREF(ResponseId)) OR_ELSE ResponseId = '' THEN
+	Error('MISSING_RESPONSE_ID', 'Unable to mark response as pending without ResponseId');
+	RETURN;
+END_IF
+
+headerAccessor.UpdateResponseWithPending(THIS^, ResponseId, RetryDelayInMs);
+CompleteResponseWithoutPayload();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Success" Id="{94c7cca4-6ca8-4833-80e2-753569bcce1e}">
+      <Declaration><![CDATA[METHOD PUBLIC Success
+VAR_INPUT
+END_VAR
+VAR
+	errorMessage : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF _sent THEN
+	RETURN;
+END_IF
+
+headerAccessor.UpdateResponseWithSuccess(THIS^);
+CompleteResponseWithoutPayload();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SuccessWithPayload" Id="{0b1ed937-31ec-4ff5-b481-0ec496f95421}">
+      <Declaration><![CDATA[METHOD PUBLIC SuccessWithPayload
+VAR_INPUT
+	PayloadDataAddress : PVOID;
+	PayloadDataSize : UDINT;
+END_VAR
+VAR
+	errorMessage : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF _sent THEN
+	RETURN;
+END_IF
+
+IF PayloadDataSize > SIZEOF(responseData.Payload) THEN
+	errorMessage := 'Payload too big to transmit. Maximum : ';
+	errorMessage := concat(errorMessage, UDINT_TO_STRING(SIZEOF(responseData.Payload)));
+	errorMessage := concat(errorMessage, ', Actual Size : ');
+	errorMessage := concat(errorMessage, UDINT_TO_STRING(SIZEOF(PayloadDataSize)));
+	Error('PAYLOAD_TOO_BIG', errorMessage);
+	RETURN;
+END_IF
+
+headerAccessor.UpdateResponseWithSuccess(THIS^);
+CompleteResponseWithPayload(PayloadDataAddress, PayloadDataSize);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetData" Id="{b5dfab8d-70d8-4594-8c15-b16db1a82e29}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetData : BOOL;
+VAR_INPUT
+	Destination : REFERENCE TO ResponseData;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT __ISVALIDREF(Destination) THEN
+	RETURN;
+END_IF
+
+IF SIZEOF(Destination) <> SIZEOF(responseData) THEN
+	RETURN;
+END_IF
+
+memcpy(ADR(Destination), ADR(responseData), SIZEOF(Destination));
+TryGetData := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

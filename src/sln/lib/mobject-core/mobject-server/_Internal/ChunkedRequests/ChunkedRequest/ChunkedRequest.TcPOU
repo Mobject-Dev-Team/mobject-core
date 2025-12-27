@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="ChunkedRequest" Id="{6a2cfa03-abf6-4e39-8742-02b61950d546}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ChunkedRequest EXTENDS Disposable IMPLEMENTS I_Request
+VAR
+	request : I_Request;
+	chunkedRequestData : REFERENCE TO I_ChunkedRequestData;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{e4ed442d-e726-4c77-bb80-316abcb1df28}" />
+    <Property Name="CreatedTimestamp" Id="{1bc2644a-21eb-4dbd-9348-48b0c00049fa}">
+      <Declaration><![CDATA[PROPERTY PUBLIC CreatedTimestamp : I_Timestamp]]></Declaration>
+      <Get Name="Get" Id="{52f386c6-fb6b-4b41-87d5-fd19bad6da60}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CreatedTimestamp := request.CreatedTimestamp;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{51b585f8-eb28-491e-986b-7c9f2f434d4a}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Request : I_Request;
+	ChunkedRequestData : Reference to I_ChunkedRequestData;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.request := Request;
+this^.chunkedRequestData ref= ChunkedRequestData;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Header" Id="{eb0fd9ca-dcac-4a20-8768-03671307ae8e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Header : I_Header]]></Declaration>
+      <Get Name="Get" Id="{8708915e-dc25-4352-b9ce-c3d4dbb15292}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Header := request.Header;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="PayloadAddress" Id="{11e60d5a-1311-41f7-b771-cc71535742fb}">
+      <Declaration><![CDATA[PROPERTY PUBLIC PayloadAddress : POINTER TO STRING]]></Declaration>
+      <Get Name="Get" Id="{224e527b-04b6-4ad9-89de-775af4f94330}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF chunkedRequestData = 0 THEN
+	RETURN;
+END_IF
+
+PayloadAddress := chunkedRequestData.PayloadAddress;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="PayloadSizeInBytes" Id="{3c1e93ac-d188-4393-a353-50efd9706ef3}">
+      <Declaration><![CDATA[PROPERTY PUBLIC PayloadSizeInBytes : UDINT]]></Declaration>
+      <Get Name="Get" Id="{89bb9a48-400b-4d68-a5f7-d2e28360b93d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF chunkedRequestData = 0 THEN
+	RETURN;
+END_IF
+
+PayloadSizeInBytes := chunkedRequestData.PayloadSizeInBytes;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

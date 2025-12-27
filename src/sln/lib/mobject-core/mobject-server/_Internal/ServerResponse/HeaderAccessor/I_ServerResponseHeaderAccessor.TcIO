@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_ServerResponseHeaderAccessor" Id="{c4f4cea4-c567-44eb-bc52-5ffc527e7313}">
+    <Declaration><![CDATA[INTERFACE I_ServerResponseHeaderAccessor
+]]></Declaration>
+    <Method Name="UpdateResponseWithAccepted" Id="{5540dbb0-d779-4148-89ef-070065c6c46c}">
+      <Declaration><![CDATA[METHOD PUBLIC UpdateResponseWithAccepted
+VAR_INPUT
+	Response : I_ServerResponse;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="UpdateResponseWithBusy" Id="{63eaf4a5-b2e7-40fb-b5cd-fdfa28d8351d}">
+      <Declaration><![CDATA[METHOD PUBLIC UpdateResponseWithBusy
+VAR_INPUT
+	Response : I_ServerResponse;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="UpdateResponseWithError" Id="{4a993900-a80f-0e71-0c3e-4131251df43a}">
+      <Declaration><![CDATA[METHOD PUBLIC UpdateResponseWithError
+VAR_INPUT
+	Response : I_ServerResponse;
+	ErrorCode : T_MAXSTRING;
+	Message : T_MAXSTRING;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="UpdateResponseWithPending" Id="{327cbd64-851f-4db5-8938-18039575cfc7}">
+      <Declaration><![CDATA[METHOD PUBLIC UpdateResponseWithPending
+VAR_INPUT
+	Response : I_ServerResponse;
+	ResponseId : T_MAXSTRING;
+	RetryDelayInMs : UDINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="UpdateResponseWithSuccess" Id="{c9085295-432e-4ae6-b894-0f99109aef2f}">
+      <Declaration><![CDATA[METHOD PUBLIC UpdateResponseWithSuccess
+VAR_INPUT
+	Response : I_ServerResponse;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

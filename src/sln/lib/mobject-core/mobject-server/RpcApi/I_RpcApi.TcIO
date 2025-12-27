@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_RpcApi" Id="{17b083e7-ae0c-0c94-08dc-e56a38b862e4}">
+    <Declaration><![CDATA[INTERFACE I_RpcApi
+]]></Declaration>
+    <Method Name="CyclicCall" Id="{e1d77c4a-cc84-0af2-1e64-ac22f705b29d}">
+      <Declaration><![CDATA[METHOD CyclicCall
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="RegisterAsynchronousRpcHandlersWith" Id="{188eb446-b1db-03a5-28d1-127fd6bacf08}">
+      <Declaration><![CDATA[METHOD RegisterAsynchronousRpcHandlersWith
+VAR_INPUT
+	Host : I_HostAsynchronousRpcHandlers;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="RegisterSynchronousRpcHandlersWith" Id="{8ef3eb5f-10d2-0144-240b-5ae24d5edb8e}">
+      <Declaration><![CDATA[METHOD RegisterSynchronousRpcHandlersWith
+VAR_INPUT
+	Host : I_HostSynchronousRpcHandlers;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

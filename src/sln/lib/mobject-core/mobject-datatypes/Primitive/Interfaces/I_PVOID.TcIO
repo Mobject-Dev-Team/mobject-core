@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <Itf Name="I_PVOID" Id="{7ba76245-0d33-0d13-1b75-1b2a20f8e584}">
+    <Declaration><![CDATA[INTERFACE I_PVOID EXTENDS I_Datatype
+]]></Declaration>
+    <Property Name="Value" Id="{7088cd81-5346-0785-28ef-b5c3b8b8f145}">
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO PVOID
+{warning restore C5410}]]></Declaration>
+      <Get Name="Get" Id="{aa96481d-9d2d-03ce-26d2-51bb13049098}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

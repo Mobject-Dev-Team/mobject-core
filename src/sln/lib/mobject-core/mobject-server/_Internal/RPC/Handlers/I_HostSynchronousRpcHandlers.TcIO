@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_HostSynchronousRpcHandlers" Id="{4dc47ead-7e95-013b-17c1-849edaed8fde}">
+    <Declaration><![CDATA[INTERFACE I_HostSynchronousRpcHandlers
+]]></Declaration>
+    <Method Name="RegisterHandler" Id="{b394f5c7-3815-0bfb-1de1-d19473e24487}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterHandler
+VAR_INPUT
+	MethodName : T_MAXSTRING;
+	Handler : I_SynchronousRpcHandler;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

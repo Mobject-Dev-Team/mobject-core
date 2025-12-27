@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="SyncToAsyncEchoRpcHandler" Id="{a346339a-884b-0374-115b-80f0d9f0213c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK SyncToAsyncEchoRpcHandler IMPLEMENTS I_SynchronousRpcHandler
+VAR
+	asyncResponse : I_AsynchronousRpcResponse;
+	result : T_MAXSTRING;
+	timer : TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="Busy" Id="{5de67654-447e-0fbc-25e1-9e001eca9d50}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Busy : BOOL]]></Declaration>
+      <Get Name="Get" Id="{29a8b5dd-d912-0cc9-243c-ab19119270c5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy := asyncResponse <> 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="CyclicCall" Id="{dd6c528d-80a9-0377-07e4-22f684dce5e6}">
+      <Declaration><![CDATA[METHOD PUBLIC CyclicCall
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[timer(in := Busy, pt := T#1S);
+
+IF timer.Q THEN
+	asyncResponse.CompleteWithString(result);
+	asyncResponse := 0;
+	result := '';
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Handle" Id="{381b342a-0a4c-0b92-0da1-e47b8f133984}">
+      <Declaration><![CDATA[METHOD Handle
+VAR_INPUT
+	Parameters : I_Deserializer;
+	Response : I_SynchronousRpcResponse;
+END_VAR
+VAR
+	deserializerFeedback : DeserializerFeedback;
+	echo : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Busy THEN
+	Response.RejectWithError('HANDLER_TOO_BUSY','Already processing response');
+	RETURN;
+END_IF
+
+IF NOT Parameters.TryGetKeyString('Echo', echo, deserializerFeedback) THEN
+	Response.RejectWithError('MISSING_PARAMETER','Missing Echo parameter');
+	RETURN;
+END_IF
+
+result := echo;
+Response.TryMakeAsynchronous(asyncResponse);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

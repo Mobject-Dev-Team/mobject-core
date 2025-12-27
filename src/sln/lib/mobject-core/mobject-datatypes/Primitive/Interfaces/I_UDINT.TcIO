@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <Itf Name="I_UDINT" Id="{478de083-5c4f-080c-34de-b24804f021cb}">
+    <Declaration><![CDATA[INTERFACE I_UDINT EXTENDS I_Datatype
+]]></Declaration>
+    <Property Name="Value" Id="{1c6665d8-c1f7-01fe-23df-696d80f8fe7e}">
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO UDINT
+{warning restore C5410}]]></Declaration>
+      <Get Name="Get" Id="{21a02be0-3565-0e25-2109-223ae50c011c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

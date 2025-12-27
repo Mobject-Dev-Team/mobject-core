@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <Itf Name="I_INT" Id="{0d55eed5-df3f-0f64-035c-fe3e51fefa5b}">
+    <Declaration><![CDATA[INTERFACE I_INT EXTENDS I_Datatype
+]]></Declaration>
+    <Property Name="Value" Id="{b7035116-cb04-0859-323f-0056b1ec550e}">
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO INT
+{warning restore C5410}]]></Declaration>
+      <Get Name="Get" Id="{3dd1c3fc-f5be-0191-08c2-4e1b3d28b6ca}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

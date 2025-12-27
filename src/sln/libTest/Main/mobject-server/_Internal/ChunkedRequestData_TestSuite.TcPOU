@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="ChunkedRequestData_TestSuite" Id="{157869a1-0950-0a57-3969-5aa7997d1426}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ChunkedRequestData_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestChunkedPayloadStoredCorrectly_10Chunks();
+TestChunkedPayloadStoredCorrectly_2Chunks();
+TestCorrectPayloadSizeInBytes_20Bytes();
+TestCorrectPayloadSizeInBytes_100Bytes();
+TestIsCompleteOnceAllChunksAdded();
+TestTryAddChunkedPayloadReturnsFalseWhenTooBig();
+TestTryAddChunkedPayloadReturnsTrueWhenValid();]]></ST>
+    </Implementation>
+    <Method Name="TestChunkedPayloadStoredCorrectly_10Chunks" Id="{9c00b0ed-f1ca-07c2-073c-8e55c78d7e52}">
+      <Declaration><![CDATA[METHOD TestChunkedPayloadStoredCorrectly_10Chunks
+VAR
+	chunkedRequestData : ChunkedRequestData(3,10); // results in 30 bytes
+	dataChunk1 : STRING(2) := 'ab'; // results in 3 bytes
+	dataChunk2 : STRING(2) := 'cd'; // results in 3 bytes
+	dataChunk3 : STRING(2) := 'ef'; // results in 3 bytes
+	dataChunk4 : STRING(2) := 'gh'; // results in 3 bytes
+	dataChunk5 : STRING(2) := 'ij'; // results in 3 bytes
+	dataChunk6 : STRING(2) := 'kl'; // results in 3 bytes
+	dataChunk7 : STRING(2) := 'mn'; // results in 3 bytes
+	dataChunk8 : STRING(2) := 'op'; // results in 3 bytes
+	dataChunk9 : STRING(2) := 'qr'; // results in 3 bytes
+	dataChunk10 : STRING(2) := 'st'; // results in 3 bytes
+	dataAddress : PVOID;
+	dataSize : UDINT;
+	result : STRING(29);
+	expected : STRING(29) := 'abcdefghijklmnopqrst'; // results in 30 bytes
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestChunkedPayloadStoredCorrectly_10Chunks');
+
+memset(ADR(result),0,SIZEOF(result));
+
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk1), SIZEOF(dataChunk1), 1);
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk2), SIZEOF(dataChunk2), 2);
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk3), SIZEOF(dataChunk3), 3);
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk4), SIZEOF(dataChunk4), 4);
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk5), SIZEOF(dataChunk5), 5);
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk6), SIZEOF(dataChunk6), 6);
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk7), SIZEOF(dataChunk7), 7);
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk8), SIZEOF(dataChunk8), 8);
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk9), SIZEOF(dataChunk9), 9);
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk10), SIZEOF(dataChunk10), 10);
+
+dataAddress := chunkedRequestData.PayloadAddress;
+dataSize := chunkedRequestData.PayloadSizeInBytes;
+
+memcpy(ADR(result),dataAddress,dataSize);
+
+AssertEquals(
+	Expected := expected,
+	Actual := result,
+	Message := 'Did not correctly assemble the chunked string data'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestChunkedPayloadStoredCorrectly_2Chunks" Id="{c125cadb-f4e1-0705-1ca7-1c822e72ef13}">
+      <Declaration><![CDATA[METHOD TestChunkedPayloadStoredCorrectly_2Chunks
+VAR
+	chunkedRequestData : ChunkedRequestData(4,2); // results in 8 bytes
+	dataChunk1 : STRING(3) := 'foo'; // results in 4 bytes
+	dataChunk2 : STRING(3) := 'bar'; // results in 4 bytes
+	dataAddress : PVOID;
+	dataSize : UDINT;
+	result : STRING(7);
+	expected : STRING(7) := 'foobar'; // results in 8 bytes
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestChunkedPayloadStoredCorrectly_2Chunks');
+
+memset(ADR(result),0,SIZEOF(result));
+
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk1), SIZEOF(dataChunk1), 1);
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk2), SIZEOF(dataChunk2), 2);
+
+dataAddress := chunkedRequestData.PayloadAddress;
+dataSize := chunkedRequestData.PayloadSizeInBytes;
+
+memcpy(ADR(result),dataAddress,dataSize);
+
+AssertEquals(
+	Expected := expected,
+	Actual := result,
+	Message := 'Did not correctly assemble the chunked string data'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestCorrectPayloadSizeInBytes_100Bytes" Id="{af847996-f21f-0cc9-2159-2339d28ab426}">
+      <Declaration><![CDATA[METHOD TestCorrectPayloadSizeInBytes_100Bytes
+VAR
+	chunkedRequestData : ChunkedRequestData(20,5);
+	result : UDINT;
+	expected : UDINT := 100;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestCorrectPayloadSizeInBytes_100Bytes');
+
+result := chunkedRequestData.PayloadSizeInBytes;
+
+AssertEquals(
+	Expected := expected,
+	Actual := result,
+	Message := 'Did not create the correct payload size based on the constructor arguments'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestCorrectPayloadSizeInBytes_20Bytes" Id="{8c49604a-f36a-068b-008c-4640e60db302}">
+      <Declaration><![CDATA[METHOD TestCorrectPayloadSizeInBytes_20Bytes
+VAR
+	chunkedRequestData : ChunkedRequestData(2,10);
+	result : UDINT;
+	expected : UDINT := 20;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestCorrectPayloadSizeInBytes_20Bytes');
+
+result := chunkedRequestData.PayloadSizeInBytes;
+
+AssertEquals(
+	Expected := expected,
+	Actual := result,
+	Message := 'Did not create the correct payload size based on the constructor arguments'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestIsCompleteOnceAllChunksAdded" Id="{104a1835-a650-0384-25d8-a5c22d6a0e67}">
+      <Declaration><![CDATA[METHOD TestIsCompleteOnceAllChunksAdded
+VAR
+	chunkedRequestData : ChunkedRequestData(4,2);
+	dataChunk1 : STRING(3) := 'foo';
+	dataChunk2 : STRING(3) := 'bar';
+	isComplete : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestIsCompleteOnceAllChunksAdded');
+
+isComplete := chunkedRequestData.IsComplete;
+
+AssertFalse(
+	Condition := isComplete,
+	Message := 'Incorrectly reported as IsComplete with 0/2 chunks added'
+);
+
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk1), SIZEOF(dataChunk1), 1);
+isComplete := chunkedRequestData.IsComplete;
+
+AssertFalse(
+	Condition := isComplete,
+	Message := 'Incorrectly reported as IsComplete with 1/2 chunks added'
+);
+
+chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk2), SIZEOF(dataChunk2), 2);
+isComplete := chunkedRequestData.IsComplete;
+
+AssertTrue(
+	Condition := isComplete,
+	Message := 'Failed to reported IsComplete with 2/2 chunks added'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryAddChunkedPayloadReturnsFalseWhenTooBig" Id="{9be9f764-fcc4-02bf-2fe0-5264e1c50f5a}">
+      <Declaration><![CDATA[METHOD TestTryAddChunkedPayloadReturnsFalseWhenTooBig
+VAR
+	chunkedRequestData : ChunkedRequestData(4,1);
+	dataChunk : STRING(10) := 'foo';
+	added : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryAddChunkedPayloadReturnsFalseWhenTooBig');
+
+added := chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk), SIZEOF(dataChunk), 1);
+
+AssertFalse(
+	Condition := added,
+	Message := 'Incorrectly reported that the try was successful'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryAddChunkedPayloadReturnsTrueWhenValid" Id="{272bac18-1560-0a13-1839-5a7fb1e584b1}">
+      <Declaration><![CDATA[METHOD TestTryAddChunkedPayloadReturnsTrueWhenValid
+VAR
+	chunkedRequestData : ChunkedRequestData(4,1);
+	dataChunk : STRING(3) := 'foo';
+	added : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryAddChunkedPayloadReturnsTrueWhenValid');
+
+added := chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk), SIZEOF(dataChunk), 1);
+
+AssertTrue(
+	Condition := added,
+	Message := 'Incorrectly reported that the try failed'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="ChunkedResponseData" Id="{781f9fc5-3ebc-4ff0-ac98-856e05f50372}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ChunkedResponseData EXTENDS Disposable IMPLEMENTS I_ChunkedResponseData
+VAR
+	pData : POINTER TO BYTE;
+	size : UDINT;
+	currentPointerLocation : PVOID;
+	remainingLengthToSendInBytes : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{c80cbdb3-cb9a-49fe-9914-91d60f1c0ad0}" />
+    <Folder Name="Destructor" Id="{c8a95ce9-85c1-4947-8c24-4259ab62db6f}" />
+    <Folder Name="Private" Id="{aa8b3d89-0333-425f-8039-0af43cf40e23}" />
+    <Method Name="FB_exit" Id="{26a59a06-9389-4457-b5a3-0891228185bf}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+IF pData <> 0 THEN
+	__DELETE(pData);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{c8bcd570-a5c0-402b-9d22-4c3fe10c9f06}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Address : PVOID;
+	Size : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StoreData(Address, Size);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="SendComplete" Id="{0e3ef159-392b-4b06-885d-1d84746037be}">
+      <Declaration><![CDATA[PROPERTY PUBLIC SendComplete : BOOL]]></Declaration>
+      <Get Name="Get" Id="{2193082c-2fb6-4f72-a650-476ec7e26479}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SendComplete := remainingLengthToSendInBytes = 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="SendNextChunk" Id="{6566f4d7-cb0d-4093-a982-79ab5b2f23da}">
+      <Declaration><![CDATA[METHOD PUBLIC SendNextChunk
+VAR_INPUT
+	Response : I_ServerResponse;
+	Size : UDINT;
+END_VAR
+VAR
+	sendSize : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF SendComplete THEN 
+	Response.Error('BAD_REQUEST', 'No further data to send');
+	RETURN;
+END_IF
+
+sendSize := Size - 1;
+
+IF Size > remainingLengthToSendInBytes THEN 
+	sendSize := remainingLengthToSendInBytes;
+END_IF
+
+Response.SuccessWithPayload(currentPointerLocation, sendSize);
+
+currentPointerLocation := currentPointerLocation + sendSize;
+remainingLengthToSendInBytes := remainingLengthToSendInBytes - sendSize;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="SizeRemaining" Id="{da39f145-753d-4410-ba23-30977ba1ac28}">
+      <Declaration><![CDATA[PROPERTY SizeRemaining : UDINT]]></Declaration>
+      <Get Name="Get" Id="{52c6e58e-8432-4843-ba02-503e5f766076}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SizeRemaining := remainingLengthToSendInBytes;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="StoreData" Id="{05fe66e7-cab7-4f49-a1e8-1358584c2b63}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE StoreData
+VAR_INPUT
+	Address : PVOID;
+	Size : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pData := __NEW(BYTE, Size);
+THIS^.size := Size;
+memcpy(pData, Address, Size);
+currentPointerLocation := pData;
+remainingLengthToSendInBytes := Size;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

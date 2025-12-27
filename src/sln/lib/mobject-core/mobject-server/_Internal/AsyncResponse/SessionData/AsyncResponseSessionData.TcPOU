@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="AsyncResponseSessionData" Id="{0b8ed430-5a94-4796-b867-fe5806058bc5}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK AsyncResponseSessionData EXTENDS Disposable IMPLEMENTS I_AsyncResponseSessionData
+VAR
+	_suggestedRetryDelayInMs : UDINT;
+	state : (PENDING, SUCCESS, SUCCESS_WITH_PAYLOAD, ERROR) := PENDING;
+	errorCode : T_MAXSTRING;
+	errorMessage : T_MAXSTRING;
+	pData : POINTER TO BYTE;
+	dataSize : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{6f42f4a9-b535-4973-9c62-6244f47596a3}" />
+    <Folder Name="Destructor" Id="{e41abfbe-c833-483c-92f1-81c6d7d7f286}" />
+    <Folder Name="Private" Id="{7ce13535-dc25-4f17-9951-0aa5f81cb2b6}" />
+    <Method Name="CopyPayloadData" Id="{37baa180-849b-46d5-a623-060e6ded8fc0}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PUBLIC CopyPayloadData
+VAR_INPUT
+	PayloadDataAddress : PVOID;
+	PayloadDataSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[dataSize := PayloadDataSize;
+pData := __NEW(BYTE, PayloadDataSize);
+memcpy(pData,PayloadDataAddress,PayloadDataSize);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DeletePayloadData" Id="{42be2907-e861-4d10-a4b5-c40a2b97a804}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DeletePayloadData
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF pData = 0 THEN
+	RETURN;
+END_IF
+
+__DELETE(pData);
+dataSize := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Error" Id="{144bc9f0-3199-43a4-9154-95673c88ba76}">
+      <Declaration><![CDATA[METHOD PUBLIC Error
+VAR_INPUT
+	ErrorCode : T_MAXSTRING;
+	Message : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF state <> PENDING THEN
+	RETURN;
+END_IF
+
+state := ERROR;
+THIS^.errorCode := ErrorCode;
+errorMessage := Message;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{bc4d092b-2899-480a-bc7f-51f7fee36982}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DeletePayloadData();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{27f87d13-9903-48fc-8cff-7eca53b8e6d5}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	SuggestedRetryDelayInMs : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_suggestedRetryDelayInMs := SuggestedRetryDelayInMs;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="IsPending" Id="{e08d9fad-bec8-4e32-95ab-a1cb4fcc9abe}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsPending : BOOL]]></Declaration>
+      <Get Name="Get" Id="{b900a727-86a7-48c0-9cb8-f26a00a3183d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsPending := state = PENDING;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Success" Id="{53d1f2b2-d75d-4cf7-ab0b-695555edeaaa}">
+      <Declaration><![CDATA[METHOD PUBLIC Success
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF state <> PENDING THEN
+	RETURN;
+END_IF
+
+state := SUCCESS;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SuccessWithPayload" Id="{26ccbc4d-1bd2-4e51-b563-1bfe2e48172f}">
+      <Declaration><![CDATA[METHOD PUBLIC SuccessWithPayload
+VAR_INPUT
+	PayloadDataAddress : PVOID;
+	PayloadDataSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF state <> PENDING THEN
+	RETURN;
+END_IF
+
+state := SUCCESS_WITH_PAYLOAD;
+CopyPayloadData(PayloadDataAddress, PayloadDataSize);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="SuggestedRetryDelayInMs" Id="{8cb1d4ee-b5b9-45a6-83c9-9f2bf03df7c2}">
+      <Declaration><![CDATA[PROPERTY PUBLIC SuggestedRetryDelayInMs : UDINT]]></Declaration>
+      <Get Name="Get" Id="{72f9dbe5-85f6-46e8-bfdb-69e04ad35781}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SuggestedRetryDelayInMs := _suggestedRetryDelayInMs;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{6c6465cb-a651-4b7a-8d53-0295f21779e5}">
+        <Declaration><![CDATA[PUBLIC 
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_suggestedRetryDelayInMs := SuggestedRetryDelayInMs;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="TryUpdateServerResponse" Id="{42e916da-74e4-4d0b-9c4e-44edfd18f901}">
+      <Declaration><![CDATA[METHOD PUBLIC TryUpdateServerResponse : BOOL
+VAR_INPUT
+	Response : I_ServerResponse;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF State = SUCCESS_WITH_PAYLOAD THEN
+	Response.SuccessWithPayload(pData,dataSize);
+	TryUpdateServerResponse := TRUE;
+	RETURN;
+END_IF
+
+IF State = SUCCESS THEN
+	Response.Success();
+	TryUpdateServerResponse := TRUE;
+	RETURN;
+END_IF
+
+IF state = ERROR THEN
+	Response.Error(errorCode, errorMessage);
+	TryUpdateServerResponse := TRUE;
+	RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

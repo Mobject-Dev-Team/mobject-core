@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="AsyncRpcCallQueue" Id="{5b87deaa-fbe5-0876-36b8-763e1807038d}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+{attribute 'TcRpcEnable'}
+FUNCTION_BLOCK AsyncRpcCallQueue IMPLEMENTS I_AsyncRpcCallQueue
+VAR
+	callQueue : Queue;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Destructor" Id="{5cf28cc6-db57-013e-223f-a6abfc7535a7}" />
+    <Folder Name="Protected" Id="{b441f6e0-701a-056d-03e6-69caff5cc3a1}" />
+    <Method Name="CreateCall" Id="{170dc7c2-c23b-09ba-0fe2-992be37ed441}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PUBLIC CreateCall : I_AsyncRpcCall
+VAR_INPUT
+	CallingParameters : I_Deserializer;
+	CallingAsynchronousRpcResponse : I_AsynchronousRpcResponse;
+	CallingHandler : I_AsynchronousRpcHandler;
+END_VAR
+VAR
+	pAsyncRpcCall : POINTER TO AsyncRpcCall;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pAsyncRpcCall := __NEW(AsyncRpcCall(Parameters := CallingParameters, AsynchronousRpcResponse := CallingAsynchronousRpcResponse, Handler := CallingHandler));
+CreateCall := pAsyncRpcCall^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CyclicCall" Id="{8165e042-b04c-0265-036f-3acc3bfae179}">
+      <Declaration><![CDATA[METHOD PUBLIC CyclicCall
+VAR
+	asyncRpcCall : I_AsyncRpcCall;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF callQueue.TryDequeue(asyncRpcCall) THEN
+	asyncRpcCall.Call();
+	asyncRpcCall.Dispose();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeAll" Id="{4dffc942-21c9-000c-3a78-3c800bfc3584}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED DisposeAll
+VAR
+	asyncRpcCall : I_AsyncRpcCall;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE callQueue.TryDequeue(asyncRpcCall) DO
+	asyncRpcCall.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{7503eb00-4a12-0fd7-1c7a-dcb1ca7f2a04}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeAll();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryAddRpcCall" Id="{71852c12-eb88-0a1b-1bdf-3e8e9c556880}">
+      <Declaration><![CDATA[METHOD PUBLIC TryAddRpcCall : BOOL
+VAR_INPUT
+	CallingParameters : I_Deserializer;
+	CallingAsynchronousRpcResponse : I_AsynchronousRpcResponse;
+	CallingHandler : I_AsynchronousRpcHandler;
+END_VAR
+VAR
+	asyncRpcCall : I_AsyncRpcCall;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[asyncRpcCall := CreateCall(CallingParameters, CallingAsynchronousRpcResponse, CallingHandler);
+callQueue.Enqueue(asyncRpcCall);
+TryAddRpcCall := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
   <POU Name="_LREAL" Id="{cc05ec20-dde3-4620-8951-148abfb0053c}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK _LREAL EXTENDS NumericDatatypeBase
+FUNCTION_BLOCK _LREAL EXTENDS NumericDatatypeBase IMPLEMENTS I_LREAL
 VAR
 	localData : LREAL;
 	activeData : REFERENCE TO LREAL REF= localData;
@@ -135,7 +135,8 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="SerializeMaxValue" Id="{45955609-ed01-05c3-2d38-ae2d5ec2865d}" FolderPath="Protected\">
+    <Method Name="SerializeMaxValue" Id="{45955609-ed01-05c3-2d38-ae2d5ec2865d}"
+      FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED SerializeMaxValue
 VAR_INPUT
 	Serializer : I_Serializer;
@@ -145,7 +146,8 @@ END_VAR
         <ST><![CDATA[Serializer.AddLreal(MaxValue);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="SerializeMinValue" Id="{650de54f-321c-0504-3ebc-55346f957ca0}" FolderPath="Protected\">
+    <Method Name="SerializeMinValue" Id="{650de54f-321c-0504-3ebc-55346f957ca0}"
+      FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED SerializeMinValue
 VAR_INPUT
 	Serializer : I_Serializer;
@@ -175,6 +177,140 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="TryConvertTo" Id="{24891d77-55da-05d4-24a3-0a59ef7070be}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConvertTo : BOOL
+VAR_INPUT
+	Destination : ANY;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryConvertTo := TryConvert_LREAL_To_Destination(activeData, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryConvertTo_" Id="{128e2130-24df-0dc1-17a8-bca517b4b130}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConvertTo_ : BOOL
+VAR_INPUT
+	Destination : I_Datatype;
+END_VAR
+VAR
+	resultofBitConversion : BOOL;
+	destinationAs_BIT : I_BIT;
+	destinationAs_BOOL : I_BOOL;
+	destinationAs_BYTE : I_BYTE;
+	destinationAs_DINT : I_DINT;
+	destinationAs_DT : I_DT;
+	destinationAs_DWORD : I_DWORD;
+	destinationAs_INT : I_INT;
+	destinationAs_LINT : I_LINT;
+	destinationAs_LREAL : I_LREAL;
+	destinationAs_LWORD : I_LWORD;
+	destinationAs_REAL : I_REAL;
+	destinationAs_SINT : I_SINT;
+	destinationAs_STRING : I_STRING;
+	destinationAs_TOD : I_TOD;
+	destinationAs_UDINT : I_UDINT;
+	destinationAs_UINT : I_UINT;
+	destinationAs_ULINT : I_ULINT;
+	destinationAs_USINT : I_USINT;
+	destinationAs_WORD : I_WORD;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF destination.TryResolveAs_BIT(destinationAs_BIT) AND_THEN TryConvert_LREAL_TO_BOOL(activeData, resultofBitConversion) THEN
+	destinationAs_BIT.Value := resultOfBitConversion;
+	TryConvertTo_ := TRUE;
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_BOOL(destinationAs_BOOL) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_BOOL(activeData, destinationAs_BOOL.Value);
+	RETURN;
+END_IF
+		
+IF destination.TryResolveAs_BYTE(destinationAs_BYTE) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_BYTE(activeData, destinationAs_BYTE.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_DINT(destinationAs_DINT) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_DINT(activeData, destinationAs_DINT.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_DT(destinationAs_DT) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_DT(activeData, destinationAs_DT.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_DWORD(destinationAs_DWORD) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_DWORD(activeData, destinationAs_DWORD.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_INT(destinationAs_INT) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_INT(activeData, destinationAs_INT.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_LINT(destinationAs_LINT) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_LINT(activeData, destinationAs_LINT.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_LREAL(destinationAs_LREAL) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_LREAL(activeData, destinationAs_LREAL.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_LWORD(destinationAs_LWORD) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_LWORD(activeData, destinationAs_LWORD.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_REAL(destinationAs_REAL) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_REAL(activeData, destinationAs_REAL.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_SINT(destinationAs_SINT) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_SINT(activeData, destinationAs_SINT.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_STRING(destinationAs_STRING) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_STRING(activeData, destinationAs_STRING.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_TOD(destinationAs_TOD) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_TOD(activeData, destinationAs_TOD.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_UDINT(destinationAs_UDINT) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_UDINT(activeData, destinationAs_UDINT.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_UINT(destinationAs_UINT) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_UINT(activeData, destinationAs_UINT.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_ULINT(destinationAs_ULINT) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_ULINT(activeData, destinationAs_ULINT.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_USINT(destinationAs_USINT) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_USINT(activeData, destinationAs_USINT.Value);
+	RETURN;
+END_IF
+
+IF destination.TryResolveAs_WORD(destinationAs_WORD) THEN
+	TryConvertTo_ := TryConvert_LREAL_TO_WORD(activeData, destinationAs_WORD.Value);
+	RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryDeserializeFrom" Id="{331ced44-7540-4591-a72e-5e6d03d318cc}">
       <Declaration><![CDATA[METHOD TryDeserializeFrom : BOOL
 VAR_INPUT
@@ -203,6 +339,17 @@ activeData REF= pTargetData^;
 TryMakeReferenceTo := TRUE;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="TryResolveAs_LREAL" Id="{15399971-84e1-0303-0366-33b461f0ba85}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_LREAL : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Destination := THIS^;
+TryResolveAs_LREAL := TRUE;]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="TypeName" Id="{a432f784-e285-4645-9d2e-b5735c558c9d}">
       <Declaration><![CDATA[PROPERTY PUBLIC TypeName : T_MAXSTRING]]></Declaration>
       <Get Name="Get" Id="{fa4e0604-e362-454f-bf9c-31636f2adae8}">
@@ -215,7 +362,9 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Value" Id="{27002f84-6748-4a80-8b6e-791fe85a74b0}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO LREAL]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO LREAL
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{d571196e-195c-458a-90d9-7091d9058e54}">
         <Declaration><![CDATA[VAR
 END_VAR

@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
   <POU Name="_TIME_OF_DAY" Id="{4b0a87e2-c072-49e3-85b6-cf5a09ecca1b}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK _TIME_OF_DAY EXTENDS DatatypeBase
+FUNCTION_BLOCK _TIME_OF_DAY EXTENDS DatatypeBase IMPLEMENTS I_TIME_OF_DAY
 VAR
 	localData : TIME_OF_DAY;
 	activeData : REFERENCE TO TIME_OF_DAY REF= localData;
@@ -116,6 +116,17 @@ activeData REF= pTargetData^;
 TryMakeReferenceTo := TRUE;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="TryResolveAs_TIME_OF_DAY" Id="{c1e3e489-600a-0048-158d-05dfcf402f2b}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_TIME_OF_DAY : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_TIME_OF_DAY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Destination := THIS^;
+TryResolveAs_TIME_OF_DAY := TRUE;]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="TypeName" Id="{9d8a6a96-27e0-47a7-ab38-5d7fea91fb21}">
       <Declaration><![CDATA[PROPERTY PUBLIC TypeName : T_MAXSTRING]]></Declaration>
       <Get Name="Get" Id="{b55c9afd-0777-4ab9-aa4c-1eb76ae24a11}">
@@ -128,7 +139,9 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Value" Id="{22db774c-0d72-46b4-a6e3-91de72a2a61b}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Value : REFERENCE TO TIME_OF_DAY]]></Declaration>
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO TIME_OF_DAY
+{warning restore C5410}]]></Declaration>
       <Get Name="Get" Id="{2e0726c9-a86a-40aa-95b6-50838455feba}">
         <Declaration><![CDATA[VAR
 END_VAR

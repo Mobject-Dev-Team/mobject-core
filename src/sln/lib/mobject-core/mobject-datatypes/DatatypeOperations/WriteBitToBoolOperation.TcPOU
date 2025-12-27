@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
   <POU Name="WriteBitToBoolOperation" Id="{f79428c6-f25e-4318-941a-ed0037d31ddf}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK WriteBitToBoolOperation EXTENDS Disposable IMPLEMENTS I_DatatypeOperation
 VAR
-	source : I_BitDatatype;
+	source : I_BIT;
 	destination : REFERENCE TO _BOOL;
 END_VAR
 ]]></Declaration>
@@ -27,7 +27,7 @@ END_VAR]]></Declaration>
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	Source : I_BitDatatype;
+	Source : I_BIT;
 	Destination : REFERENCE TO _BOOL;
 END_VAR]]></Declaration>
       <Implementation>

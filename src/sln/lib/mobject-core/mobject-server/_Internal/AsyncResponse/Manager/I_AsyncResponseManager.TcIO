@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_AsyncResponseManager" Id="{e66426b4-8976-41c4-8618-3a237a7a5dc6}">
+    <Declaration><![CDATA[INTERFACE I_AsyncResponseManager
+]]></Declaration>
+    <Method Name="TryConvertResponseToAsyncResponseSessionData" Id="{1c256675-c6f3-4a69-abe1-023a0168c972}">
+      <Declaration><![CDATA[METHOD TryConvertResponseToAsyncResponseSessionData : BOOL
+VAR_INPUT
+	Response : I_ServerResponse;
+	RetryDelayInMs : UDINT;
+	Destination : REFERENCE TO I_AsyncResponseSessionData;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryHandleIncomingRequest" Id="{0f01b17a-9511-4c12-b684-a1173a95c487}">
+      <Declaration><![CDATA[METHOD PUBLIC TryHandleIncomingRequest : BOOL
+VAR_INPUT
+	Request : I_Request;
+	Response : I_ServerResponse;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
   <Itf Name="I_EventHandlerItem" Id="{943820f2-6d02-43f4-a224-eda85ce6c166}">
     <Declaration><![CDATA[INTERFACE I_EventHandlerItem EXTENDS I_Disposable
 ]]></Declaration>
     <Method Name="Emit" Id="{d47a8275-0b77-488c-b526-2a215b45aa18}">
-      <Declaration><![CDATA[METHOD PUBLIC Emit
+      <Declaration><![CDATA[METHOD PUBLIC Emit : BOOL
 VAR_INPUT
 	EventName : T_MaxString;
 	Event : I_Event;

@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="SessionManager" Id="{342bd2b9-d9c4-43ce-b8a8-4b776e195a05}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK SessionManager implements I_SessionManager, I_SessionStorage
+VAR
+	activeSessions : Dictionary;
+	sessionIdGenerator : I_SessionIdGenerator;
+	currentStorageId : UDINT;
+	sessionMaxLife : TIME;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{59dc977b-c9d6-4ea5-b673-0567074a2efe}" />
+    <Folder Name="Destructor" Id="{f3550d59-e470-4ef4-b641-59b3abdf6f6a}" />
+    <Folder Name="Private" Id="{0daec0e3-e661-487c-8cd2-4d66ebf1a854}" />
+    <Method Name="CheckForExpiredSessions" Id="{83c99074-d8fe-4a4c-a47d-2bdd9191ef7f}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PUBLIC CheckForExpiredSessions
+VAR_INPUT
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	session : I_Session;
+	expiredSessions : Stack;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := activeSessions.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(session) THEN
+		IF session.LastAccessedTimestamp.IsDurationElapsed(sessionMaxLife) THEN
+			expiredSessions.Push(session);
+		END_IF
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+WHILE expiredSessions.TryPop(session) DO
+	DisposeSession(session.Id);
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateNewSession" Id="{67daf57f-529a-491c-98ac-210b647922cc}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateNewSession : I_Session
+VAR
+	id : T_MAXSTRING;
+	pSession : POINTER TO Session;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[id := sessionIdGenerator.Generate();
+pSession := __NEW(Session(SessionId := id));
+CreateNewSession := pSession^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateSession" Id="{3d128496-0e33-4145-8c69-cef3e51197dc}">
+      <Declaration><![CDATA[METHOD PUBLIC CreateSession : T_MAXSTRING;
+VAR
+	session : I_Session;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[session := CreateNewSession();
+activeSessions.AddOrUpdate(session.Id, session);
+CreateSession := session.Id;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CyclicCall" Id="{38f22274-e118-4edf-84a1-b31ff40ceb3d}">
+      <Declaration><![CDATA[METHOD PUBLIC CyclicCall
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CheckForExpiredSessions();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeAllSessions" Id="{4fb5f618-5c09-4476-95e3-facf2f8ddd17}">
+      <Declaration><![CDATA[METHOD PUBLIC DisposeAllSessions
+VAR_INPUT
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	session : I_Session;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := activeSessions.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	if enumerator.TryGet(session) then
+		session.Dispose();
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+activeSessions.Clear();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSession" Id="{5662ad75-5216-40ce-94a1-fa8cff8a6832}">
+      <Declaration><![CDATA[METHOD PUBLIC DisposeSession
+VAR_INPUT
+	Id : T_MAXSTRING;
+END_VAR
+VAR
+	session : I_Session;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT activeSessions.TryGetValue(Id, session) THEN
+	RETURN;
+END_IF
+
+session.Dispose();
+activeSessions.Remove(Id);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSessionDataById" Id="{826e50ce-2826-46e3-83b5-6a41d927b9df}">
+      <Declaration><![CDATA[METHOD PUBLIC DisposeSessionDataById
+VAR_INPUT
+	SessionId : T_MAXSTRING;
+	StorageId : T_MAXSTRING;
+END_VAR
+VAR
+	session : I_Session;
+	sessionData : I_SessionData;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF StorageId = '' THEN 
+	RETURN;
+END_IF
+
+IF NOT activeSessions.TryGetValue(SessionId, session) THEN
+	RETURN;
+END_IF
+
+IF NOT session.TryGetDataFromStorage(StorageId, sessionData) THEN
+	RETURN;
+END_IF
+
+session.DisposeDataFromStorage(StorageId);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{fb653362-4918-4c20-a479-5bfdae3af15c}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeAllSessions();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{c8ae154c-bf52-4f70-a548-c5f854d4c3c6}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	SessionIdGenerator : I_SessionIdGenerator;
+	SessionMaxLife : TIME;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.sessionIdGenerator := SessionIdGenerator;
+THIS^.sessionMaxLife := SessionMaxLife;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsValidSession" Id="{0da1fdfc-0a19-4c5e-8f5b-40dfb58efee8}">
+      <Declaration><![CDATA[METHOD PUBLIC IsValidSession : BOOL
+VAR_INPUT
+	Id : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsValidSession := activeSessions.ContainsKey(Id);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RefreshSession" Id="{bfd9aab5-9e57-4dfc-b196-52065ffa84b1}">
+      <Declaration><![CDATA[METHOD PUBLIC RefreshSession
+VAR_INPUT
+	Id : T_MAXSTRING;
+END_VAR
+VAR
+	session : I_Session;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT activeSessions.TryGetValue(Id, session) THEN
+	RETURN;
+END_IF
+
+session.Refresh();]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="SessionCount" Id="{92419871-f1d4-4c05-a107-d0a755e2fdf5}">
+      <Declaration><![CDATA[PROPERTY PUBLIC SessionCount : DINT]]></Declaration>
+      <Get Name="Get" Id="{45202798-d9a6-4003-a444-39572bd10c6b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SessionCount := activeSessions.Count;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="TryRetreiveSessionDataById" Id="{acd3535b-fec8-4aba-83d3-ae428cce48af}">
+      <Declaration><![CDATA[METHOD PUBLIC TryRetreiveSessionDataById : BOOL
+VAR_INPUT
+	SessionId : T_MAXSTRING;
+	StorageId : T_MAXSTRING;
+	Destination : REFERENCE TO I_SessionData;
+END_VAR
+VAR
+	session : I_Session;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT activeSessions.TryGetValue(SessionId, session) THEN
+	RETURN;
+END_IF
+
+TryRetreiveSessionDataById := session.TryGetDataFromStorage(StorageId, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryStoreSessionDataById" Id="{e6016ad1-a6fb-48a2-bfc4-1ee26d0f9e9c}">
+      <Declaration><![CDATA[METHOD PUBLIC TryStoreSessionDataById : BOOL
+VAR_INPUT
+	SessionId : T_MAXSTRING;
+	StorageId : T_MAXSTRING;
+	Source : I_SessionData;
+END_VAR
+VAR
+	session : I_Session;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF StorageId = '' THEN 
+	RETURN;
+END_IF
+
+IF NOT activeSessions.TryGetValue(SessionId, session) THEN
+	RETURN;
+END_IF
+
+session.AddOrUpdateStorage(StorageId, Source);
+TryStoreSessionDataById := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <Itf Name="I_ULINT" Id="{3ebc358f-1f13-0940-2bd8-78a9aa1abb01}">
+    <Declaration><![CDATA[INTERFACE I_ULINT EXTENDS I_Datatype
+]]></Declaration>
+    <Property Name="Value" Id="{82e3b063-9aea-0c67-2273-1eaefdd4db3a}">
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO ULINT
+{warning restore C5410}]]></Declaration>
+      <Get Name="Get" Id="{78fe9476-ab02-0f6a-01e5-d0a60f94ce07}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <Itf Name="I_SINT" Id="{af8d9b79-b3d6-0fe5-2487-8054253ef912}">
+    <Declaration><![CDATA[INTERFACE I_SINT EXTENDS I_Datatype
+]]></Declaration>
+    <Property Name="Value" Id="{4e9574dc-ac84-0283-2957-89519c13c6a5}">
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO SINT
+{warning restore C5410}]]></Declaration>
+      <Get Name="Get" Id="{be1daa36-d78f-0cae-2900-174e85da11d7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

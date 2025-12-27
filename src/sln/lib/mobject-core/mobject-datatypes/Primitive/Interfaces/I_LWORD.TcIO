@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <Itf Name="I_LWORD" Id="{3ad6bf80-55cc-0b7f-36c3-d0c11f83a142}">
+    <Declaration><![CDATA[INTERFACE I_LWORD EXTENDS I_Datatype
+]]></Declaration>
+    <Property Name="Value" Id="{59ae7cc2-aa8a-054b-1a6a-bdec2057d45d}">
+      <Declaration><![CDATA[{warning disable C5410}
+PROPERTY PUBLIC Value : REFERENCE TO LWORD
+{warning restore C5410}]]></Declaration>
+      <Get Name="Get" Id="{b387d43e-7713-09cc-0e7e-6c1d70312d4e}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

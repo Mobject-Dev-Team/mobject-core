@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_AsyncResponseHeaderAccessor" Id="{61b9a4ee-8cd0-4644-b0b2-453653811270}">
+    <Declaration><![CDATA[INTERFACE I_AsyncResponseHeaderAccessor
+]]></Declaration>
+    <Method Name="TryGetResponseIdFromRequest" Id="{5a578aba-db65-4303-a492-398025f4f169}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetResponseIdFromRequest : BOOL
+VAR_INPUT
+	Request : I_Request;
+	Destination : ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetSessionIdFromRequest" Id="{59ffb8d0-e7f1-4d58-ade8-d6555afd94d8}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetSessionIdFromRequest : BOOL
+VAR_INPUT
+	Request : I_Request;
+	Destination : REFERENCE TO T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetSessionIdFromResponse" Id="{8962ab21-3edc-4974-917e-ae01e1fac701}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetSessionIdFromResponse : BOOL
+VAR_INPUT
+	Response : I_ServerResponse;
+	Destination : ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

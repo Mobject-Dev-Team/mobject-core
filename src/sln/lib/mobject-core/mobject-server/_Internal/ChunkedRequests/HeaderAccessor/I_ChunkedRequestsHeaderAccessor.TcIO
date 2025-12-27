@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_ChunkedRequestsHeaderAccessor" Id="{7e42ddcb-3582-475a-a4a5-411d401cc5a1}">
+    <Declaration><![CDATA[INTERFACE I_ChunkedRequestsHeaderAccessor
+]]></Declaration>
+    <Method Name="TryGetChunkSequenceFromRequest" Id="{7af9a95b-ffef-46e5-b4fc-6d4bee37c3f8}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetChunkSequenceFromRequest : BOOL
+VAR_INPUT
+	Request : I_Request;
+	Destination : REFERENCE TO DINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetChunkTotalFromRequest" Id="{13debe56-ee1e-4553-9ce1-0fedda011766}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetChunkTotalFromRequest : BOOL
+VAR_INPUT
+	Request : I_Request;
+	Destination : REFERENCE TO DINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetHasMoreChunksFromRequest" Id="{73b07beb-728f-480b-80f6-a1da86da93d9}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetHasMoreChunksFromRequest : BOOL
+VAR_INPUT
+	Request : I_Request;
+	Destination : REFERENCE TO BOOL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetRequestIdFromRequest" Id="{3f6581fc-9aba-410e-808d-3ede1af00222}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetRequestIdFromRequest : BOOL
+VAR_INPUT
+	Request : I_Request;
+	Destination : REFERENCE TO T_MAXSTRING;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetSessionIdFromRequest" Id="{ff6fb8ec-7032-4b4d-8a87-1f0d7fd5f686}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetSessionIdFromRequest : BOOL
+VAR_INPUT
+	Request : I_Request;
+	Destination : REFERENCE TO T_MAXSTRING;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_RpcServer" Id="{a5034f39-2651-0014-2602-42051a0f2c0b}">
+    <Declaration><![CDATA[INTERFACE I_RpcServer
+]]></Declaration>
+    <Method Name="GetConfiguredHeaderSize" Id="{c509b177-31f7-0a55-1d42-ba14984823b6}">
+      <Declaration><![CDATA[METHOD PUBLIC GetConfiguredHeaderSize : UDINT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetConfiguredPayloadSize" Id="{0bc88360-274f-0a0b-20d0-56c3740a385c}">
+      <Declaration><![CDATA[METHOD PUBLIC GetConfiguredPayloadSize : UDINT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="HandleRequest" Id="{9444fd2f-bc13-00b0-0481-1faa0bc4d5ad}">
+      <Declaration><![CDATA[{attribute 'TcRpcEnable'}
+METHOD PUBLIC HandleRequest : ResponseData;
+VAR_INPUT
+	SerializedHeader : STRING(ServerConfiguration.HEADER_STRING_SIZE);
+	SerializedPayload : STRING(ServerConfiguration.PAYLOAD_STRING_SIZE);
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="RegisterApi" Id="{81c9cc32-5ef8-0ba2-2ec6-b19f619b9397}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterApi
+VAR_INPUT
+	RpcApi : I_RpcApi;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="RegisterAsynchronousRpcHandler" Id="{50a7df9e-6b61-0f77-3992-6f5c5879e3f9}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterAsynchronousRpcHandler
+VAR_INPUT
+	MethodName : T_MAXSTRING;
+	Handler : I_AsynchronousRpcHandler;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="RegisterSynchronousRpcHandler" Id="{7e7d3b91-00ef-05b3-3b18-66affe850f6c}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterSynchronousRpcHandler
+VAR_INPUT
+	MethodName : T_MAXSTRING;
+	Handler : I_SynchronousRpcHandler;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

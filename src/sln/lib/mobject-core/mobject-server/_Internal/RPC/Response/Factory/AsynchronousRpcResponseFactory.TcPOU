@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="AsynchronousRpcResponseFactory" Id="{7280755c-1fdf-4cb5-a5fe-5dbe4a370a60}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK AsynchronousRpcResponseFactory IMPLEMENTS I_AsynchronousRpcResponseFactory
+VAR
+	serverResponse : I_ServerResponse;
+	serializer : I_Serializer;
+	asyncResponseManager : I_AsyncResponseManager;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{d52d1752-d4e9-4f2a-98fa-305408348c32}" />
+    <Method Name="FB_init" Id="{547d19be-863b-437d-92d7-2f9c7b7933c3}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	ServerResponse : I_ServerResponse;
+	Serializer : I_Serializer;
+	AsyncResponseManager : I_AsyncResponseManager;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.serverResponse := ServerResponse;
+THIS^.serializer := Serializer;
+THIS^.asyncResponseManager := AsyncResponseManager;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryCreate" Id="{f58325af-5740-4e44-9894-cedd421d8a3b}">
+      <Declaration><![CDATA[METHOD PUBLIC TryCreate : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_AsynchronousRpcResponse;
+END_VAR
+VAR
+	asyncResponseSessionData : I_AsyncResponseSessionData;
+	pAsynchronousRpcResponse : POINTER TO AsynchronousRpcResponse;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT asyncResponseManager.TryConvertResponseToAsyncResponseSessionData(serverResponse, 0, asyncResponseSessionData) THEN
+	RETURN;
+END_IF
+
+pAsynchronousRpcResponse := __NEW(AsynchronousRpcResponse(AsyncResponse := asyncResponseSessionData, Serializer := THIS^.serializer));
+Destination := pAsynchronousRpcResponse^;
+TryCreate := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

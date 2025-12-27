@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
   <POU Name="JsonSerializer_TestSuite" Id="{6a56b15b-61b3-44a3-ae00-b4c0769367dc}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK JsonSerializer_TestSuite EXTENDS TcUnit.FB_TestSuite]]></Declaration>
     <Implementation>
@@ -904,7 +904,7 @@ VAR
 	jsonSerializer : JsonSerializer;
 	realValue : REAL := DatatypeLimits.REAL_MAX_VALUE;
 	out : STRING;
-	expected : STRING := '{"data":3.4028230607370967e38}'; // this has been adapted to support more decimal places, due to the issue with REAL conversion in TwinCAT 4024.56
+	expected : STRING := '{"data":3.4028230607370965e38}'; // this has been adapted to support more decimal places, due to the issue with REAL conversion in TwinCAT 4024.56
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('TestAddKeyReal_Max');

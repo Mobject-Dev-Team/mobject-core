@@ -1,0 +1,7 @@
+{
+  "entry": "./src/sln/lib",
+  "libName": "MobjectCore",
+  "libVersion": "0.0.0",
+  "ignore": ["libTest/**"],
+  "extensions": [".tcpou"]
+}
