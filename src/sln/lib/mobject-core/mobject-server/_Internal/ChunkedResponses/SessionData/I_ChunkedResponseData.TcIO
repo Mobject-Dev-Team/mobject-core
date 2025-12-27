@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_ChunkedResponseData" Id="{fe2b3a42-4911-41cc-992a-f3bfe48b2891}">
+    <Declaration><![CDATA[INTERFACE I_ChunkedResponseData EXTENDS I_SessionData
+]]></Declaration>
+    <Property Name="SendComplete" Id="{1e88171c-d352-4194-a989-9f84c307607e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC SendComplete : BOOL]]></Declaration>
+      <Get Name="Get" Id="{a284bf0b-dc4d-44b6-bf3e-7ad7e0adf6c6}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="SendNextChunk" Id="{bcd4ddad-2aeb-425e-9fc0-440a1d4464c5}">
+      <Declaration><![CDATA[METHOD PUBLIC SendNextChunk
+VAR_INPUT
+	Response : I_ServerResponse;
+	Size : UDINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="SizeRemaining" Id="{2d8a8123-a251-4b81-8626-d0540f976b53}">
+      <Declaration><![CDATA[PROPERTY SizeRemaining : UDINT]]></Declaration>
+      <Get Name="Get" Id="{360f0ba3-1ef6-4c20-a462-2e9c82067d8d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

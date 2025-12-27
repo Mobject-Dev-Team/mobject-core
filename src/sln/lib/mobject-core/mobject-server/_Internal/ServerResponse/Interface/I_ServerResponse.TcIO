@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_ServerResponse" Id="{73400505-8067-4057-a9de-9d0c6e7226c5}">
+    <Declaration><![CDATA[INTERFACE I_ServerResponse
+]]></Declaration>
+    <Method Name="Accepted" Id="{6246fac0-fc8d-4feb-9371-c0177960159c}">
+      <Declaration><![CDATA[METHOD PUBLIC Accepted
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="Busy" Id="{b25a9655-c66e-49ae-baa3-1edf29ea3497}">
+      <Declaration><![CDATA[METHOD PUBLIC Busy
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="Error" Id="{d237216f-7967-40d2-9412-b4a24b85b267}">
+      <Declaration><![CDATA[METHOD PUBLIC Error
+VAR_INPUT
+	ErrorCode : T_MAXSTRING;
+	Message : T_MAXSTRING;
+END_VAR]]></Declaration>
+    </Method>
+    <Property Name="Header" Id="{8ffc523a-6ad8-4515-8678-65029bb01dfe}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Header : I_Header]]></Declaration>
+      <Get Name="Get" Id="{fe96836b-a607-43f6-b9c8-6c3cd3277023}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="HeadersSent" Id="{69151604-9c1b-4504-8acc-666dace45603}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HeadersSent : BOOL]]></Declaration>
+      <Get Name="Get" Id="{77ce1403-f79b-43fa-add7-726ec1bd603b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="Pending" Id="{020c4672-a442-48d5-8a39-1dc52a2129db}">
+      <Declaration><![CDATA[METHOD PUBLIC Pending
+VAR_INPUT
+	ResponseId : REFERENCE TO T_MAXSTRING;
+	RetryDelayInMs : UDINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="Success" Id="{cdab33a1-e5db-491f-a118-2f8d58ebf253}">
+      <Declaration><![CDATA[METHOD PUBLIC Success
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="SuccessWithPayload" Id="{d047699e-ce48-49a9-a850-a788b6066cc8}">
+      <Declaration><![CDATA[METHOD PUBLIC SuccessWithPayload
+VAR_INPUT
+	PayloadDataAddress : PVOID;
+	PayloadDataSize : UDINT;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

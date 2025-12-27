@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_RpcManager" Id="{3201a288-ebc2-4ab0-a325-1c2dd49298b1}">
+    <Declaration><![CDATA[INTERFACE I_RpcManager
+]]></Declaration>
+    <Method Name="TryHandleIncomingRequest" Id="{1e4e5a69-d0dd-4296-b98a-5ea517af59a2}">
+      <Declaration><![CDATA[METHOD PUBLIC TryHandleIncomingRequest : BOOL
+VAR_INPUT
+	Request : I_Request;
+	Response : I_ServerResponse;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

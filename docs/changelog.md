@@ -5,6 +5,7 @@
 - moved up to TwinCAT 4026.19
 - added compiler warning suppression
 - bug fix, event once was being removed event when not the same event
+- added mobject-server (0.18.0)
 
 ## v0.7.0-beta
 

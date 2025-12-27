@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="MobjectServerUnitTests" Id="{d739872e-a4b9-0c9a-1611-1e81c17127c4}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MobjectServerUnitTests
+VAR
+	server_IntegrationTestSuite : Server_IntegrationTestSuite;
+	chunkedRequestData_TestSuite : ChunkedRequestData_TestSuite;
+	
+	initialized : BOOL;
+	server : RpcServer;
+	concatStringRpcHandler : ConcatStringRpcHandler;	
+	syncToAsyncEchoRpcHandler : SyncToAsyncEchoRpcHandler;
+	adjustableSizeReplyRpcHandler : AdjustableSizeReplyRpcHandler;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TcUnit.RUN();
+
+// the code below is used by TwinCAT HMI implementation
+
+IF NOT initialized THEN
+	initialized := TRUE;
+	server.RegisterSynchronousRpcHandler('concat',concatStringRpcHandler);
+	server.RegisterSynchronousRpcHandler('asyncEcho',syncToAsyncEchoRpcHandler);
+	server.RegisterSynchronousRpcHandler('adjustableSizeReply',adjustableSizeReplyRpcHandler);
+END_IF
+
+server.CyclicCall();
+
+// this has timers inside, so must be cyclic called.
+syncToAsyncEchoRpcHandler.CyclicCall();]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

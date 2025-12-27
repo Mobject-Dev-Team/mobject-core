@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="RegisteredRpcApis" Id="{4d0cac44-bafd-0291-176e-591a6c185186}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK RegisteredRpcApis
+VAR
+	registeredRpcApis : Queue;
+	_hasRegisteredRpcApis : BOOL;
+	enumerator : I_ForwardEnumerator;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Destructor" Id="{32c4252c-3b00-09f6-0abe-078e0db26d03}" />
+    <Folder Name="Private" Id="{865efe74-a0d6-0b74-24cb-3f89854ddca9}" />
+    <Method Name="CreateEnumerator" Id="{1bac79a0-5ddd-0a0c-3634-a36e798db8dd}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF enumerator <> 0 THEN
+	enumerator.Dispose();
+END_IF
+
+enumerator := registeredRpcApis.GetEnumerator();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CyclicCall" Id="{0f978c5e-4e24-0dc5-11bc-289baa8e9ba6}">
+      <Declaration><![CDATA[METHOD PUBLIC CyclicCall
+VAR
+	rpcApi : I_RpcApi;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT HasRegisteredRpcApis THEN
+	RETURN;
+END_IF
+
+enumerator.Reset();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(rpcApi) THEN
+		rpcApi.CyclicCall();
+	END_IF;
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{928e84db-3815-0296-3e3d-d26ade461b27}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+IF enumerator <> 0 THEN
+	enumerator.Dispose();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="HasRegisteredRpcApis" Id="{468d24c0-7fb4-095c-35f8-1b09332a7025}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRegisteredRpcApis : BOOL]]></Declaration>
+      <Get Name="Get" Id="{4225082f-d46c-0dba-1c5a-5dde1110a491}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasRegisteredRpcApis := enumerator <> 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="RegisterRpcApi" Id="{1d599615-868a-0acb-15c9-aedd31798800}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterRpcApi
+VAR_INPUT
+	RpcApi : I_RpcApi;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[registeredRpcApis.Enqueue(RpcApi);
+CreateEnumerator();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

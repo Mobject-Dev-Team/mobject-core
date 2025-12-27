@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_AsynchronousRpcHandlers" Id="{84de3bed-7a09-0743-1169-a4c8b354c303}">
+    <Declaration><![CDATA[INTERFACE I_AsynchronousRpcHandlers
+]]></Declaration>
+    <Property Name="HasHandlers" Id="{2ad9b18a-42a6-0bb5-36f7-f414c80e7ebf}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasHandlers : BOOL]]></Declaration>
+      <Get Name="Get" Id="{95bd51d9-5ac3-0797-226e-18babffeb70b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryGetByMethodName" Id="{4fed1802-86a1-0114-1954-592e63b014d8}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByMethodName : BOOL
+VAR_INPUT
+	MethodName : T_MAXSTRING;
+	Destination : REFERENCE TO I_AsynchronousRpcHandler;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

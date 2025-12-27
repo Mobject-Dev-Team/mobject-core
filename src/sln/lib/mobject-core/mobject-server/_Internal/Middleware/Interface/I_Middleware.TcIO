@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_Middleware" Id="{c6de0511-8791-47bc-bd05-1e7ea8dec882}">
+    <Declaration><![CDATA[INTERFACE I_Middleware
+]]></Declaration>
+    <Method Name="Handle" Id="{e9ed1e8e-e1ba-4a07-b915-3a53a228db40}">
+      <Declaration><![CDATA[METHOD Handle
+VAR_INPUT
+	Request : I_Request;
+	Response : I_ServerResponse;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="NextMiddleware" Id="{d4daed27-77d0-4d8e-a40c-7c2ca31b310d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC NextMiddleware : I_Middleware]]></Declaration>
+      <Get Name="Get" Id="{c4f5edea-4997-466e-a8e1-409427ed23e4}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{73f564f5-34fe-4e43-9705-8b982564aae5}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>

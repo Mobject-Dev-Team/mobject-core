@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="SequentialSessionIdGenerator" Id="{861c656a-ac3b-417d-8521-03fb713524d8}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK SequentialSessionIdGenerator Implements I_SessionIdGenerator
+VAR
+	currentCount : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Generate" Id="{b9b2f3c1-aeac-45cf-9d70-1b5838dd8b70}">
+      <Declaration><![CDATA[METHOD PUBLIC Generate : T_MAXSTRING
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[currentCount := currentCount + 1;
+Generate := UDINT_TO_STRING(currentCount);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

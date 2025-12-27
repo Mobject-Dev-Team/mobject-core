@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_Session" Id="{02daf2cc-9508-444b-83cc-6a7ab37af681}">
+    <Declaration><![CDATA[INTERFACE I_Session Extends I_Disposable
+]]></Declaration>
+    <Method Name="AddOrUpdateStorage" Id="{98d2f6bc-a3ae-4ab6-bec2-a17304829331}">
+      <Declaration><![CDATA[METHOD PUBLIC AddOrUpdateStorage
+VAR_INPUT
+	StorageId : T_MAXSTRING;
+	Source : I_SessionData;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="DisposeAllDataFromStorage" Id="{5dc2f177-30e0-436a-ab62-ae041e2d8dbe}">
+      <Declaration><![CDATA[METHOD PUBLIC DisposeAllDataFromStorage
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="DisposeDataFromStorage" Id="{d6d00990-b9c3-4623-944c-1ef8a0a570f9}">
+      <Declaration><![CDATA[METHOD PUBLIC DisposeDataFromStorage
+VAR_INPUT
+	StorageId : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Id" Id="{27783e9f-f360-424f-9e88-8a4f5ba2ea72}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{94d53331-fbc2-41ad-9a8c-48e18c591513}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="LastAccessedTimestamp" Id="{c1b2895b-984d-44a2-8ab5-c6f7750a8185}">
+      <Declaration><![CDATA[PROPERTY PUBLIC LastAccessedTimestamp : I_TimeStamp]]></Declaration>
+      <Get Name="Get" Id="{71b032c6-f00c-4f94-a7d6-0e752b063fb7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="Refresh" Id="{30ef096c-0925-4638-a02c-7fb641708fff}">
+      <Declaration><![CDATA[METHOD PUBLIC Refresh
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetDataFromStorage" Id="{4c1fc734-d03c-4264-aaf3-5d37b6bd5cc3}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetDataFromStorage : BOOL
+VAR_INPUT
+	StorageId : T_MAXSTRING;
+	Destination : REFERENCE TO I_SessionData;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

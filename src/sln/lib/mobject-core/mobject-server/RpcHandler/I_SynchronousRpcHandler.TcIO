@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <Itf Name="I_SynchronousRpcHandler" Id="{bd7246d2-6912-454e-8284-1058d0fb4690}">
+    <Declaration><![CDATA[INTERFACE I_SynchronousRpcHandler EXTENDS __SYSTEM.IQueryInterface 
+]]></Declaration>
+    <Method Name="Handle" Id="{e6ba7fe5-059d-448d-ac0c-79caa69dc2e7}">
+      <Declaration><![CDATA[METHOD Handle
+VAR_INPUT
+	Parameters : I_Deserializer;
+	Response : I_SynchronousRpcResponse;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

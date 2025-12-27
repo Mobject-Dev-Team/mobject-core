@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="RpcServer" Id="{478f75da-2d6c-448f-8a5f-529f8ebd0362}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+{attribute 'TcRpcEnable'}
+FUNCTION_BLOCK RpcServer IMPLEMENTS I_RpcServer
+VAR
+	// default header accessor.
+	headerAccessor : HeaderAccessor;
+	
+	// Payload size may be changed using the constants
+	payloadStringSizeIncludingNull : UDINT := ServerConfiguration.PAYLOAD_STRING_SIZE + 1;
+	
+	// the middleware stack allows us to construct our server in any way needed.
+	// by default we will support sessions, async polling and chunked requests/
+	middlewareStack : MiddlewareStack;
+	
+	// responseId generation required for pending or chunked data
+	sequentialResponseIdGenerator : SequentialResponseIdGenerator;
+	
+	// ability to support sessions...
+	sessionIdGenerator : SequentialSessionIdGenerator;
+	sessionManager : SessionManager(sessionIdGenerator, INACTIVE_SESSION_MAX_AGE);
+	sessionsMiddleware : SessionsMiddleware(sessionManager, headerAccessor);
+	
+	// ability to suppoort chunked requests
+	chunkedRequestsManager : ChunkedRequestsManager(payloadStringSizeIncludingNull, sessionManager, headerAccessor);
+	chunkedRequestsMiddleware : ChunkedRequestsMiddleware(chunkedRequestsManager);
+	
+	// ability to support chunked responses
+	chunkedResponseManager : ChunkedResponseManager(payloadStringSizeIncludingNull, sessionManager, sequentialResponseIdGenerator, headerAccessor);
+	chunkedResponsesMiddleware : ChunkedResponsesMiddleware(chunkedResponseManager);
+	
+	// ability to support pending responses
+	asyncResponseManager : AsyncResponseManager(sessionManager, sequentialResponseIdGenerator, headerAccessor);
+	asyncResponseMiddleware : AsyncResponseMiddleware(asyncResponseManager);
+	
+	// ability to support rpc
+	synchronousRpcHandlers : SynchronousRpcHandlers;
+	asynchronousRpcHandlers : AsynchronousRpcHandlers;
+	asyncRpcCallQueue : AsyncRpcCallQueue;
+	rpcManager : RpcManager(synchronousRpcHandlers, asynchronousRpcHandlers, asyncResponseManager, headerAccessor, asyncRpcCallQueue);
+	rpcMiddleware : RpcMiddleware(rpcManager);
+	
+	// registered apis (used for cyclic calling)
+	registeredRpcApis : RegisteredRpcApis;
+	
+END_VAR
+VAR CONSTANT
+	INACTIVE_SESSION_MAX_AGE : TIME := T#10S;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{5a65d6d9-3a25-4459-9718-feaf759a0bd3}" />
+    <Method Name="CyclicCall" Id="{c4d1d38b-ec98-43ab-b5ad-48d5438a7cf2}">
+      <Declaration><![CDATA[METHOD PUBLIC CyclicCall
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[sessionManager.CyclicCall();
+asyncRpcCallQueue.CyclicCall();
+registeredRpcApis.CyclicCall();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{e1ea361f-f32d-4328-a934-23838a941d3a}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// must be above any middleware which requires storing of session data. 
+// best practice is to put at the top
+MiddlewareStack.Use(sessionsMiddleware);
+
+// must be above any middleware which could send a response larger than the max payload.
+// once this is in place then middleware can send as large as they like (up to router memory max)
+MiddlewareStack.Use(chunkedResponsesMiddleware);
+
+// must be above any middleware which needs to support async responses
+MiddlewareStack.Use(AsyncResponseMiddleware);
+
+// chunked request must be after chunked response to prevent incorrectly starting a new request
+// if the client askes for a response without removing the last request header.
+MiddlewareStack.Use(chunkedRequestsMiddleware); 
+
+// rpc middlware.  All other middleware can go under here.
+MiddlewareStack.Use(rpcMiddleware);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetConfiguredHeaderSize" Id="{f98e5a33-aa52-0cd6-3028-d47b1ff97864}">
+      <Declaration><![CDATA[{attribute 'TcRpcEnable'}
+METHOD PUBLIC GetConfiguredHeaderSize : UDINT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetConfiguredHeaderSize := ServerConfiguration.HEADER_STRING_SIZE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetConfiguredPayloadSize" Id="{76837349-3482-0041-25e1-7c42ceb54c04}">
+      <Declaration><![CDATA[{attribute 'TcRpcEnable'}
+METHOD PUBLIC GetConfiguredPayloadSize : UDINT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetConfiguredPayloadSize := ServerConfiguration.PAYLOAD_STRING_SIZE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="HandleRequest" Id="{2927183f-d407-44ae-8e99-c4945fcc01c3}">
+      <Declaration><![CDATA[{attribute 'TcRpcEnable'}
+METHOD PUBLIC HandleRequest : ResponseData;
+VAR_INPUT
+	SerializedHeader : STRING(ServerConfiguration.HEADER_STRING_SIZE);
+	SerializedPayload : STRING(ServerConfiguration.PAYLOAD_STRING_SIZE);
+END_VAR
+VAR
+	header : Header(SerializedHeader);
+	request : Request(header, SerializedPayload);
+	serverResponse : ServerResponse(headerAccessor);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[middlewareStack.Handle(request, serverResponse);
+
+IF NOT serverResponse.HeadersSent THEN
+	serverResponse.Error('UNHANDLED_REQUEST', 'Unhandled Request');
+END_IF
+
+serverResponse.TryGetData(HandleRequest);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterApi" Id="{c16b7f9c-e597-0501-39a5-87565208f383}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterApi
+VAR_INPUT
+	RpcApi : I_RpcApi;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RpcApi.RegisterSynchronousRpcHandlersWith(synchronousRpcHandlers);
+RpcApi.RegisterAsynchronousRpcHandlersWith(asynchronousRpcHandlers);
+registeredRpcApis.RegisterRpcApi(RpcApi);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterAsynchronousRpcHandler" Id="{6583b5f1-0150-43d9-b3c9-f2dd346a05cd}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterAsynchronousRpcHandler
+VAR_INPUT
+	MethodName : T_MAXSTRING;
+	Handler : I_AsynchronousRpcHandler;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[asynchronousRpcHandlers.RegisterHandler(MethodName, Handler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterSynchronousRpcHandler" Id="{a8757bd8-988c-08e5-2182-c358fe91e3d3}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterSynchronousRpcHandler
+VAR_INPUT
+	MethodName : T_MAXSTRING;
+	Handler : I_SynchronousRpcHandler;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[synchronousRpcHandlers.RegisterHandler(MethodName, Handler);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="SessionCount" Id="{9661ba7c-2865-4e11-94b0-6a4330c040ea}">
+      <Declaration><![CDATA[PROPERTY PUBLIC SessionCount : DINT]]></Declaration>
+      <Get Name="Get" Id="{2d166da8-d84d-40f6-8b8f-ee5f22b9783e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SessionCount := sessionManager.SessionCount;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Use" Id="{c963689d-369e-4c7c-b72b-5f972a674e3e}">
+      <Declaration><![CDATA[METHOD PUBLIC Use
+VAR_INPUT
+	Middleware : I_Middleware;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[middlewareStack.Use(Middleware);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

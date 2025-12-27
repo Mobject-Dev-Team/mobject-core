@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="AsynchronousRpcHandlers" Id="{5a59dde4-32b8-0d5f-378f-518baba081f6}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK AsynchronousRpcHandlers IMPLEMENTS I_AsynchronousRpcHandlers, I_HostAsynchronousRpcHandlers
+VAR
+	handlers : Dictionary;
+	_hasHandlers : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="HasHandlers" Id="{80d85242-6110-0ea8-2ee5-89ce70d12413}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasHandlers : BOOL]]></Declaration>
+      <Get Name="Get" Id="{ffefbd94-9b22-0369-0845-12b7f3620bc0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasHandlers := _hasHandlers;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="RegisterHandler" Id="{fd46f2a8-4deb-071b-39bf-13392664b17d}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterHandler
+VAR_INPUT
+	MethodName : T_MAXSTRING;
+	Handler : I_AsynchronousRpcHandler;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[handlers.AddOrUpdate(MethodName, Handler);
+_hasHandlers := true;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetByMethodName" Id="{b5f08c82-a6fa-0c1d-2078-981670d3fd50}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByMethodName : BOOL
+VAR_INPUT
+	MethodName : T_MAXSTRING;
+	Destination : REFERENCE TO I_AsynchronousRpcHandler;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetByMethodName := handlers.TryGetValue(MethodName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

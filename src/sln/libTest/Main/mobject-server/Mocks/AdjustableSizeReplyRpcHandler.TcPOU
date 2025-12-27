@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="AdjustableSizeReplyRpcHandler" Id="{2ffbc062-61a9-0a4d-19e5-ce05fc5c1aea}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK AdjustableSizeReplyRpcHandler IMPLEMENTS I_SynchronousRpcHandler
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Handle" Id="{22499a03-9a1d-0468-0acd-df8713fb4f52}">
+      <Declaration><![CDATA[METHOD Handle
+VAR_INPUT
+	Parameters : I_Deserializer;
+	Response : I_SynchronousRpcResponse;
+END_VAR
+VAR
+	deserializerFeedback : DeserializerFeedback;
+	size : UDINT;
+	pBytes : POINTER TO BYTE;
+	currentPos : POINTER TO BYTE;
+	i : UDINT;
+	count : BYTE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT Parameters.TryGetKeyUdint('Size', size, deserializerFeedback) THEN
+	Response.RejectWithError('MISSING_PARAMETER','Missing Size parameter');
+	RETURN;
+END_IF
+
+IF size = 0 THEN 
+	Response.CompleteWithNull();
+END_IF
+
+pBytes := __NEW(BYTE, size);
+FOR i := 0 TO size -1 DO
+	currentPos := pBytes + i;
+	currentPos^ := count;
+	count := count + 1;
+END_FOR
+
+Response.CompleteWithBytesAsHex(pBytes, UDINT_TO_DINT(size));
+
+__Delete(pBytes);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

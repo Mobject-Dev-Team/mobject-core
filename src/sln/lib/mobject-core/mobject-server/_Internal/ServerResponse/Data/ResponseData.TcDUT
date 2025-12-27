@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <DUT Name="ResponseData" Id="{d95db528-a485-42f2-8049-3f6902121201}">
+    <Declaration><![CDATA[TYPE ResponseData : 
+STRUCT
+	Header : STRING(ServerConfiguration.HEADER_STRING_SIZE);
+	Payload : STRING(ServerConfiguration.PAYLOAD_STRING_SIZE);
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
