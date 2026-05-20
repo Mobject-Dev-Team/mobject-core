@@ -25,7 +25,3 @@ mobject's goal is to be a lightweight solution to typical oop problems.
 ## Documentation
 
 The documentation for this project can be found [here](https://mobject-dev-team.github.io/mobject-core/#/).
-
-## Versions
-
-- TcXaeShell 3.1.4024.55
