@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="AsyncResponseManager" Id="{b44ad965-b3c6-43e1-83a4-dd689be1455d}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -113,7 +113,7 @@ IF NOT headerAccessor.TryGetSessionIdFromRequest(Request, sessionId) THEN
 	RETURN;
 END_IF
 
-IF NOT sessionStorage.TryRetreiveSessionDataById(sessionId, responseId, sessionData) THEN
+IF NOT sessionStorage.TryRetrieveSessionDataById(sessionId, responseId, sessionData) THEN
 	RETURN;
 END_IF
 

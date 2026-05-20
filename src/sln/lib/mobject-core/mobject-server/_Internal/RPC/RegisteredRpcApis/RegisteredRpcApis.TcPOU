@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="RegisteredRpcApis" Id="{4d0cac44-bafd-0291-176e-591a6c185186}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -71,7 +71,7 @@ END_IF]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[HasRegisteredRpcApis := enumerator <> 0;]]></ST>
+          <ST><![CDATA[HasRegisteredRpcApis := NOT registeredRpcApis.IsEmpty;]]></ST>
         </Implementation>
       </Get>
     </Property>

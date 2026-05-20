@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <Itf Name="I_SessionStorage" Id="{681aeedc-281d-4081-8075-f09d2979153e}">
     <Declaration><![CDATA[INTERFACE I_SessionStorage
 ]]></Declaration>
@@ -10,8 +10,8 @@ VAR_INPUT
 	StorageId : T_MAXSTRING;
 END_VAR]]></Declaration>
     </Method>
-    <Method Name="TryRetreiveSessionDataById" Id="{8990449f-7a3e-4565-8525-3a7a86933533}">
-      <Declaration><![CDATA[METHOD PUBLIC TryRetreiveSessionDataById : BOOL
+    <Method Name="TryRetrieveSessionDataById" Id="{8990449f-7a3e-4565-8525-3a7a86933533}">
+      <Declaration><![CDATA[METHOD PUBLIC TryRetrieveSessionDataById : BOOL
 VAR_INPUT
 	SessionId : T_MAXSTRING;
 	StorageId : T_MAXSTRING;

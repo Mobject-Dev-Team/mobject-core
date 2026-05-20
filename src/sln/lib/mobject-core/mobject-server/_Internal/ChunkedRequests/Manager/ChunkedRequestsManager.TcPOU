@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="ChunkedRequestsManager" Id="{29bb4d2a-f5bc-4a92-b01f-999fe0b31eb2}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -123,7 +123,7 @@ END_IF
 
 // at this point we know we have all of the data required for handling a chunked request
 
-IF NOT sessionStorage.TryRetreiveSessionDataById(sessionId, requestId, sessionData) THEN	
+IF NOT sessionStorage.TryRetrieveSessionDataById(sessionId, requestId, sessionData) THEN	
 	chunkedRequestData := CreateChunkedRequestData(maximumChunkSizeInBytes, DINT_TO_UDINT(chunkTotal));
 	sessionStorage.TryStoreSessionDataById(sessionId, requestId, chunkedRequestData);
 ELSIF NOT __QUERYINTERFACE(sessionData, chunkedRequestData) THEN
