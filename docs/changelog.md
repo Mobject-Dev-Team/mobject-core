@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.9.0-beta
+
+- moved up to TwinCAT 4026.22
+- removed redundant balance calculation from dictionary
+- TryRetreiveSessionDataById corrected to TryRetrieveSessionDataById
+- HasRegisteredRpcApis now checks for non zero collection
+
 ## v0.8.0-beta
 
 - moved up to TwinCAT 4026.19

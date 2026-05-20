@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="ChunkedRequest" Id="{6a2cfa03-abf6-4e39-8742-02b61950d546}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -36,7 +36,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[THIS^.request := Request;
-this^.chunkedRequestData ref= ChunkedRequestData;]]></ST>
+THIS^.chunkedRequestData REF= ChunkedRequestData;]]></ST>
       </Implementation>
     </Method>
     <Property Name="Header" Id="{eb0fd9ca-dcac-4a20-8768-03671307ae8e}">

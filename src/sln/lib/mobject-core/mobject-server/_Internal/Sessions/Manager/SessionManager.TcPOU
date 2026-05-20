@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="SessionManager" Id="{342bd2b9-d9c4-43ce-b8a8-4b776e195a05}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -204,8 +204,8 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="TryRetreiveSessionDataById" Id="{acd3535b-fec8-4aba-83d3-ae428cce48af}">
-      <Declaration><![CDATA[METHOD PUBLIC TryRetreiveSessionDataById : BOOL
+    <Method Name="TryRetrieveSessionDataById" Id="{acd3535b-fec8-4aba-83d3-ae428cce48af}">
+      <Declaration><![CDATA[METHOD PUBLIC TryRetrieveSessionDataById : BOOL
 VAR_INPUT
 	SessionId : T_MAXSTRING;
 	StorageId : T_MAXSTRING;
@@ -219,7 +219,7 @@ END_VAR]]></Declaration>
 	RETURN;
 END_IF
 
-TryRetreiveSessionDataById := session.TryGetDataFromStorage(StorageId, Destination);]]></ST>
+TryRetrieveSessionDataById := session.TryGetDataFromStorage(StorageId, Destination);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryStoreSessionDataById" Id="{e6016ad1-a6fb-48a2-bfc4-1ee26d0f9e9c}">
