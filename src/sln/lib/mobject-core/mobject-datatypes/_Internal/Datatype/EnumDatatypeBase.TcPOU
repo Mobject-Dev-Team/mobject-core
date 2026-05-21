@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="EnumDatatypeBase" Id="{557f6aea-7e69-0891-32d1-deff7c86141d}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -70,6 +70,16 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
+    <Method Name="IsEquivalentTo" Id="{fbc6dac7-2de7-0fa8-3c89-d663c25668a0}">
+      <Declaration><![CDATA[METHOD PUBLIC IsEquivalentTo : BOOL
+VAR_INPUT
+	Datatype : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// overrides as enums are actually wrapped up primatives
+IsEquivalentTo := Root.IsEquivalentTo(Datatype.Root);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="OnSerializeTypeWith" Id="{fcf8efb2-c5e6-0e18-18a2-fd640a5efe78}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED OnSerializeTypeWith
 VAR_INPUT
@@ -81,6 +91,17 @@ SerializeEnums(Serializer);
 SerializeBaseType(Serializer);]]></ST>
       </Implementation>
     </Method>
+    <Property Name="Root" Id="{b11dac17-bf40-0134-19fa-e09c50050f74}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Root : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{67cf4144-57ba-0d1d-19e7-a6ed359be6ff}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Root := _baseDatatype.Root;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SerializeBaseType" Id="{9539c2ca-6d4d-09f6-3fbb-0dcee0a49871}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE SerializeBaseType
 VAR_INPUT

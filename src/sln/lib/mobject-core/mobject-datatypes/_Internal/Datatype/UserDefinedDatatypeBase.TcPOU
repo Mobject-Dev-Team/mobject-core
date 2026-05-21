@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="UserDefinedDatatypeBase" Id="{fd645b0d-4a81-0ada-1363-d0e819ed505d}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -23,7 +23,7 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="IsEquivalentTo" Id="{5c46f4dc-9059-0b7f-2b4d-c813f15ee697}">
+    <Method Name="IsEquivalentTo" Id="{c436fbfa-5783-0250-1ee0-e968f743b1ab}">
       <Declaration><![CDATA[METHOD PUBLIC IsEquivalentTo : BOOL
 VAR_INPUT
 	Datatype : I_Datatype;

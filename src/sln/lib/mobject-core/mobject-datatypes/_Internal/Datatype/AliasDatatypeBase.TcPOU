@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="AliasDatatypeBase" Id="{43071a06-31c8-0f0a-109c-de25a9d3f60c}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -7,7 +7,6 @@
 FUNCTION_BLOCK ABSTRACT AliasDatatypeBase EXTENDS UserDefinedDatatypeBase IMPLEMENTS I_AliasDatatype
 VAR
 	_baseDatatype : I_Datatype; // this value is the single level down
-	_rootDatatype : I_Datatype; // this value is the very root of the alias (i.e. if there are stacked alias)
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -18,28 +17,9 @@ END_VAR
       <Declaration><![CDATA[METHOD PROTECTED AddBaseDatatype
 VAR_INPUT
 	BaseType : I_Datatype;
-END_VAR
-VAR
-	current : I_AliasDatatype;
-	root : I_AliasDatatype;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF BaseType = 0 THEN
-	RETURN;
-END_IF
-
-_baseDatatype := BaseType;
-
-// find root datatype
-current := THIS^;
-WHILE (TRUE) DO
-	IF current.BaseDatatype.TryResolveAsAliasDatatype(root) THEN
-		current := root;
-		CONTINUE;
-	END_IF
-	EXIT;
-END_WHILE
-_rootDatatype := current.BaseDatatype;]]></ST>
+        <ST><![CDATA[_baseDatatype := BaseType;]]></ST>
       </Implementation>
     </Method>
     <Property Name="BaseDatatype" Id="{34002056-d771-048e-2dbb-e738f41b9379}">
@@ -59,7 +39,8 @@ VAR_INPUT
 	Datatype : I_Datatype;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IsEquivalentTo := Root.IsEquivalentTo(Datatype.Root);]]></ST>
+        <ST><![CDATA[// overrides as alias are always wrapped up, so it should defer to it's root
+IsEquivalentTo := Root.IsEquivalentTo(Datatype.Root);]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnSerializeTypeWith" Id="{50c21e86-9c66-0865-337d-e5624a0cbf3e}" FolderPath="Protected\">
@@ -80,7 +61,7 @@ _baseDatatype.SerializeTypeWith(Serializer);]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[Root := _rootDatatype;]]></ST>
+          <ST><![CDATA[Root := _baseDatatype.Root;]]></ST>
         </Implementation>
       </Get>
     </Property>

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.10.0-beta
+
+- fixed bug which prevented IsEquivalent from correctly seeing Enums as compatible with their base type
+- fixed bug which prevented IsEquivalent from correctly seeing Alias as compatible with Enums
+
 ## v0.9.0-beta
 
 - moved up to TwinCAT 4026.22
