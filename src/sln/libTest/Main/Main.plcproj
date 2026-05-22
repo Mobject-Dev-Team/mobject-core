@@ -466,7 +466,7 @@
   </ItemGroup>
   <ItemGroup>
     <PlaceholderResolution Include="mobject-core">
-      <Resolution>mobject-core, 0.9.0 (mobject)</Resolution>
+      <Resolution>mobject-core, * (mobject)</Resolution>
     </PlaceholderResolution>
   </ItemGroup>
   <ProjectExtensions>
