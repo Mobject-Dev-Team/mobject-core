@@ -63,7 +63,7 @@ VAR
 	sourceAsInterface : I_InterfaceDatatype;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT __QUERYINTERFACE(Source, sourceAsInterface) THEN
+        <ST><![CDATA[IF NOT Source.TryResolveAsInterfaceDatatype(sourceAsInterface) THEN
 	RETURN;
 END_IF
 

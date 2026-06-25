@@ -73,7 +73,7 @@ VAR
 	sourceAsUdt : I_UserDefinedDatatype;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT __QUERYINTERFACE(Source, sourceAsUdt) THEN
+        <ST><![CDATA[IF NOT Source.TryResolveAsUserDefinedDatatype(sourceAsUdt) THEN
 	RETURN;
 END_IF
 

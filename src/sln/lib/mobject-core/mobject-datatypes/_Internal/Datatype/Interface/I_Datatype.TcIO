@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <Itf Name="I_Datatype" Id="{51a69d2e-c0c1-0516-1d53-b6243b074c1e}">
     <Declaration><![CDATA[INTERFACE I_Datatype extends I_Serializable, I_Deserializable, I_Disposable]]></Declaration>
     <Method Name="Accept" Id="{8aab0540-3d70-0faa-342b-c9c8c7ecf3f8}">
@@ -31,6 +31,12 @@ VAR_INPUT
 	Datatype : I_Datatype;
 END_VAR]]></Declaration>
     </Method>
+    <Property Name="IsNull" Id="{ac00b9fa-f6ee-0597-1d4b-2c9f74b38274}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsNull : BOOL]]></Declaration>
+      <Get Name="Get" Id="{dc88dfb7-140a-09ef-2d7f-b61fd3805dfe}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Property Name="IsUserDefined" Id="{0446cf84-05ec-4e56-be5c-a67118db8177}">
       <Declaration><![CDATA[PROPERTY PUBLIC IsUserDefined : BOOL]]></Declaration>
       <Get Name="Get" Id="{30f423b3-7fa4-4d61-994e-65acaf766845}">
@@ -86,6 +92,13 @@ END_VAR]]></Declaration>
       <Declaration><![CDATA[METHOD TryMakeReferenceTo : BOOL
 VAR_INPUT
 	Target : I_Datatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAs_ANY" Id="{34b1781a-94d0-064c-36ae-e657928ec5e7}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_ANY : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ANY;
 END_VAR
 ]]></Declaration>
     </Method>
@@ -247,6 +260,13 @@ END_VAR
       <Declaration><![CDATA[METHOD PUBLIC TryResolveAsArrayDatatype : BOOL
 VAR_INPUT
 	Destination : REFERENCE TO I_ArrayDatatype;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryResolveAsBitDatatype" Id="{6cc61584-9673-045a-3102-053b316581ab}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsBitDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_BIT;
 END_VAR
 ]]></Declaration>
     </Method>

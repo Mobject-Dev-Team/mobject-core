@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <Itf Name="I_ANY" Id="{8527ab3c-0e0b-05b3-26dc-9d94eae3bd2a}">
+    <Declaration><![CDATA[INTERFACE I_ANY EXTENDS I_Datatype
+]]></Declaration>
+    <Method Name="CanBecome" Id="{724d82c3-b9d4-0fc3-3df0-30f4deb951ea}">
+      <Declaration><![CDATA[METHOD PUBLIC CanBecome : BOOL
+VAR_INPUT
+	Target : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="Clear" Id="{269c7724-ce6a-0b38-0413-25b2ac71b9e4}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="IsResolved" Id="{e2c5de62-d370-07e4-12cb-3481ef8a3bd1}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsResolved : BOOL]]></Declaration>
+      <Get Name="Get" Id="{bc530904-3701-0093-0c8a-b317ff19d363}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryBecome" Id="{b66fb347-1bad-0ceb-1851-fc2726f42cd7}">
+      <Declaration><![CDATA[METHOD PUBLIC TryBecome : BOOL
+VAR_INPUT
+	Target : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

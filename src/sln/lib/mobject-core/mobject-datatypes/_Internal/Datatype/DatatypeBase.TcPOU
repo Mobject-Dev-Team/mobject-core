@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="DatatypeBase" Id="{f1308857-8bde-075c-0685-2da651a42b2c}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -11,7 +11,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="Protected" Id="{48b6bb47-c276-00f0-25e0-4934e60ec871}" />
+    <Folder Name="Protected" Id="{0d42d5c0-f943-0a5c-2ca4-86c2e2ac9f25}" />
     <Method Name="Accept" Id="{3c6d046e-c0ee-05c3-14c2-b096a9e47227}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
@@ -66,6 +66,17 @@ END_IF
 IsEquivalentTo := TRUE;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="IsNull" Id="{5c9de624-a8b0-0567-1341-6dabe3cf675b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsNull : BOOL]]></Declaration>
+      <Get Name="Get" Id="{682bbcdd-bd75-0f98-2e82-3f1f78f7110b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsNull := FALSE;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="IsUserDefined" Id="{8c5b0b06-69cc-4b20-ad40-040443b3a8a5}">
       <Declaration><![CDATA[PROPERTY PUBLIC IsUserDefined : BOOL]]></Declaration>
       <Get Name="Get" Id="{be3b14b1-28de-4597-929b-49bb88cea57b}">
@@ -77,11 +88,12 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="OnSerializeTypeWith" Id="{f1402a76-5940-0dd1-07c6-3fa768a99025}" FolderPath="Protected\">
+    <Method Name="OnSerializeTypeWith" Id="{a831d171-0d53-088d-1722-aba40f567dba}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED OnSerializeTypeWith
 VAR_INPUT
 	Serializer : I_Serializer;
-END_VAR]]></Declaration>
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[Serializer.AddKeyString('typeName',TypeName);]]></ST>
       </Implementation>
@@ -153,7 +165,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Source.TypeName <> TypeName THEN
+        <ST><![CDATA[IF NOT IsEquivalentTo(Source) THEN
 	RETURN;
 END_IF
 
@@ -178,6 +190,16 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_ANY" Id="{8125a23c-f3fa-0346-309e-68cbcb722867}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_ANY : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_ANY := FALSE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryResolveAs_BIT" Id="{b630718a-0e4d-0fe0-0ac3-13e9789cd03f}">
