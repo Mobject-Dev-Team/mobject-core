@@ -48,9 +48,16 @@ Address := resolvedDatatype.Address;]]></ST>
       <Declaration><![CDATA[METHOD PUBLIC CanBecome : BOOL
 VAR_INPUT
 	Target : I_Datatype;
+END_VAR
+VAR
+	targetAsAny : I_ANY;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CanBecome := TRUE;]]></ST>
+        <ST><![CDATA[IF Target.TryResolveAs_ANY(targetAsAny) THEN
+	RETURN;
+END_IF
+
+CanBecome := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Clear" Id="{74df08ba-8fd1-00ae-20ae-8ccb8c980636}">
@@ -59,7 +66,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[DestroyResolvedDatatype();]]></ST>
+        <ST><![CDATA[ClearResolvedDatatype();]]></ST>
       </Implementation>
     </Method>
     <Method Name="ClearReference" Id="{eddde866-a7d7-025d-09ea-db4dcbc4eeba}">
@@ -68,7 +75,28 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[DestroyResolvedDatatype();]]></ST>
+        <ST><![CDATA[ClearResolvedDatatype();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ClearResolvedDatatype" Id="{2a636094-e69f-0724-1c47-e678dda8ae0d}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE ClearResolvedDatatype
+VAR_INPUT
+END_VAR
+VAR
+	resolvedDatatypeAsAny : I_ANY;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF resolvedDatatype = 0 THEN
+	RETURN;
+END_IF
+
+IF resolvedDatatype.TryResolveAs_ANY(resolvedDatatypeAsAny) THEN
+	resolvedDatatype := 0;
+	RETURN;
+END_IF
+
+resolvedDatatype.Dispose();
+resolvedDatatype := 0;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Clone" Id="{fba5394f-dcaa-0d82-30d4-3746a85090cd}">
@@ -94,22 +122,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[DestroyResolvedDatatype();
+        <ST><![CDATA[ClearResolvedDatatype();
 resolvedDatatype := DatatypeToClone.Clone();]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DestroyResolvedDatatype" Id="{2a636094-e69f-0724-1c47-e678dda8ae0d}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE DestroyResolvedDatatype
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF resolvedDatatype = 0 THEN
-	RETURN;
-END_IF
-
-resolvedDatatype.Dispose();
-resolvedDatatype := 0;]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_exit" Id="{16856200-56ee-0e26-328c-fa38ea5833ef}" FolderPath="Destructor\">
@@ -124,7 +138,7 @@ END_VAR
 	RETURN;
 END_IF
 
-DestroyResolvedDatatype();]]></ST>
+ClearResolvedDatatype();]]></ST>
       </Implementation>
     </Method>
     <Method Name="IsEquivalentTo" Id="{b43a5df5-3af0-0aef-04c8-e349ec46ddba}">
@@ -159,10 +173,19 @@ IsNull := resolvedDatatype.IsNull;]]></ST>
       <Declaration><![CDATA[PROPERTY PUBLIC IsResolved : BOOL]]></Declaration>
       <Get Name="Get" Id="{033fced0-f45a-075b-2f99-bf3e46efbe8b}">
         <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
+	resolvedDatatypeAsAny : I_ANY;
+END_VAR]]></Declaration>
         <Implementation>
-          <ST><![CDATA[IsResolved := resolvedDatatype <> 0 ;]]></ST>
+          <ST><![CDATA[IF resolvedDatatype = 0 THEN
+	RETURN;
+END_IF
+
+IF resolvedDatatype.TryResolveAs_ANY(resolvedDatatypeAsAny) THEN
+	IsResolved := resolvedDatatypeAsAny.IsResolved;
+	RETURN;
+END_IF
+
+IsResolved := TRUE;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -308,9 +331,18 @@ TryDeserializeFrom := resolvedDatatype.TryDeserializeFrom(Deserializer, Feedback
       <Declaration><![CDATA[METHOD TryMakeReferenceTo : BOOL
 VAR_INPUT
 	Target : I_Datatype;
+END_VAR
+VAR
+	targetAsAny : I_ANY;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CreateResolvedDatatype(Target);
+        <ST><![CDATA[IF Target.TryResolveAs_ANY(targetAsAny) THEN
+	resolvedDatatype := Target;
+	TryMakeReferenceTo := TRUE;
+	RETURN;
+END_IF
+
+CreateResolvedDatatype(Target);
 TryMakeReferenceTo := resolvedDatatype.TryMakeReferenceTo(Target);]]></ST>
       </Implementation>
     </Method>
