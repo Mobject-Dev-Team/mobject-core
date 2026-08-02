@@ -161,15 +161,20 @@ VAR_INPUT
 END_VAR
 VAR
 	errorMessage : T_MAXSTRING;
+	maximumPayloadDataSize : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF _sent THEN
 	RETURN;
 END_IF
 
-IF PayloadDataSize > SIZEOF(responseData.Payload) THEN
+// SIZEOF includes the null terminator, which must stay within the buffer,
+// so only SIZEOF - 1 bytes of actual payload data can be transmitted.
+maximumPayloadDataSize := SIZEOF(responseData.Payload) - 1;
+
+IF PayloadDataSize > maximumPayloadDataSize THEN
 	errorMessage := 'Payload too big to transmit. Maximum : ';
-	errorMessage := concat(errorMessage, UDINT_TO_STRING(SIZEOF(responseData.Payload)));
+	errorMessage := concat(errorMessage, UDINT_TO_STRING(maximumPayloadDataSize));
 	errorMessage := concat(errorMessage, ', Actual Size : ');
 	errorMessage := concat(errorMessage, UDINT_TO_STRING(PayloadDataSize));
 	Error('PAYLOAD_TOO_BIG', errorMessage);

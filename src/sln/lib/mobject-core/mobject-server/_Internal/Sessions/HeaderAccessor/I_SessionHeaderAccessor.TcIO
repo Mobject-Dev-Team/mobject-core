@@ -3,6 +3,14 @@
   <Itf Name="I_SessionHeaderAccessor" Id="{ba57f804-ee48-4b8e-8a65-7d07a1ce9431}">
     <Declaration><![CDATA[INTERFACE I_SessionHeaderAccessor
 ]]></Declaration>
+    <Method Name="TryGetResponseIdFromRequest" Id="{3f1c8a62-5d94-4b17-9e03-c8a7d15b6e40}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetResponseIdFromRequest : BOOL
+VAR_INPUT
+	Request : I_Request;
+	Destination : ANY;
+END_VAR
+]]></Declaration>
+    </Method>
     <Method Name="TryGetSessionIdFromRequest" Id="{0a1bf00c-fcdd-41ff-9a5b-4d607ec62790}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetSessionIdFromRequest : BOOL
 VAR_INPUT

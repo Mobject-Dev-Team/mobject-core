@@ -36,9 +36,25 @@ VAR_INPUT
 END_VAR
 VAR
 	sessionId : T_MAXSTRING;
+	responseId : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF (NOT headerAccessor.TryGetSessionIdFromRequest(Request, sessionId)) OR_ELSE (NOT sessionManager.IsValidSession(sessionId)) THEN
+
+	// A request carrying a Response-Id is a follow-up to work started earlier - an async
+	// poll or a chunk fetch - and the state it refers to lived in the session that has
+	// just been found missing or expired.  That state cannot be recovered, so the
+	// follow-up must be rejected here.  Allowing it to continue would let it fall through
+	// the chunked/async middleware (both of which simply return when their session lookup
+	// misses) down to the rpc middleware, which still sees the original Method-Name in the
+	// header and would silently run the handler a second time.
+	IF headerAccessor.TryGetResponseIdFromRequest(Request, responseId) THEN
+		sessionId := sessionManager.CreateSession();
+		headerAccessor.UpdateResponseWithSessionId(Response, sessionId);
+		Response.Error('SESSION_EXPIRED', 'The session expired before this follow-up request could be served. The original request must be retried.');
+		RETURN;
+	END_IF
+
 	sessionId := sessionManager.CreateSession();
 	headerAccessor.UpdateRequestWithSessionId(Request,sessionId);
 END_IF
