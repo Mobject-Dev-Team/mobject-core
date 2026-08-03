@@ -9,6 +9,9 @@ VAR
 	sessionStorage : I_SessionStorage;
 	responseIdGenerator : I_ResponseIdGenerator;
 	headerAccessor : I_AsyncResponseHeaderAccessor;
+	// how long a handler is given to complete before its pending response is
+	// failed.  T#0S disables the deadline.
+	pendingResponseMaxAge : TIME;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -25,7 +28,7 @@ VAR
 	pAsyncResponseSessionData : POINTER TO AsyncResponseSessionData;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pAsyncResponseSessionData := __NEW(AsyncResponseSessionData(SuggestedRetryDelayInMs := RetryDelayInMs));
+        <ST><![CDATA[pAsyncResponseSessionData := __NEW(AsyncResponseSessionData(SuggestedRetryDelayInMs := RetryDelayInMs, MaxAge := pendingResponseMaxAge));
 CreateAsyncResponseSessionData := pAsyncResponseSessionData^;]]></ST>
       </Implementation>
     </Method>
@@ -51,12 +54,14 @@ VAR_INPUT
 	SessionStorage : I_SessionStorage;
 	ResponseIdGenerator : I_ResponseIdGenerator;
 	HeaderAccessor : I_AsyncResponseHeaderAccessor;
+	PendingResponseMaxAge : TIME;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[THIS^.sessionStorage := SessionStorage;
 THIS^.responseIdGenerator := ResponseIdGenerator;
-THIS^.headerAccessor := HeaderAccessor;]]></ST>
+THIS^.headerAccessor := HeaderAccessor;
+THIS^.pendingResponseMaxAge := PendingResponseMaxAge;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryConvertResponseToAsyncResponseSessionData" Id="{692d8dc0-6080-4827-9b9a-d7eda4b4eefb}">
@@ -122,6 +127,18 @@ IF NOT __QUERYINTERFACE(sessionData, asyncResponseData) THEN
 END_IF
 
 IF asyncResponseData.IsPending THEN
+
+	// The handler was given a deadline and has not completed within it.  Fail the
+	// response and discard it rather than telling the client to keep polling - it
+	// would otherwise poll forever, and each poll refreshes the session, so the
+	// usual session expiry would never reclaim this either.
+	IF asyncResponseData.HasExpired THEN
+		Response.Error('HANDLER_TIMEOUT', 'The handler did not complete within the time allowed for a pending response');
+		sessionStorage.DisposeSessionDataById(sessionId, responseId);
+		TryHandleIncomingRequest := TRUE;
+		RETURN;
+	END_IF
+
 	Response.Pending(responseId, asyncResponseData.SuggestedRetryDelayInMs);
 	TryHandleIncomingRequest := TRUE;
 	RETURN;

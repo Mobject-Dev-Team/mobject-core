@@ -9,6 +9,12 @@ VAR_INPUT
 	Message : T_MAXSTRING;
 END_VAR]]></Declaration>
     </Method>
+    <Property Name="HasExpired" Id="{6d1e4b83-72c5-4f09-a1de-38b7c2905ef4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasExpired : BOOL]]></Declaration>
+      <Get Name="Get" Id="{9c4a7e51-08d6-4b32-bf7a-25e1d3a49b60}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Property Name="IsPending" Id="{81bd7be5-52a3-455d-b074-542d0792efa3}">
       <Declaration><![CDATA[PROPERTY PUBLIC IsPending : BOOL]]></Declaration>
       <Get Name="Get" Id="{34013b24-5966-4230-9ded-51629f26b3c3}">

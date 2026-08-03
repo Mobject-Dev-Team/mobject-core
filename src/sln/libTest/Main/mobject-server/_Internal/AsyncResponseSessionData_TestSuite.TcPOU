@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+  <POU Name="AsyncResponseSessionData_TestSuite" Id="{7b3d5c81-40e9-0a72-6c15-93f2ad81be40}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK AsyncResponseSessionData_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestNewResponseIsPending();
+TestFreshResponseHasNotExpired();
+TestZeroMaxAgeDisablesTheDeadline();
+TestCompletedResponseIsNoLongerPending();
+TestRejectedResponseIsNoLongerPending();]]></ST>
+    </Implementation>
+    <Method Name="TestCompletedResponseIsNoLongerPending" Id="{2c8f14a6-9b03-05de-4471-8e6a2f0517cb}">
+      <Declaration><![CDATA[METHOD TestCompletedResponseIsNoLongerPending
+VAR
+	asyncResponseSessionData : AsyncResponseSessionData(SuggestedRetryDelayInMs := 0, MaxAge := T#60S);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestCompletedResponseIsNoLongerPending');
+
+asyncResponseSessionData.Success();
+
+AssertFalse(
+	Condition := asyncResponseSessionData.IsPending,
+	Message := 'A response which has completed should no longer report as pending'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestFreshResponseHasNotExpired" Id="{5a190b73-6e24-0c38-1f07-b6d4029ae5f1}">
+      <Declaration><![CDATA[METHOD TestFreshResponseHasNotExpired
+VAR
+	asyncResponseSessionData : AsyncResponseSessionData(SuggestedRetryDelayInMs := 0, MaxAge := T#60S);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestFreshResponseHasNotExpired');
+
+AssertFalse(
+	Condition := asyncResponseSessionData.HasExpired,
+	Message := 'A response created this cycle cannot already be past a 60s deadline'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestNewResponseIsPending" Id="{9d0e2f47-1c85-0b16-3a92-47f18c60d3ea}">
+      <Declaration><![CDATA[METHOD TestNewResponseIsPending
+VAR
+	asyncResponseSessionData : AsyncResponseSessionData(SuggestedRetryDelayInMs := 0, MaxAge := T#60S);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestNewResponseIsPending');
+
+AssertTrue(
+	Condition := asyncResponseSessionData.IsPending,
+	Message := 'A newly created response should be pending until the handler completes it'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestRejectedResponseIsNoLongerPending" Id="{4f62b0d9-83a1-0e57-25cb-1a09df73b268}">
+      <Declaration><![CDATA[METHOD TestRejectedResponseIsNoLongerPending
+VAR
+	asyncResponseSessionData : AsyncResponseSessionData(SuggestedRetryDelayInMs := 0, MaxAge := T#60S);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestRejectedResponseIsNoLongerPending');
+
+asyncResponseSessionData.Error('SOME_CODE', 'some message');
+
+AssertFalse(
+	Condition := asyncResponseSessionData.IsPending,
+	Message := 'A response which has been rejected should no longer report as pending'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestZeroMaxAgeDisablesTheDeadline" Id="{8e15c3a2-27b6-0f49-59d3-c0b842e19a75}">
+      <Declaration><![CDATA[METHOD TestZeroMaxAgeDisablesTheDeadline
+VAR
+	asyncResponseSessionData : AsyncResponseSessionData(SuggestedRetryDelayInMs := 0, MaxAge := T#0S);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestZeroMaxAgeDisablesTheDeadline');
+
+// T#0S is the documented way to switch the deadline off.  It must not be read
+// as 'expires immediately', which would fail every asynchronous call.
+AssertFalse(
+	Condition := asyncResponseSessionData.HasExpired,
+	Message := 'A max age of T#0S should disable the deadline, not expire instantly'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

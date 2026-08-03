@@ -34,7 +34,7 @@ VAR
 	chunkedResponsesMiddleware : ChunkedResponsesMiddleware(chunkedResponseManager);
 	
 	// ability to support pending responses
-	asyncResponseManager : AsyncResponseManager(sessionManager, sequentialResponseIdGenerator, headerAccessor);
+	asyncResponseManager : AsyncResponseManager(sessionManager, sequentialResponseIdGenerator, headerAccessor, ServerConfiguration.PENDING_RESPONSE_MAX_AGE);
 	asyncResponseMiddleware : AsyncResponseMiddleware(asyncResponseManager);
 	
 	// ability to support rpc
