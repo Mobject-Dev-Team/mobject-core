@@ -1,0 +1,534 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <POU Name="_REFERENCE_TO" Id="{3d3d9a52-c096-0687-2956-e5a8f291cf53}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK _REFERENCE_TO EXTENDS Disposable IMPLEMENTS I_REFERENCE_TO
+VAR
+	nullTarget : _NULL;
+	_target : I_Datatype := nullTarget;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{b5b29d87-9717-0151-11f2-d6904c353178}" />
+    <Method Name="Accept" Id="{139315b7-01ee-0854-19bb-17d72a0cdd69}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_DatatypeVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitDatatype(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Address" Id="{d654bb50-4460-0464-18d5-4b5965bf1b34}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Address : PVOID]]></Declaration>
+      <Get Name="Get" Id="{0129bf83-ed44-0412-1581-d4e812a0abfb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Address := _target.Address;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="ClearReference" Id="{a69a4d4b-e74b-074e-2a37-d7d45ebea6f6}">
+      <Declaration><![CDATA[METHOD PUBLIC ClearReference
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_target := nullTarget;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Clone" Id="{87a9e5f0-56c4-0dc7-38ef-a3c1c3c29bcd}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Datatype
+VAR
+    pClone : POINTER TO _REFERENCE_TO;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pClone := __NEW(_REFERENCE_TO(RefTo := _target));
+Clone := pClone^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_Init" Id="{4488cff1-fc79-0c26-3d56-471c036d96ba}" FolderPath="Constructor\">
+      <Declaration><![CDATA[//FB_Init is always available implicitly and it is used primarily for initialization.
+//The return value is not evaluated. For a specific influence, you can also declare the
+//methods explicitly and provide additional code there with the standard initialization
+//code. You can evaluate the return value.
+METHOD FB_Init: BOOL
+VAR_INPUT
+    bInitRetains: BOOL; // TRUE: the retain variables are initialized (reset warm / reset cold)
+    bInCopyCode: BOOL;  // TRUE: the instance will be copied to the copy code afterward (online change)  
+	RefTo : I_Datatype; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF RefTo = 0 THEN
+	RETURN;
+END_IF
+
+this^._target := RefTo;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsEquivalentTo" Id="{38a670a3-0265-03ee-24ad-1cdc38a5eac3}">
+      <Declaration><![CDATA[METHOD PUBLIC IsEquivalentTo : BOOL
+VAR_INPUT
+	Datatype : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsEquivalentTo := _target.IsEquivalentTo(Datatype);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="IsNull" Id="{cb804b7d-81f7-0fe2-3412-aaa5548f859a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsNull : BOOL]]></Declaration>
+      <Get Name="Get" Id="{0c5ed1ac-400e-0e42-09cb-99a618cdbc61}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsNull := _target.IsNull;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="IsUserDefined" Id="{0f736c73-b6f1-06ce-1014-fb3f537852df}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsUserDefined : BOOL]]></Declaration>
+      <Get Name="Get" Id="{a3a0d859-ff70-0072-388b-f80248b8ff7f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsUserDefined := _target.IsUserDefined;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="IsValidReference" Id="{faff2cd0-a327-002d-1ade-ad1f81d32919}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsValidReference : BOOL]]></Declaration>
+      <Get Name="Get" Id="{4bca33f5-127d-03d7-28ba-1720fd2d3c8c}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF _target.IsNull THEN
+	RETURN;
+END_IF
+
+IsValidReference := TRUE;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Root" Id="{8e183f2c-3258-0197-3fc8-3553f7dd49ef}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Root : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{8e0b1089-ef50-07fd-323d-78fe53bd041c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF _target.IsNull THEN
+	Root := THIS^;
+	RETURN;
+END_IF
+
+Root := _target.Root;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="SerializeTypeWith" Id="{4713f5a9-1d9b-0e13-3d4f-f16f749e971a}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeTypeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('typeName',TypeName);
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{f7f68d69-1fff-0d7e-2edc-c5444bfd9845}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_target.SerializeWith(Serializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Size" Id="{4b89824e-a139-0f91-337a-d727dda07c7e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Size : UDINT]]></Declaration>
+      <Get Name="Get" Id="{542ded92-ddb0-0dd9-1b3f-da45e6bb2629}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Size := _target.Size;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="TryConvertTo" Id="{e08a3295-7758-0707-06e5-1abde579a7d8}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConvertTo : BOOL
+VAR_INPUT
+	Destination : ANY;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryConvertTo := _target.TryConvertTo(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryConvertTo_" Id="{4136e466-b8eb-09cd-3972-94510276e674}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConvertTo_ : BOOL
+VAR_INPUT
+	Destination : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryConvertTo_ := _target.TryConvertTo_(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryCopyFrom" Id="{12ced2d4-bac8-0a42-3dcf-b201101d9c33}">
+      <Declaration><![CDATA[METHOD PUBLIC TryCopyFrom : BOOL
+VAR_INPUT
+	Source : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryCopyFrom := _target.TryCopyFrom(Source);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{e0e1e957-178f-0c07-37a0-44a2eab5e156}">
+      <Declaration><![CDATA[METHOD TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryDeserializeFrom := _target.TryDeserializeFrom(Deserializer, Feedback);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryMakeReferenceTo" Id="{61cf1810-0ee1-0ea5-2c62-1b7504b26e3e}">
+      <Declaration><![CDATA[METHOD TryMakeReferenceTo : BOOL
+VAR_INPUT
+	Target : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Target = 0 THEN
+	RETURN;
+END_IF
+
+_target := Target;
+TryMakeReferenceTo := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_ANY" Id="{7ed4c202-f46b-06d9-3c9d-4108b4f5c18f}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_ANY : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_ANY := _target.TryResolveAs_ANY(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_BIT" Id="{94a92c8c-e148-0dc0-22c5-ddb7a452a151}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_BIT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_BIT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_BIT := _target.TryResolveAs_BIT(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_BOOL" Id="{50494f78-2a96-0815-11df-f2badfb0ca1a}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_BOOL : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_BOOL := _target.TryResolveAs_BOOL(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_BYTE" Id="{c0de5710-5ce9-0b32-1349-6f5bf041bfb5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_BYTE : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_BYTE;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_BYTE := _target.TryResolveAs_BYTE(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_DINT" Id="{efce46f2-0fad-0757-2c08-953e50227e14}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_DINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_DINT := _target.TryResolveAs_DINT(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_DT" Id="{3131f058-e98a-0a72-0171-7e49b5dccf0b}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_DT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_DT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_DT := _target.TryResolveAs_DT(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_DWORD" Id="{7b4d796a-addc-0c84-2528-384718409784}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_DWORD : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_DWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_DWORD := _target.TryResolveAs_DWORD(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_INT" Id="{2718de7a-cf3d-032b-025e-946d8df3be3c}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_INT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_INT := _target.TryResolveAs_INT(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_LINT" Id="{7809b55c-47de-0179-363d-b9f67f813def}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_LINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_LINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_LINT := _target.TryResolveAs_LINT(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_LREAL" Id="{f7533fa0-337e-0fa8-0d5f-ca9d490b7c24}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_LREAL : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_LREAL := _target.TryResolveAs_LREAL(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_LWORD" Id="{882adba3-cb51-0369-15b3-b838ff8cb704}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_LWORD : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_LWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_LWORD := _target.TryResolveAs_LWORD(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_PVOID" Id="{25dba0c8-30f7-0f87-0b08-b4eafc29a0bd}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_PVOID : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_PVOID := _target.TryResolveAs_PVOID(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_REAL" Id="{a838081f-7d0b-0c07-3827-c7d0bc740149}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_REAL : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_REAL := _target.TryResolveAs_REAL(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_REFERENCE_TO" Id="{dc5b95eb-8667-0e52-094e-646df591fab5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_REFERENCE_TO : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_REFERENCE_TO;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Destination := THIS^;
+TryResolveAs_REFERENCE_TO := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_SINT" Id="{876d4fff-4274-0726-0897-05fc81327052}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_SINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_SINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_SINT := _target.TryResolveAs_SINT(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_STRING" Id="{b6a68a4b-a6d6-021b-3964-a9a04db66e77}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_STRING : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_STRING := _target.TryResolveAs_STRING(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_TIME_OF_DAY" Id="{e34a41a8-6b82-08fc-1fa1-2fc87e2910f2}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_TIME_OF_DAY : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_TIME_OF_DAY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_TIME_OF_DAY := _target.TryResolveAs_TIME_OF_DAY(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_TOD" Id="{615f718f-b3f5-0b53-3c37-cf7931b7f5d1}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_TOD : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_TOD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_TOD := _target.TryResolveAs_TOD(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_UDINT" Id="{2bffaf66-8926-0435-16eb-e83e9d6aa7b4}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_UDINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_UDINT := _target.TryResolveAs_UDINT(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_UINT" Id="{9099940d-0977-0ebe-3fd6-f756ea8394c5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_UINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_UINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_UINT := _target.TryResolveAs_UINT(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_ULINT" Id="{1a9393fd-8194-056c-1c1b-a2c6bb2e369c}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_ULINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ULINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_ULINT := _target.TryResolveAs_ULINT(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_USINT" Id="{505fedc1-bd8e-0f30-1e3e-b7ca8fccb4ef}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_USINT : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_USINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_USINT := _target.TryResolveAs_USINT(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAs_WORD" Id="{95883719-a6f3-0439-33c4-3bb183f8d708}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_WORD : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_WORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_WORD := _target.TryResolveAs_WORD(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAsAliasDatatype" Id="{e816a80b-63c7-0d4e-3c5b-5a1e7da36b35}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsAliasDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_AliasDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAsAliasDatatype := _target.TryResolveAsAliasDatatype(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAsArrayDatatype" Id="{e3956842-632d-0d20-2f37-eaa37ad09e96}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsArrayDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_ArrayDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAsArrayDatatype := _target.TryResolveAsArrayDatatype(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAsBitDatatype" Id="{c5effa80-2b0a-074f-1672-3cbc3a5d7d9d}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsBitDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_BIT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAsBitDatatype := _target.TryResolveAsBitDatatype(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAsEnumDatatype" Id="{32312cb8-a1e7-0890-2c88-107905747616}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsEnumDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_EnumDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAsEnumDatatype := _target.TryResolveAsEnumDatatype(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAsInterfaceDatatype" Id="{63bc39bf-62fb-0fc0-0ce6-e89f0593bff5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsInterfaceDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_InterfaceDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAsInterfaceDatatype := _target.TryResolveAsInterfaceDatatype(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAsStructuredDatatype" Id="{d41464fa-4cf8-06fd-111a-5a6e2abb5fc5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsStructuredDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_StructuredDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAsStructuredDatatype := _target.TryResolveAsStructuredDatatype(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryResolveAsUserDefinedDatatype" Id="{6739fc04-ea33-01c0-2c52-a3623b3f54d1}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAsUserDefinedDatatype : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_UserDefinedDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAsUserDefinedDatatype := _target.TryResolveAsUserDefinedDatatype(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="TypeName" Id="{94aae41b-ce43-07f0-0f86-a7625d461416}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TypeName : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{3bb10e56-ec3c-0e6c-1f0e-74ef2aa83303}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TypeName := concat('REFERENCE TO ', _target.TypeName);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

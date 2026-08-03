@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <Itf Name="I_REFERENCE_TO" Id="{d58f73ff-1d4c-05a4-2ba1-ac397ce5e773}">
+    <Declaration><![CDATA[INTERFACE I_REFERENCE_TO EXTENDS I_Datatype
+
+]]></Declaration>
+    <Property Name="IsValidReference" Id="{0531ddf0-0b9c-0b03-05ee-bf10c0d34c5b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsValidReference : BOOL]]></Declaration>
+      <Get Name="Get" Id="{a6776383-d9a7-0b6b-2d9a-056dc735e256}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

@@ -525,6 +525,20 @@ END_IF
 TryResolveAs_REAL := resolvedDatatype.TryResolveAs_REAL(Destination);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="TryResolveAs_REFERENCE_TO" Id="{32ef44e2-ade8-0b46-2219-ffc21f7986a0}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_REFERENCE_TO : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_REFERENCE_TO;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF resolvedDatatype = 0 THEN
+	RETURN;
+END_IF
+
+TryResolveAs_REFERENCE_TO := resolvedDatatype.TryResolveAs_REFERENCE_TO(Destination);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryResolveAs_SINT" Id="{9e78e843-4246-0bec-1407-f0936271cf93}">
       <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_SINT : BOOL
 VAR_INPUT

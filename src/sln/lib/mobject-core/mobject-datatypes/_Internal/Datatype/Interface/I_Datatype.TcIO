@@ -186,6 +186,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Method Name="TryResolveAs_REFERENCE_TO" Id="{37d6162b-f15d-0b6c-37d7-bce06bfe9c56}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_REFERENCE_TO : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_REFERENCE_TO;
+END_VAR
+]]></Declaration>
+    </Method>
     <Method Name="TryResolveAs_SINT" Id="{67cccaa3-70ca-0322-019c-66e7213071dc}">
       <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_SINT : BOOL
 VAR_INPUT

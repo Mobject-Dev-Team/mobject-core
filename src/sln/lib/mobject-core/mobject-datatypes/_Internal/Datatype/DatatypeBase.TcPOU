@@ -322,6 +322,16 @@ END_VAR
         <ST><![CDATA[TryResolveAs_REAL := FALSE;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="TryResolveAs_REFERENCE_TO" Id="{26f5898f-e0d3-0868-1f4e-9a57cb46bda6}">
+      <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_REFERENCE_TO : BOOL
+VAR_INPUT
+	Destination : REFERENCE TO I_REFERENCE_TO;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryResolveAs_REFERENCE_TO := FALSE;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryResolveAs_SINT" Id="{58ac0ed4-a938-0fbd-0d26-884a63e15af6}">
       <Declaration><![CDATA[METHOD PUBLIC TryResolveAs_SINT : BOOL
 VAR_INPUT

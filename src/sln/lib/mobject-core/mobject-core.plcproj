@@ -1681,6 +1681,9 @@
     <Compile Include="mobject-datatypes\Primitive\Interfaces\I_REAL.TcIO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-datatypes\Primitive\Interfaces\I_REFERENCE_TO.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="mobject-datatypes\Primitive\Interfaces\I_SINT.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -1709,6 +1712,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Primitive\Interfaces\I_WORD.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-datatypes\Primitive\_REFERENCE_TO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-datatypes\Primitive\_NULL.TcPOU">
