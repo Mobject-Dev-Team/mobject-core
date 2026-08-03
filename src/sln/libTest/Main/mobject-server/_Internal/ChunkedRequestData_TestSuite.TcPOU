@@ -12,7 +12,9 @@ TestCorrectPayloadSizeInBytes_20Bytes();
 TestCorrectPayloadSizeInBytes_100Bytes();
 TestIsCompleteOnceAllChunksAdded();
 TestTryAddChunkedPayloadReturnsFalseWhenTooBig();
-TestTryAddChunkedPayloadReturnsTrueWhenValid();]]></ST>
+TestTryAddChunkedPayloadReturnsTrueWhenValid();
+TestTryAddChunkedPayloadRejectsOutOfOrderChunk();
+TestTryAddChunkedPayloadRejectsDuplicateChunk();]]></ST>
     </Implementation>
     <Method Name="TestChunkedPayloadStoredCorrectly_10Chunks" Id="{9c00b0ed-f1ca-07c2-073c-8e55c78d7e52}">
       <Declaration><![CDATA[METHOD TestChunkedPayloadStoredCorrectly_10Chunks
@@ -190,6 +192,55 @@ added := chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk), SIZEOF(dataChun
 AssertFalse(
 	Condition := added,
 	Message := 'Incorrectly reported that the try was successful'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryAddChunkedPayloadRejectsOutOfOrderChunk" Id="{3ea71c56-08b4-0d29-47f1-95ac2e0b7d13}">
+      <Declaration><![CDATA[METHOD TestTryAddChunkedPayloadRejectsOutOfOrderChunk
+VAR
+	chunkedRequestData : ChunkedRequestData(4,3);
+	dataChunk : STRING(3) := 'foo';
+	added : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryAddChunkedPayloadRejectsOutOfOrderChunk');
+
+// chunk 2 arriving before chunk 1 cannot be appended in the right place
+added := chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk), SIZEOF(dataChunk), 2);
+
+AssertFalse(
+	Condition := added,
+	Message := 'A chunk which is not the one due next must be rejected, not appended out of order'
+);
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryAddChunkedPayloadRejectsDuplicateChunk" Id="{6b2f90d4-71ce-0a83-3c05-1de84a72f6b9}">
+      <Declaration><![CDATA[METHOD TestTryAddChunkedPayloadRejectsDuplicateChunk
+VAR
+	chunkedRequestData : ChunkedRequestData(4,3);
+	dataChunk : STRING(3) := 'foo';
+	firstAdd : BOOL;
+	duplicateAdd : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryAddChunkedPayloadRejectsDuplicateChunk');
+
+firstAdd := chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk), SIZEOF(dataChunk), 1);
+duplicateAdd := chunkedRequestData.TryAddChunkedPayload(ADR(dataChunk), SIZEOF(dataChunk), 1);
+
+AssertTrue(
+	Condition := firstAdd,
+	Message := 'The first chunk should have been accepted'
+);
+
+// resending chunk 1 would otherwise append it twice and count twice towards completion
+AssertFalse(
+	Condition := duplicateAdd,
+	Message := 'A repeated chunk must be rejected rather than appended a second time'
 );
 
 TEST_FINISHED();]]></ST>
