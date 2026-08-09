@@ -49,6 +49,21 @@ THIS^.sessionId := SessionId;
 THIS^.responseId := ResponseId;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasExpired" Id="{8a3f0c26-49d1-4e7b-b5a2-6f19c48d3e70}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasExpired : BOOL]]></Declaration>
+      <Get Name="Get" Id="{2b6d5e18-c073-4a94-8e3f-70d2a165b9cf}">
+        <Declaration><![CDATA[VAR
+	asyncReponseSessionData : I_AsyncResponseSessionData;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF NOT TryGetAsyncResponseSessionData(asyncReponseSessionData) THEN
+	RETURN;
+END_IF
+
+HasExpired := asyncReponseSessionData.HasExpired;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="IsPending" Id="{fbbbc150-c2e3-4e3d-ba1d-f5dac363ba37}">
       <Declaration><![CDATA[PROPERTY PUBLIC IsPending : BOOL]]></Declaration>
       <Get Name="Get" Id="{6c62a4e7-d547-436e-a33d-96261ca93588}">

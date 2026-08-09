@@ -12,6 +12,10 @@ VAR
 	errorMessage : T_MAXSTRING;
 	pData : POINTER TO BYTE;
 	dataSize : UDINT;
+	// records the moment this response was created, so the handler can be given
+	// a deadline to complete within
+	createdTimestamp : SystemTimestamp;
+	maxAge : TIME;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -83,12 +87,32 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	SuggestedRetryDelayInMs : UDINT;
+	MaxAge : TIME;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_suggestedRetryDelayInMs := SuggestedRetryDelayInMs;]]></ST>
+        <ST><![CDATA[_suggestedRetryDelayInMs := SuggestedRetryDelayInMs;
+THIS^.maxAge := MaxAge;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasExpired" Id="{4e8b1a97-3d62-4c05-9f81-7ab3e6d2c518}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasExpired : BOOL]]></Declaration>
+      <Get Name="Get" Id="{1f7c9d40-6b28-4e93-a570-c8d143f9b207}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[// purely a statement about age.  whether that matters is for the caller to
+// decide - a response which has already been completed is collectable no
+// matter how old it is.
+IF maxAge = T#0S THEN
+	RETURN;
+END_IF
+
+HasExpired := createdTimestamp.IsDurationElapsed(maxAge);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="IsPending" Id="{e08d9fad-bec8-4e32-95ab-a1cb4fcc9abe}">
       <Declaration><![CDATA[PROPERTY PUBLIC IsPending : BOOL]]></Declaration>
       <Get Name="Get" Id="{b900a727-86a7-48c0-9cb8-f26a00a3183d}">

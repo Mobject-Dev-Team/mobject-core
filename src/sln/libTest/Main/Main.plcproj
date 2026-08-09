@@ -370,6 +370,9 @@
     <Compile Include="mobject-server\Server_IntegrationTestSuite.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mobject-server\_Internal\AsyncResponseSessionData_TestSuite.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="mobject-server\_Internal\ChunkedRequestData_TestSuite.TcPOU">
       <SubType>Code</SubType>
     </Compile>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <Itf Name="I_ServerResponse" Id="{73400505-8067-4057-a9de-9d0c6e7226c5}">
     <Declaration><![CDATA[INTERFACE I_ServerResponse
 ]]></Declaration>
@@ -48,6 +48,9 @@ END_VAR]]></Declaration>
       <Declaration><![CDATA[METHOD PUBLIC SuccessWithPayload
 VAR_INPUT
 	PayloadDataAddress : PVOID;
+	
+	// Number of payload bytes to copy.
+    // Does not include the STRING null terminator.
 	PayloadDataSize : UDINT;
 END_VAR]]></Declaration>
     </Method>

@@ -6,7 +6,11 @@
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK ChunkedResponseManager IMPLEMENTS I_ChunkedResponseManager
 VAR
+	// buffer size including the null terminator
 	maximumChunkSizeInBytes : UDINT;
+	// data bytes actually transmittable per chunk.  SendNextChunk reserves the last
+	// byte for the null terminator, so this is always one less than the buffer size.
+	maximumPayloadBytesPerChunk : UDINT;
 	sessionStorage : I_SessionStorage;
 	responseIdGenerator : I_ResponseIdGenerator;
 	headerAccessor : I_ChunkedResponseHeaderAccessor;
@@ -44,6 +48,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[THIS^.maximumChunkSizeInBytes := MaximumChunkSizeInBytes;
+THIS^.maximumPayloadBytesPerChunk := MaximumChunkSizeInBytes - 1;
 THIS^.sessionStorage := SessionStorage;
 THIS^.responseIdGenerator := ResponseIdGenerator;
 This^.headerAccessor := HeaderAccessor;]]></ST>
@@ -62,7 +67,7 @@ VAR
 	chunkedResponseData : I_ChunkedResponseData;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF SourceSize <= maximumChunkSizeInBytes THEN
+        <ST><![CDATA[IF SourceSize <= maximumPayloadBytesPerChunk THEN
 	OriginalResponse.SuccessWithPayload(SourceAddress, SourceSize);
 	RETURN;
 END_IF
@@ -114,7 +119,7 @@ IF NOT __QUERYINTERFACE(sessionData, chunkedResponseData) THEN
 	RETURN;
 END_IF
 
-IF chunkedResponseData.SizeRemaining > maximumChunkSizeInBytes THEN
+IF chunkedResponseData.SizeRemaining > maximumPayloadBytesPerChunk THEN
 	headerAccessor.UpdateResponseWithHasMoreChunks(Response, responseId);
 END_IF
 

@@ -176,12 +176,14 @@
     <Folder Include="mobject-server\_Internal\ChunkedResponses\Middleware" />
     <Folder Include="mobject-server\_Internal\ChunkedResponses\ServerResponse" />
     <Folder Include="mobject-server\_Internal\ChunkedResponses\SessionData" />
+    <Folder Include="mobject-server\_Internal\Followup\Middleware" />
     <Folder Include="mobject-server\_Internal\Header" />
     <Folder Include="mobject-server\_Internal\HeaderAccessor" />
     <Folder Include="mobject-server\_Internal\Middleware" />
     <Folder Include="mobject-server\_Internal\Middleware\Base" />
     <Folder Include="mobject-server\_Internal\Middleware\Interface" />
     <Folder Include="mobject-server\_Internal\Middleware\Stack" />
+    <Folder Include="mobject-server\_Internal\Followup" />
     <Folder Include="mobject-server\_Internal\Request" />
     <Folder Include="mobject-server\_Internal\Request\Interface" />
     <Folder Include="mobject-server\_Internal\ResponseId" />
@@ -2128,6 +2130,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-server\_Internal\ChunkedResponses\SessionData\I_ChunkedResponseData.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mobject-server\_Internal\Followup\Middleware\ResponseIdGuardMiddleware.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="mobject-server\_Internal\HeaderAccessor\HeaderAccessor.TcPOU">

@@ -126,7 +126,12 @@ IF PayloadSize > maximumChunkSizeInBytes THEN
 	RETURN;
 END_IF
 
-IF ChunkSequence <= 0 THEN
+// The payload is appended in arrival order rather than placed by index, so a
+// chunk which is not the one due next cannot be stored correctly.  Rejecting it
+// turns what would otherwise be silent corruption of the assembled request into
+// a clean failure.  This covers a duplicate too, which would otherwise be
+// appended twice and counted towards completion twice.
+IF ChunkSequence <> UDINT_TO_DINT(totalReceivedChunks) + 1 THEN
 	RETURN;
 END_IF
 

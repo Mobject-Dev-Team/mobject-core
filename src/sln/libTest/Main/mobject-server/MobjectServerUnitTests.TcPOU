@@ -5,6 +5,7 @@
 VAR
 	server_IntegrationTestSuite : Server_IntegrationTestSuite;
 	chunkedRequestData_TestSuite : ChunkedRequestData_TestSuite;
+	asyncResponseSessionData_TestSuite : AsyncResponseSessionData_TestSuite;
 	
 	initialized : BOOL;
 	server : RpcServer;

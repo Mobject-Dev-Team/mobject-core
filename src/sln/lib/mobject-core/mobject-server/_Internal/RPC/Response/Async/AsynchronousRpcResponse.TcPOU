@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="AsynchronousRpcResponse" Id="{6db93e11-243e-4162-9119-fd684d547642}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -271,25 +271,29 @@ VAR
 	pJsonString : POINTER TO STRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF asyncResponse = 0 THEN
-	RETURN;
-END_IF
-
-jsonSize := Serializer.GetSerializedDataLength();
+        <ST><![CDATA[jsonSize := Serializer.GetSerializedDataLength();
 
 IF jsonSize = 0 THEN
-	asyncResponse.Success();
+    asyncResponse.Success();
+    RETURN;
 END_IF
 
 pJsonString := __NEW(BYTE, jsonSize);
 
 IF NOT Serializer.TryGetSerializedData(pJsonString, jsonSize) THEN
-	asyncResponse.Error('SERVER_INTERNAL_ERROR','RPC Handler unable to get serialized data');
-	__DELETE(pJsonString);
-	RETURN;
+    asyncResponse.Error(
+        'SERVER_INTERNAL_ERROR',
+        'RPC Handler unable to get serialized data'
+    );
+    __DELETE(pJsonString);
+    RETURN;
 END_IF
 
-asyncResponse.SuccessWithPayload(pJsonString, jsonSize);
+asyncResponse.SuccessWithPayload(
+    pJsonString,
+    jsonSize - 1
+);
+
 __DELETE(pJsonString);]]></ST>
       </Implementation>
     </Method>

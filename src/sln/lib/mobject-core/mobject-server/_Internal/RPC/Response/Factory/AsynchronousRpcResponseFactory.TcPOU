@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="AsynchronousRpcResponseFactory" Id="{7280755c-1fdf-4cb5-a5fe-5dbe4a370a60}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -41,7 +41,7 @@ VAR
 	pAsynchronousRpcResponse : POINTER TO AsynchronousRpcResponse;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT asyncResponseManager.TryConvertResponseToAsyncResponseSessionData(serverResponse, 0, asyncResponseSessionData) THEN
+        <ST><![CDATA[IF NOT asyncResponseManager.TryConvertResponseToAsyncResponseSessionData(serverResponse, ServerConfiguration.PENDING_RESPONSE_RETRY_DELAY_MS, asyncResponseSessionData) THEN
 	RETURN;
 END_IF
 

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="SessionsMiddleware" Id="{387119d6-9862-4cec-b800-0c7b4120197b}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -36,9 +36,19 @@ VAR_INPUT
 END_VAR
 VAR
 	sessionId : T_MAXSTRING;
+	responseId : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF (NOT headerAccessor.TryGetSessionIdFromRequest(Request, sessionId)) OR_ELSE (NOT sessionManager.IsValidSession(sessionId)) THEN
+
+	IF headerAccessor.TryGetResponseIdFromRequest(Request, responseId) THEN
+		Response.Error(
+			'SESSION_EXPIRED',
+			'The session for this follow-up has expired. The original request outcome is unknown.'
+		);
+		RETURN;
+	END_IF
+
 	sessionId := sessionManager.CreateSession();
 	headerAccessor.UpdateRequestWithSessionId(Request,sessionId);
 END_IF

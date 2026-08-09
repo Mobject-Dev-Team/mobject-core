@@ -2,6 +2,12 @@
 
 ## v0.10.0-beta
 
+- added a deadline for asynchronous handlers, configurable through ServerConfiguration.PENDING_RESPONSE_MAX_AGE (default 60s, T#0S disables). A handler which never completes now fails its response with HANDLER_TIMEOUT instead of leaving the client polling forever
+- fixed follow-up requests being silently re-executed when their session had expired, which could run a handler a second time
+- fixed chunked responses losing their final byte when the remaining data was exactly one chunk buffer in size
+- fixed a chunked request whose session was lost part way through silently starting a fresh buffer, leaving a request which could never reach its chunk total. It now fails with CHUNKED_REQUEST_LOST
+- fixed out of order and repeated chunks being appended anyway, which silently corrupted the assembled request. They are now rejected
+- fixed oversized payloads being accepted by one byte, leaving no room for the string terminator
 - fixed bug which prevented IsEquivalent from correctly seeing Enums as compatible with their base type
 - fixed bug which prevented IsEquivalent from correctly seeing Alias as compatible with Enums
 - null datatype added, plus IsNull check on interface

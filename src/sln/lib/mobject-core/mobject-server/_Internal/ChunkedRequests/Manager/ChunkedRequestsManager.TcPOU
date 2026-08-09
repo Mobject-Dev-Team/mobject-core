@@ -123,7 +123,20 @@ END_IF
 
 // at this point we know we have all of the data required for handling a chunked request
 
-IF NOT sessionStorage.TryRetrieveSessionDataById(sessionId, requestId, sessionData) THEN	
+IF NOT sessionStorage.TryRetrieveSessionDataById(sessionId, requestId, sessionData) THEN
+
+	// Nothing stored for a chunk which is not the first means the earlier chunks
+	// have gone - the session holding them expired or was replaced part way
+	// through the upload.  Opening a fresh buffer here would quietly discard
+	// them and leave a request which can never reach its chunk total, so the
+	// client would wait until it timed out with no idea why.  Fail it instead so
+	// the whole request can be sent again.
+	IF chunkSequence > 1 THEN
+		response.Error('CHUNKED_REQUEST_LOST', 'The earlier chunks of this request are no longer held by the server. The request must be sent again from the first chunk.');
+		TryHandleIncomingRequest := TRUE;
+		RETURN;
+	END_IF
+
 	chunkedRequestData := CreateChunkedRequestData(maximumChunkSizeInBytes, DINT_TO_UDINT(chunkTotal));
 	sessionStorage.TryStoreSessionDataById(sessionId, requestId, chunkedRequestData);
 ELSIF NOT __QUERYINTERFACE(sessionData, chunkedRequestData) THEN

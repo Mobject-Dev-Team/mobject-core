@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <POU Name="ResponseIdGuardMiddleware" Id="{c021aa21-1f1f-00f8-18d2-07f5e7225b3d}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ResponseIdGuardMiddleware EXTENDS MiddlewareBase
+VAR
+	headerAccessor : I_SessionHeaderAccessor;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{9e1d269a-98df-02f3-178a-450895212a0c}" />
+    <Method Name="FB_init" Id="{67df02dc-6bb1-08db-2dc9-c5f618837e43}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	HeaderAccessor : I_SessionHeaderAccessor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.headerAccessor := HeaderAccessor;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Handle" Id="{3388bd93-fd4b-0f0d-00c2-292971970a40}">
+      <Declaration><![CDATA[METHOD PUBLIC Handle
+VAR_INPUT
+	Request : I_Request;
+	Response : I_ServerResponse;
+END_VAR
+VAR
+	responseId : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// ChunkedResponseMiddleware and AsyncResponseMiddleware have already
+// had the opportunity to consume a valid Response-Id.
+//
+// Therefore, if a Response-Id reaches here, its stored response no
+// longer exists. It must never reach RpcMiddleware because the
+// original Method-Name is still present in mobject-client's header.
+IF headerAccessor.TryGetResponseIdFromRequest(Request, responseId) THEN
+    Response.Error(
+        'RESPONSE_NOT_FOUND',
+        'No pending or chunked response exists for this Response-Id.'
+    );
+    RETURN;
+END_IF
+
+Next(Request, Response);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
