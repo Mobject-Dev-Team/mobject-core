@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="Server_IntegrationTestSuite" Id="{70989c7d-aa03-0146-2472-f220748ad887}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK Server_IntegrationTestSuite EXTENDS TcUnit.FB_TestSuite
 VAR
@@ -35,47 +35,6 @@ TestAsyncRejectMessage();
 TestSyncRejectMessage();
 TestFollowupWithUnknownSessionIsRejected();]]></ST>
     </Implementation>
-    <Method Name="TestFollowupWithUnknownSessionIsRejected" Id="{4a71f0c5-9e2b-0d38-71a4-6cb2f8e91d07}">
-      <Declaration><![CDATA[METHOD TestFollowupWithUnknownSessionIsRejected
-VAR
-	server : RpcServer;
-	concatStringRpcHandler : ConcatStringRpcHandler;
-	// A follow-up as the client actually resends it: the original Type/Method-Name are still
-	// on the header, a Response-Id has been added, and the Session-Id names a session the
-	// server no longer holds (expired, or lost across a restart).
-	followupHeader : T_MAXSTRING := '{"Type":"RPC 1.0","Method-Name":"concat","Content-Type":"application/json","Response-Id":"1","Session-Id":"999"}';
-	followupPayload : T_MAXSTRING := '{"STR1":"hello", "STR2":"world"}';
-	expectedHeader : T_MAXSTRING := '{"Session-Id":"1","Status":"Error","Error-Code":"SESSION_EXPIRED","Error-Message":"The session expired before this follow-up request could be served. The original request must be retried."}';
-	unexpectedPayload : T_MAXSTRING := '"helloworld"';
-	actualHeader : T_MAXSTRING;
-	actualPayload : T_MAXSTRING;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[TEST('TestFollowupWithUnknownSessionIsRejected');
-
-server.RegisterSynchronousRpcHandler('concat',concatStringRpcHandler);
-
-testFollowupWithUnknownSessionOutput := server.HandleRequest(followupHeader,followupPayload);
-actualHeader := testFollowupWithUnknownSessionOutput.Header;
-actualPayload := testFollowupWithUnknownSessionOutput.Payload;
-
-AssertEquals(
-	Expected := expectedHeader,
-	Actual := actualHeader,
-	Message := 'A follow-up naming an unknown session should be rejected with SESSION_EXPIRED'
-);
-
-// The regression guarded against: the follow-up falling past the chunked and async
-// middleware down to the rpc middleware, which still matches on Method-Name and would
-// run the handler a second time.
-AssertFalse(
-	Condition := actualPayload = unexpectedPayload,
-	Message := 'The rpc handler must not run again for a follow-up whose session has gone'
-);
-
-TEST_FINISHED();]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="TestAsyncConcatRpcCallAndResponse" Id="{9bb8b929-7b90-016b-0769-b77524f7974d}">
       <Declaration><![CDATA[METHOD TestAsyncConcatRpcCallAndResponse
 VAR
@@ -116,7 +75,7 @@ VAR
     payload : T_MAXSTRING := '';
 	followupHeader : T_MAXSTRING := '{"Response-Id":"1","Session-Id":"1"}';
 	followupPayload : T_MAXSTRING := '';
-	expectedFirstReply : T_MAXSTRING := '{"Session-Id":"1","Status":"Pending","Response-Id":"1"}';
+	expectedFirstReply : T_MAXSTRING := '{"Session-Id":"1","Status":"Pending","Response-Id":"1","Retry-Delay":"20"}';
 	expectedSecondReply : T_MAXSTRING := '{"Session-Id":"1","Status":"Error","Error-Code":"EXAMPLE_ERROR_CODE","Error-Message":"This is the reject message"}';
 	actual : T_MAXSTRING;
 END_VAR]]></Declaration>
@@ -203,6 +162,47 @@ END_VAR]]></Declaration>
 //);
 
 //TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestFollowupWithUnknownSessionIsRejected" Id="{4a71f0c5-9e2b-0d38-71a4-6cb2f8e91d07}">
+      <Declaration><![CDATA[METHOD TestFollowupWithUnknownSessionIsRejected
+VAR
+	server : RpcServer;
+	concatStringRpcHandler : ConcatStringRpcHandler;
+	// A follow-up as the client actually resends it: the original Type/Method-Name are still
+	// on the header, a Response-Id has been added, and the Session-Id names a session the
+	// server no longer holds (expired, or lost across a restart).
+	followupHeader : T_MAXSTRING := '{"Type":"RPC 1.0","Method-Name":"concat","Content-Type":"application/json","Response-Id":"1","Session-Id":"999"}';
+	followupPayload : T_MAXSTRING := '{"STR1":"hello", "STR2":"world"}';
+	expectedHeader : T_MAXSTRING := '{"Status":"Error","Error-Code":"SESSION_EXPIRED","Error-Message":"The session for this follow-up has expired. The original request outcome is unknown."}';
+	unexpectedPayload : T_MAXSTRING := '"helloworld"';
+	actualHeader : T_MAXSTRING;
+	actualPayload : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestFollowupWithUnknownSessionIsRejected');
+
+server.RegisterSynchronousRpcHandler('concat',concatStringRpcHandler);
+
+testFollowupWithUnknownSessionOutput := server.HandleRequest(followupHeader,followupPayload);
+actualHeader := testFollowupWithUnknownSessionOutput.Header;
+actualPayload := testFollowupWithUnknownSessionOutput.Payload;
+
+AssertEquals(
+	Expected := expectedHeader,
+	Actual := actualHeader,
+	Message := 'A follow-up naming an unknown session should be rejected with SESSION_EXPIRED'
+);
+
+// The regression guarded against: the follow-up falling past the chunked and async
+// middleware down to the rpc middleware, which still matches on Method-Name and would
+// run the handler a second time.
+AssertFalse(
+	Condition := actualPayload = unexpectedPayload,
+	Message := 'The rpc handler must not run again for a follow-up whose session has gone'
+);
+
+TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TestSyncRejectMessage" Id="{7fb6336f-04ff-0b03-1e5c-3a4cd4a2ee7d}">

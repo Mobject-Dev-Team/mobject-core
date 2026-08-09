@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="SessionsMiddleware" Id="{387119d6-9862-4cec-b800-0c7b4120197b}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -41,17 +41,11 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF (NOT headerAccessor.TryGetSessionIdFromRequest(Request, sessionId)) OR_ELSE (NOT sessionManager.IsValidSession(sessionId)) THEN
 
-	// A request carrying a Response-Id is a follow-up to work started earlier - an async
-	// poll or a chunk fetch - and the state it refers to lived in the session that has
-	// just been found missing or expired.  That state cannot be recovered, so the
-	// follow-up must be rejected here.  Allowing it to continue would let it fall through
-	// the chunked/async middleware (both of which simply return when their session lookup
-	// misses) down to the rpc middleware, which still sees the original Method-Name in the
-	// header and would silently run the handler a second time.
 	IF headerAccessor.TryGetResponseIdFromRequest(Request, responseId) THEN
-		sessionId := sessionManager.CreateSession();
-		headerAccessor.UpdateResponseWithSessionId(Response, sessionId);
-		Response.Error('SESSION_EXPIRED', 'The session expired before this follow-up request could be served. The original request must be retried.');
+		Response.Error(
+			'SESSION_EXPIRED',
+			'The session for this follow-up has expired. The original request outcome is unknown.'
+		);
 		RETURN;
 	END_IF
 

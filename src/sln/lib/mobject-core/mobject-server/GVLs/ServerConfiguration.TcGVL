@@ -1,17 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <GVL Name="ServerConfiguration" Id="{0d553159-eb9e-066f-1720-dd6008ee3771}" ParameterList="True">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
 	HEADER_STRING_SIZE : UDINT := 1024;
 	PAYLOAD_STRING_SIZE : UDINT := 8000; // typically 1/8th of the Runtime Stack Size
 
-	// How long an asynchronous handler is given to complete before its pending
-	// response is failed and discarded. Without this a handler that never calls
-	// Complete or Reject leaves the response pending forever, and a client that
-	// keeps polling keeps refreshing the session, so nothing ever cleans it up.
-	// Set to T#0S to disable the deadline.
-	PENDING_RESPONSE_MAX_AGE : TIME := T#60S;
+	// Maximum time an asynchronous response may remain pending.
+    // T#0S disables the deadline.
+    PENDING_RESPONSE_MAX_AGE : TIME := T#60S;
+
+    // Delay suggested to clients between asynchronous response polls.
+    // Prevents clients continuously polling the PLC as fast as ADS allows.
+    PENDING_RESPONSE_RETRY_DELAY_MS : UDINT := 20;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

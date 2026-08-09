@@ -133,7 +133,10 @@ IF asyncResponseData.IsPending THEN
 	// would otherwise poll forever, and each poll refreshes the session, so the
 	// usual session expiry would never reclaim this either.
 	IF asyncResponseData.HasExpired THEN
-		Response.Error('HANDLER_TIMEOUT', 'The handler did not complete within the time allowed for a pending response');
+		Response.Error(
+			'HANDLER_TIMEOUT',
+			'The pending response exceeded its maximum age. The operation may still complete; retry only if it is safe to repeat.'
+		);
 		sessionStorage.DisposeSessionDataById(sessionId, responseId);
 		TryHandleIncomingRequest := TRUE;
 		RETURN;
